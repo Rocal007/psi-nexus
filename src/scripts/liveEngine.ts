@@ -664,6 +664,13 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
   const numSynergyAffirmation = document.getElementById('numSynergyAffirmation');
   if (numSynergyAffirmation) numSynergyAffirmation.textContent = numerology.nameNumbers.nameSynergy.affirmation;
 
+  const numSynHeadline = document.getElementById('numSynHeadline');
+  if (numSynHeadline) numSynHeadline.textContent = numerology.astroSynergy.headline;
+  const numSynDescription = document.getElementById('numSynDescription');
+  if (numSynDescription) numSynDescription.textContent = numerology.astroSynergy.description;
+  const numSynGuidance = document.getElementById('numSynGuidance');
+  if (numSynGuidance) numSynGuidance.textContent = numerology.astroSynergy.coreGuidance;
+
   // 12. Update Angel Numbers Section (Tor V)
   const angelRes = calculatePersonalAngelResonance(numerology.lifePath.number, synthesis.sun.planet.sign.name);
   const angelMainNumber = document.getElementById('angelMainNumber');
