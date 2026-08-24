@@ -1045,7 +1045,7 @@ export function updateShadowHealthDialectic(chart: CompleteNatalChart) {
         <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-2 text-xs leading-relaxed">
           <div class="font-bold text-emerald-300 flex items-center gap-1.5">
             <span>✨</span>
-            <span>Positive Dialektik & Verborgene Gabe:</span>
+            <span>Verborgene Gabe & Seelenpotenzial:</span>
           </div>
           <p class="text-emerald-100 font-medium font-lato">
             ${item.positiveDialectic.hiddenGift}
