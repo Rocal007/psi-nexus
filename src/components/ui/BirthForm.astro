@@ -464,8 +464,44 @@ const defaultName = initialValues?.name || '';
       nameEl?.focus();
     }
 
+    // Sync form fields with active profile or URL params
+    function syncFormWithActiveProfile() {
+      const params = new URLSearchParams(window.location.search);
+      const active = getActiveProfile();
+
+      const dateEl = document.getElementById('birthDate') as HTMLInputElement;
+      const timeEl = document.getElementById('birthTime') as HTMLInputElement;
+      const nameEl = document.getElementById('userName') as HTMLInputElement;
+      const houseEl = document.getElementById('houseSystem') as HTMLSelectElement;
+
+      const birthDate = params.get('birthDate') || active?.birthDate;
+      const birthTime = params.get('birthTime') || active?.birthTime;
+      const cityName = params.get('cityName') || active?.cityName;
+      const lat = params.get('latitude') || active?.latitude?.toString();
+      const lng = params.get('longitude') || active?.longitude?.toString();
+      const tz = params.get('timezone') || active?.timezone;
+      const name = params.get('name') || active?.name;
+      const houseSystem = params.get('houseSystem') || active?.houseSystem;
+      const isUnknown = params.get('unknownTime') === 'true' || Boolean(active?.isUnknownTime);
+
+      if (birthDate && dateEl) dateEl.value = birthDate;
+      if (birthTime && timeEl) {
+        timeEl.value = birthTime;
+        lastKnownTime = birthTime;
+      }
+      if (cityName && cityInput) cityInput.value = cityName;
+      if (lat && latInput) latInput.value = lat;
+      if (lng && lngInput) lngInput.value = lng;
+      if (tz && tzInput) tzInput.value = tz;
+      if (name && nameEl) nameEl.value = name;
+      if (houseSystem && houseEl) houseEl.value = houseSystem;
+
+      setUnknownTimeState(isUnknown);
+    }
+
     // Toggle Form visibility
     function openForm() {
+      syncFormWithActiveProfile();
       formContainer?.classList.remove('hidden');
       formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -501,6 +537,7 @@ const defaultName = initialValues?.name || '';
 
     window.addEventListener('astro_open_profile_creator', openCreationMode);
     window.addEventListener('astro_active_profile_cleared', openCreationMode);
+    window.addEventListener('astro_sync_form_inputs', syncFormWithActiveProfile);
 
     const unknownTimeCheckbox = document.getElementById('unknownTimeCheckbox') as HTMLInputElement;
     const unknownTimeNotice = document.getElementById('unknownTimeNotice');
@@ -688,6 +725,7 @@ const defaultName = initialValues?.name || '';
     });
 
     renderSavedProfiles();
+    syncFormWithActiveProfile();
     window.addEventListener('astro_profiles_updated', renderSavedProfiles);
 
     // Apply values and calculate with cosmic loader
