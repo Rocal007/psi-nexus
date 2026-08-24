@@ -391,25 +391,30 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
   const aspectListContainer = document.getElementById('aspectListContainer');
   if (aspectListContainer) {
     aspectListContainer.innerHTML = chart.aspects.map(item => `
-      <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 transition-all">
-        <div class="flex items-center gap-2.5">
-          <div class="flex items-center gap-1 font-bold text-sm" style="color: ${item.planet1.color}">
-            <span class="text-base">${item.planet1.symbol}</span>
+      <div class="p-3.5 rounded-2xl bg-slate-950/70 hover:bg-slate-900/90 border border-white/10 hover:border-amber-500/40 transition-all flex flex-wrap items-center justify-between gap-2.5 shadow-md group">
+        <div class="flex flex-wrap items-center gap-2 min-w-0 flex-1">
+          <div class="inline-flex items-center gap-1.5 font-bold text-xs sm:text-sm shrink-0" style="color: ${item.planet1.color}">
+            <span class="text-base leading-none">${item.planet1.symbol}</span>
             <span>${item.planet1.name}</span>
           </div>
-          <div class="px-2 py-0.5 rounded text-xs font-bold border flex items-center gap-1"
-               style="color: ${item.definition.color}; border-color: ${item.definition.color}40; background-color: ${item.definition.color}15">
-            <span>${item.definition.symbol}</span>
+
+          <div
+            class="px-2.5 py-1 rounded-lg text-xs font-bold border inline-flex items-center gap-1 shrink-0 font-tech shadow-sm"
+            style="color: ${item.definition.color}; border-color: ${item.definition.color}50; background-color: ${item.definition.color}18"
+          >
+            <span class="text-sm leading-none">${item.definition.symbol}</span>
             <span>${item.definition.name}</span>
           </div>
-          <div class="flex items-center gap-1 font-bold text-sm" style="color: ${item.planet2.color}">
-            <span class="text-base">${item.planet2.symbol}</span>
+
+          <div class="inline-flex items-center gap-1.5 font-bold text-xs sm:text-sm shrink-0" style="color: ${item.planet2.color}">
+            <span class="text-base leading-none">${item.planet2.symbol}</span>
             <span>${item.planet2.name}</span>
           </div>
         </div>
-        <div class="text-right">
-          <span class="text-xs font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded">
-            Orb: ${item.orb.toFixed(1)}°
+
+        <div class="shrink-0">
+          <span class="text-xs font-mono font-bold text-slate-300 bg-white/5 group-hover:bg-amber-500/10 group-hover:text-amber-300 group-hover:border-amber-500/30 px-2.5 py-1 rounded-lg border border-white/10 transition-colors block">
+            Orb ${item.orb.toFixed(1)}°
           </span>
         </div>
       </div>
