@@ -208,24 +208,24 @@ export function generatePersonalitySummary(chart: CompleteNatalChart): Personali
 
   // Compound Archetype Name
   const archetypeName = `${sunData.sunName} mit ${moonSign.name}-Gefühlstiefe & ${ascSign.name}-Seelentor`;
-  const shortEssence = `${sunData.sunEssence} Im seelischen Inneren getragen von ${moonData.desc} Nach außen strahlt diese Persönlichkeit ${ascData.impression.toLowerCase()} hervor.`;
+  const shortEssence = `${sunData.sunEssence} Im seelischen Kern: ${moonData.desc} Nach außen wirkt das Auftreten ${ascData.impression.toLowerCase()}.`;
 
   // Superpowers
   const superpowers = [
     {
       icon: '☀️',
       name: sunData.superpower,
-      detail: `Geprägt durch die ${sunSign.name}-Sonne: Schöpferische Willenskraft und die Fähigkeit, ${sunData.trait.toLowerCase()}`
+      detail: `Geprägt durch die ${sunSign.name}-Sonne: Schöpferische Willenskraft, gepaart mit ${sunData.trait.toLowerCase()}`
     },
     {
       icon: '🌙',
       name: 'Emotionale Seelenkraft & Instinkt',
-      detail: `Geprägt durch den ${moonSign.name}-Mond: ${moonData.desc} Schafft tiefes Urvertrauen durch ${moonData.need.toLowerCase()}.`
+      detail: `Geprägt durch den ${moonSign.name}-Mond: ${moonData.desc} Schafft inneren Halt durch ${moonData.need.toLowerCase()}.`
     },
     {
       icon: '🧠',
       name: `Geistige Auffassung (${mercuryPlanet.sign.name})`,
-      detail: `Merkur im ${mercuryPlanet.sign.name}: Denkt ${mercuryData.trait.toLowerCase()} und trifft Entscheidungen mit innerer Klarheit.`
+      detail: `Merkur im ${mercuryPlanet.sign.name}: Ausgeprägte ${mercuryData.trait.toLowerCase()} – trifft Entscheidungen mit geistiger Klarheit.`
     }
   ];
 
