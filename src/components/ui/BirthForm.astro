@@ -291,62 +291,140 @@ const defaultName = initialValues?.name || '';
       </div>
     </div>
 
-    <!-- Action Button & Quick Presets -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/5">
-      <!-- Quick Presets -->
-      <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-400">
-        <span class="text-[11px] text-slate-400 mr-1 hidden lg:inline">Archetypen:</span>
-        <button
-          type="button"
-          class="preset-btn px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition-all text-xs font-bold shadow-[0_0_10px_rgba(234,179,8,0.15)]"
-          data-date="1991-05-05"
-          data-time="13:00"
-          data-city="Wien"
-          data-lat="48.2082"
-          data-lng="16.3738"
-          data-tz="Europe/Vienna"
-          data-name="Denise Christin"
-        >
-          ✦ Denise Christin (Wien, 1991)
-        </button>
-        <button
-          type="button"
-          class="preset-btn px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 hover:text-amber-300 border border-white/10 transition-all text-xs"
-          data-date="1875-07-26"
-          data-time="19:30"
-          data-city="Kesswil (TG)"
-          data-lat="47.5976"
-          data-lng="9.3175"
-          data-tz="Europe/Zurich"
-          data-name="C. G. Jung"
-        >
-          C.G. Jung
-        </button>
-        <button
-          type="button"
-          class="preset-btn px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 hover:text-amber-300 border border-white/10 transition-all text-xs"
-          data-date="1749-08-28"
-          data-time="12:00"
-          data-city="Frankfurt am Main"
-          data-lat="50.1109"
-          data-lng="8.6821"
-          data-tz="Europe/Berlin"
-          data-name="J. W. von Goethe"
-        >
-          J.W. Goethe
-        </button>
+    <!-- Action Button & Famous Personality Presets -->
+    <div class="space-y-4 pt-4 border-t border-white/10">
+      <!-- Famous Personality Presets (1452 – Gegenwart) -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1.5 font-tech">
+            <span>📜</span>
+            <span>Berühmte Seelen-Profile (1452 – Gegenwart):</span>
+          </span>
+          <span class="text-[11px] text-slate-400 font-mono">6 historische & moderne Meister</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- 1. Leonardo da Vinci (1452) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1452-04-15"
+            data-time="21:40"
+            data-city="Vinci"
+            data-lat="43.7844"
+            data-lng="10.9258"
+            data-tz="Europe/Rome"
+            data-name="Leonardo da Vinci"
+            title="Universalgenie & Renaissance-Meister (1452)"
+          >
+            <span>🎨</span>
+            <span class="font-semibold">Leonardo da Vinci</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1452)</span>
+          </button>
+
+          <!-- 2. J. W. von Goethe (1749) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1749-08-28"
+            data-time="12:00"
+            data-city="Frankfurt am Main"
+            data-lat="50.1109"
+            data-lng="8.6821"
+            data-tz="Europe/Berlin"
+            data-name="J. W. von Goethe"
+            title="Dichterfürst & Universalgelehrter (1749)"
+          >
+            <span>🖋️</span>
+            <span class="font-semibold">J.W. Goethe</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1749)</span>
+          </button>
+
+          <!-- 3. C. G. Jung (1875) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1875-07-26"
+            data-time="19:30"
+            data-city="Kesswil"
+            data-lat="47.5976"
+            data-lng="9.3175"
+            data-tz="Europe/Zurich"
+            data-name="Carl Gustav Jung"
+            title="Begründer der Analytischen Psychologie & Archetypen-Lehre (1875)"
+          >
+            <span>🧠</span>
+            <span class="font-semibold">C.G. Jung</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1875)</span>
+          </button>
+
+          <!-- 4. Albert Einstein (1879) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1879-03-14"
+            data-time="11:30"
+            data-city="Ulm"
+            data-lat="48.4011"
+            data-lng="9.9876"
+            data-tz="Europe/Berlin"
+            data-name="Albert Einstein"
+            title="Physiker & Mystiker der Relativität (1879)"
+          >
+            <span>🌌</span>
+            <span class="font-semibold">Albert Einstein</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1879)</span>
+          </button>
+
+          <!-- 5. Vera F. Birkenbihl (1946) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1946-04-26"
+            data-time="10:30"
+            data-city="München"
+            data-lat="48.1351"
+            data-lng="11.5820"
+            data-tz="Europe/Berlin"
+            data-name="Vera F. Birkenbihl"
+            title="Pionierin der Neurodidaktik & Gehirngerechtes Denken (1946)"
+          >
+            <span>💡</span>
+            <span class="font-semibold">Vera F. Birkenbihl</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1946)</span>
+          </button>
+
+          <!-- 6. Steve Jobs (1955) -->
+          <button
+            type="button"
+            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
+            data-date="1955-02-24"
+            data-time="19:15"
+            data-city="San Francisco"
+            data-lat="37.7749"
+            data-lng="-122.4194"
+            data-tz="America/Los_Angeles"
+            data-name="Steve Jobs"
+            title="Visionär, Design-Philosoph & Innovator (1955)"
+          >
+            <span>🍎</span>
+            <span class="font-semibold">Steve Jobs</span>
+            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1955)</span>
+          </button>
+        </div>
       </div>
 
       <!-- Submit button -->
-      <button
-        type="submit"
-        id="submitCalcBtn"
-        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-[0_0_30px_rgba(234,179,8,0.45)] hover:shadow-[0_0_40px_rgba(234,179,8,0.7)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
-      >
-        <span>✧</span>
-        <span>Berechnen & in DB Speichern</span>
-        <span>✦</span>
-      </button>
+      <div class="flex justify-end pt-1">
+        <button
+          type="submit"
+          id="submitCalcBtn"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-[0_0_30px_rgba(234,179,8,0.45)] hover:shadow-[0_0_40px_rgba(234,179,8,0.7)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>✧</span>
+          <span>Berechnen & in DB Speichern</span>
+          <span>✦</span>
+        </button>
+      </div>
     </div>
   </form>
 </div>
