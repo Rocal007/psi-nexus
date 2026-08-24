@@ -87,12 +87,9 @@ const SEMANTIC_MENU_CHAPTERS = [
       </span>
     </a>
 
-    <!-- Right Actions: Multi-Theme Switcher & Hamburger Button -->
+    <!-- Right Actions: Quick Tools & Hamburger Button -->
     <div class="flex items-center gap-2 sm:gap-3">
       
-      <!-- Primary Theme Switcher in Header -->
-      <ThemeSwitcher variant="header" />
-
       <a
         href="#decoderToggleHeader"
         class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-xs font-semibold text-purple-300 transition-all cursor-pointer"
@@ -229,24 +226,30 @@ const SEMANTIC_MENU_CHAPTERS = [
       </div>
     </div>
 
-    <!-- Quick Tools Footer -->
-    <div class="pt-6 border-t border-white/10 space-y-3">
-      <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Direkt-Werkzeuge</div>
-      
-      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
-        <a
-          href="#decoderToggleHeader"
-          class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 text-center transition-all cursor-pointer close-drawer-link"
-        >
-          🧠 Birkenbihl-Decoder
-        </a>
-        <button
-          type="button"
-          id="drawerNewChartBtn"
-          class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1 font-semibold"
-        >
-          ✧ Neues Profil
-        </button>
+    <!-- Quick Tools & Layout Switcher Footer -->
+    <div class="pt-6 border-t border-white/10 space-y-4">
+      <div class="space-y-2">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-tech">🎨 Design- & Layout-Stile</div>
+        <ThemeSwitcher variant="drawer" />
+      </div>
+
+      <div class="space-y-2 pt-2 border-t border-white/5">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-tech">Direkt-Werkzeuge</div>
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a
+            href="#decoderToggleHeader"
+            class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 text-center transition-all cursor-pointer close-drawer-link"
+          >
+            🧠 Birkenbihl-Decoder
+          </a>
+          <button
+            type="button"
+            id="drawerNewChartBtn"
+            class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1 font-semibold"
+          >
+            ✧ Neues Profil
+          </button>
+        </div>
       </div>
     </div>
   </div>
