@@ -94,6 +94,17 @@ const defaultName = initialValues?.name || '';
       <span>✧</span>
       <span>Neu</span>
     </button>
+
+    <!-- Delete Current Profile Button -->
+    <button
+      type="button"
+      id="deleteCurrentProfileBtn"
+      class="px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer hover:border-rose-500/60 shadow-md"
+      title="Aktuelles Profil aus der Datenbank löschen"
+    >
+      <span>🗑️</span>
+      <span class="hidden sm:inline">Löschen</span>
+    </button>
   </div>
 </div>
 
@@ -368,7 +379,7 @@ const defaultName = initialValues?.name || '';
 
 <script>
   import { geocodeCity } from '../../lib/geo/geocode';
-  import { saveClientProfile, getClientProfiles, getActiveProfile, clearActiveProfile } from '../../lib/db/profileStore';
+  import { saveClientProfile, getClientProfiles, getActiveProfile, clearActiveProfile, deleteClientProfile } from '../../lib/db/profileStore';
 
   function initBirthFormController() {
     const cityInput = document.getElementById('citySearch') as HTMLInputElement;
@@ -379,6 +390,7 @@ const defaultName = initialValues?.name || '';
 
     const toggleFormBtn = document.getElementById('toggleFormBtn');
     const newProfileBtn = document.getElementById('newProfileBtn');
+    const deleteCurrentProfileBtn = document.getElementById('deleteCurrentProfileBtn');
     const closeFormBtn = document.getElementById('closeFormBtn');
     const formContainer = document.getElementById('formContainer');
     const activeProfileSummaryCard = document.getElementById('activeProfileSummaryCard');
@@ -399,6 +411,27 @@ const defaultName = initialValues?.name || '';
     const formQuickProfilesList = document.getElementById('formQuickProfilesList');
 
     let debounceTimer: any = null;
+
+    // Delete Profile Handler
+    function handleDeleteProfile(pid: string, profileName: string) {
+      const confirmed = window.confirm(`Möchtest du das Seelen-Profil "${profileName}" wirklich aus deiner lokalen Datenbank löschen?`);
+      if (!confirmed) return;
+
+      const active = getActiveProfile();
+      const wasActive = active && active.id === pid;
+
+      deleteClientProfile(pid);
+
+      if (wasActive) {
+        clearActiveProfile();
+        const url = new URL(window.location.href);
+        url.search = '';
+        window.history.replaceState({}, '', url.toString());
+        openCreationMode();
+      } else {
+        renderSavedProfiles();
+      }
+    }
 
     // Open creation mode (resets form and reveals creation prompt)
     function openCreationMode() {
@@ -455,6 +488,17 @@ const defaultName = initialValues?.name || '';
     newProfileBtn?.addEventListener('click', openCreationMode);
     closeFormBtn?.addEventListener('click', closeForm);
 
+    deleteCurrentProfileBtn?.addEventListener('click', () => {
+      const active = getActiveProfile();
+      const currentName = active?.name || 'Aktuelles Profil';
+      if (active) {
+        handleDeleteProfile(active.id, currentName);
+      } else {
+        clearActiveProfile();
+        openCreationMode();
+      }
+    });
+
     window.addEventListener('astro_open_profile_creator', openCreationMode);
     window.addEventListener('astro_active_profile_cleared', openCreationMode);
 
@@ -502,6 +546,9 @@ const defaultName = initialValues?.name || '';
     // Refresh Saved Profiles in UI
     function renderSavedProfiles() {
       const profiles = getClientProfiles();
+      const active = getActiveProfile();
+      const currentActiveId = active?.id;
+
       if (profileCountBadge) {
         profileCountBadge.textContent = profiles.length.toString();
       }
@@ -512,15 +559,27 @@ const defaultName = initialValues?.name || '';
       if (formSavedProfilesBanner && formQuickProfilesList) {
         if (profiles.length > 0) {
           formSavedProfilesBanner.classList.remove('hidden');
-          formQuickProfilesList.innerHTML = profiles.slice(0, 4).map(p => `
-            <button
-              type="button"
-              class="quick-saved-profile-btn px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/35 text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer"
-              data-id="${p.id}"
-            >
-              <span>👤</span>
-              <span>${p.name || 'Profil'} (${p.birthDate.slice(0, 4)})</span>
-            </button>
+          formQuickProfilesList.innerHTML = profiles.slice(0, 5).map(p => `
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-200 text-xs shadow-sm transition-all">
+              <button
+                type="button"
+                class="quick-saved-profile-btn flex items-center gap-1 cursor-pointer hover:text-white font-semibold"
+                data-id="${p.id}"
+                title="Profil ${p.name || ''} laden"
+              >
+                <span>👤</span>
+                <span>${p.name || 'Profil'} (${p.birthDate.slice(0, 4)})</span>
+              </button>
+              <button
+                type="button"
+                class="quick-delete-profile-btn text-slate-400 hover:text-rose-400 p-0.5 rounded cursor-pointer text-xs ml-0.5"
+                data-id="${p.id}"
+                data-name="${p.name || 'Profil'}"
+                title="Profil löschen"
+              >
+                ✕
+              </button>
+            </div>
           `).join('');
 
           formQuickProfilesList.querySelectorAll('.quick-saved-profile-btn').forEach(btn => {
@@ -531,6 +590,16 @@ const defaultName = initialValues?.name || '';
               if (found) {
                 applyProfileValues(found);
               }
+            });
+          });
+
+          formQuickProfilesList.querySelectorAll('.quick-delete-profile-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const target = e.currentTarget as HTMLElement;
+              const pid = target.dataset.id;
+              const pname = target.dataset.name || 'Profil';
+              if (pid) handleDeleteProfile(pid, pname);
             });
           });
         } else {
@@ -545,42 +614,62 @@ const defaultName = initialValues?.name || '';
         }
 
         savedProfilesList.innerHTML = profiles.map(p => `
-          <button
-            type="button"
-            class="saved-profile-item w-full text-left px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white text-xs flex items-center justify-between border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer shadow-sm group"
-            data-date="${p.birthDate}"
-            data-time="${p.birthTime}"
-            data-unknowntime="${p.isUnknownTime ? 'true' : 'false'}"
-            data-city="${p.cityName}"
-            data-lat="${p.latitude}"
-            data-lng="${p.longitude}"
-            data-tz="${p.timezone}"
-            data-name="${p.name || ''}"
-            data-houses="${p.houseSystem || 'placidus'}"
-          >
-            <div class="min-w-0 pr-2">
-              <div class="font-bold text-white group-hover:text-amber-300 transition-colors truncate">${p.name || 'Edle Seele'}</div>
-              <div class="text-[10px] text-slate-400 font-mono mt-0.5">${p.birthDate} ${p.isUnknownTime ? '(Solar 12h)' : '• ' + p.birthTime} • ${p.cityName}</div>
+          <div class="saved-profile-row w-full p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-between gap-2 transition-all group">
+            <button
+              type="button"
+              class="saved-profile-select-btn flex-1 text-left min-w-0 cursor-pointer"
+              data-id="${p.id}"
+              title="Dieses Profil auswählen"
+            >
+              <div class="font-bold text-white group-hover:text-amber-300 transition-colors truncate text-xs flex items-center gap-1.5">
+                <span>👤</span>
+                <span class="truncate">${p.name || 'Edle Seele'}</span>
+                ${p.id === currentActiveId ? '<span class="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 font-normal shrink-0">Aktiv</span>' : ''}
+              </div>
+              <div class="text-[10px] text-slate-400 font-mono mt-0.5 truncate">${p.birthDate} ${p.isUnknownTime ? '(12h)' : '• ' + p.birthTime} • ${p.cityName}</div>
+            </button>
+
+            <div class="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                class="saved-profile-choose-btn text-amber-300 font-mono text-[10px] px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/30 border border-amber-500/20 transition-all cursor-pointer"
+                data-id="${p.id}"
+                title="Dieses Profil laden"
+              >
+                Laden ➔
+              </button>
+              <button
+                type="button"
+                class="saved-profile-delete-btn text-slate-400 hover:text-rose-300 hover:bg-rose-500/20 p-1.5 rounded-lg border border-transparent hover:border-rose-500/30 transition-all cursor-pointer text-xs"
+                data-id="${p.id}"
+                data-name="${p.name || 'Profil'}"
+                title="Profil unwiderruflich löschen"
+              >
+                🗑️
+              </button>
             </div>
-            <span class="text-amber-300 font-mono text-[10px] px-2 py-1 rounded bg-amber-500/10 group-hover:bg-amber-500/30 border border-amber-500/20 transition-all shrink-0">Wählen ➔</span>
-          </button>
+          </div>
         `).join('');
 
-        savedProfilesList.querySelectorAll('.saved-profile-item').forEach(btn => {
+        savedProfilesList.querySelectorAll('.saved-profile-select-btn, .saved-profile-choose-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const target = e.currentTarget as HTMLElement;
-            applyProfileValues({
-              birthDate: target.dataset.date || '1990-05-15',
-              birthTime: target.dataset.time || '14:30',
-              isUnknownTime: target.dataset.unknowntime === 'true',
-              cityName: target.dataset.city || 'Wien',
-              latitude: parseFloat(target.dataset.lat || '48.2082'),
-              longitude: parseFloat(target.dataset.lng || '16.3738'),
-              timezone: target.dataset.tz || 'Europe/Vienna',
-              name: target.dataset.name || '',
-              houseSystem: (target.dataset.houses === 'equal' ? 'equal' : 'placidus') as any
-            });
-            savedProfilesMenu?.classList.add('hidden');
+            const pid = target.dataset.id;
+            const found = profiles.find(x => x.id === pid);
+            if (found) {
+              applyProfileValues(found);
+              savedProfilesMenu?.classList.add('hidden');
+            }
+          });
+        });
+
+        savedProfilesList.querySelectorAll('.saved-profile-delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const target = e.currentTarget as HTMLElement;
+            const pid = target.dataset.id;
+            const pname = target.dataset.name || 'Profil';
+            if (pid) handleDeleteProfile(pid, pname);
           });
         });
       }
