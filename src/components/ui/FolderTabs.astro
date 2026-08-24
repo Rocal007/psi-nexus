@@ -13,17 +13,17 @@ const { activeTab = 'radix' } = Astro.props;
 const initialSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === activeTab)) || SOUL_SPHERES[0];
 ---
 
-<div id="folderTabsContainer" class="w-full sticky top-16 z-30 py-3 bg-slate-950/90 backdrop-blur-2xl border-b border-white/10 no-print shadow-2xl space-y-2.5">
+<div id="folderTabsContainer" class="w-full sticky top-16 z-30 py-3 bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 no-print shadow-2xl space-y-2.5">
   <div class="max-w-7xl mx-auto px-2 sm:px-4 space-y-2.5">
     
     <!-- LEVEL 1: Master Thematic Spheres (Birkenbihl Kategoriensystem) -->
-    <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1 scrollbar-none">
-      <div class="flex items-center gap-1.5 sm:gap-2 min-w-max mx-auto" id="sphereFilterContainer">
+    <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div class="flex items-center gap-1.5 sm:gap-2 min-w-max" id="sphereFilterContainer">
         
         {SOUL_SPHERES.map((sphere) => (
           <button
             type="button"
-            class={`sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${sphere.id === initialSphere.id ? sphere.borderActive : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
+            class={`sphere-filter-btn px-3 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${sphere.id === initialSphere.id ? sphere.borderActive : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
             data-sphere-id={sphere.id}
           >
             <span class="text-base">{sphere.icon}</span>
@@ -40,7 +40,7 @@ const initialSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === activeTa
         <!-- View All Button -->
         <button
           type="button"
-          class={`sphere-filter-btn tab-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${activeTab === 'all' ? 'border-amber-400 bg-amber-500/20 text-amber-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
+          class={`sphere-filter-btn tab-btn px-3 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${activeTab === 'all' ? 'border-amber-400 bg-amber-500/20 text-amber-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
           data-sphere-id="sphere_all"
           data-tab-target="all"
         >
@@ -54,25 +54,15 @@ const initialSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === activeTa
       </div>
     </div>
 
-    <!-- LEVEL 2: Birkenbihl Neurodidactic Anchor Pill & Gate Sub-Tabs -->
-    <div class="flex flex-col lg:flex-row items-center justify-between gap-3 pt-1 border-t border-white/5">
-      <!-- Birkenbihl Question / Anchor -->
-      <div class="flex items-center gap-2 text-xs text-slate-300 shrink-0 w-full lg:w-auto justify-center lg:justify-start" id="activeSphereAnchor">
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech bg-amber-500/15 text-amber-300 border border-amber-500/30" id="sphereBadge">
-          {initialSphere.num}: {initialSphere.shortQuestion}
-        </span>
-        <span class="text-slate-400 hidden sm:inline text-[11px] font-lato" id="sphereExplanation">
-          {initialSphere.birkenbihlAnchor}
-        </span>
-      </div>
-
-      <!-- LEVEL 3: Gate Sub-Tabs (Dynamically filterable or switchable) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none w-full lg:w-auto justify-center lg:justify-end" id="gateTabsRow">
-        {SOUL_SPHERES.map(sphere => (
-          sphere.gates.map(tab => (
+    <!-- LEVEL 2: Gate Sub-Tabs (Eigene Zeile für Tore der aktiven Sphäre) -->
+    <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto py-1 scrollbar-none" id="gateTabsRow">
+      {SOUL_SPHERES.map(sphere => (
+        sphere.gates.map(tab => {
+          const isInitialVisible = activeTab === 'all' || sphere.id === initialSphere.id;
+          return (
             <button
               type="button"
-              class={`cosmic-folder-tab tab-btn px-3 py-1.5 rounded-xl border flex items-center gap-2 cursor-pointer text-left transition-all ${activeTab === tab.id ? 'active' : ''}`}
+              class={`cosmic-folder-tab tab-btn px-3.5 py-1.5 rounded-xl border flex items-center gap-2 cursor-pointer text-left transition-all shrink-0 ${activeTab === tab.id ? 'active' : ''} ${isInitialVisible ? '' : 'hidden'}`}
               data-tab-target={tab.id}
               data-belonging-sphere={sphere.id}
             >
@@ -86,9 +76,19 @@ const initialSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === activeTa
                 </span>
               </div>
             </button>
-          ))
-        ))}
-      </div>
+          );
+        })
+      ))}
+    </div>
+
+    <!-- LEVEL 3: Birkenbihl Neurodidaktischer Leitgedanke & Erklärung (Eigene saubere Zeile) -->
+    <div class="pt-1.5 border-t border-white/5 flex flex-wrap items-center justify-center text-center gap-2 px-2" id="activeSphereAnchor">
+      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0" id="sphereBadge">
+        {initialSphere.num}: {initialSphere.shortQuestion}
+      </span>
+      <span class="text-slate-300 text-xs font-lato max-w-2xl" id="sphereExplanation">
+        {initialSphere.birkenbihlAnchor}
+      </span>
     </div>
 
   </div>
