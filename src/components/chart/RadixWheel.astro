@@ -1,0 +1,400 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { ZODIAC_SIGNS } from '../../lib/astrology/constants';
+
+interface Props {
+  chart: CompleteNatalChart;
+  size?: number;
+}
+
+const { chart, size = 640 } = Astro.props;
+
+const asc = chart.housesResult.angles.ascendant.longitude;
+const mc = chart.housesResult.angles.midheaven.longitude;
+const dc = chart.housesResult.angles.descendant.longitude;
+const ic = chart.housesResult.angles.imumCoeli.longitude;
+
+// Convert ecliptic longitude to SVG angle in degrees
+// AC (Ascendant) is placed at 9 o'clock position (180 deg in SVG polar)
+function lonToSvgAngle(lon: number): number {
+  let diff = lon - asc;
+  let angle = 180 - diff;
+  return ((angle % 360) + 360) % 360;
+}
+
+function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
+  const angleInRadians = (angleInDegrees * Math.PI) / 180.0;
+  return {
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians)
+  };
+}
+
+function describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number) {
+  const start = polarToCartesian(x, y, radius, endAngle);
+  const end = polarToCartesian(x, y, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+  return ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
+}
+
+const center = 350;
+const rOuter = 320;
+const rZodiacInner = 265;
+const rHouses = 210;
+const rPlanets = 175;
+const rAspects = 135;
+
+// Build Zodiac Sign wedges
+const zodiacSlices = ZODIAC_SIGNS.map((sign) => {
+  const startLon = sign.startDegree;
+  const endLon = startLon + 30;
+  const startAngle = lonToSvgAngle(endLon);
+  const endAngle = lonToSvgAngle(startLon);
+  const midAngle = lonToSvgAngle(startLon + 15);
+  const glyphPos = polarToCartesian(center, center, (rOuter + rZodiacInner) / 2, midAngle);
+
+  return {
+    sign,
+    startAngle,
+    endAngle,
+    midAngle,
+    glyphPos,
+    color: sign.color,
+    bgColor: sign.bgColor
+  };
+});
+
+// Build House Cusps
+const houseLines = chart.housesResult.cusps.map((cuspLon, idx) => {
+  const angle = lonToSvgAngle(cuspLon);
+  const p1 = polarToCartesian(center, center, rHouses, angle);
+  const p2 = polarToCartesian(center, center, rZodiacInner, angle);
+  const isAngle = idx === 0 || idx === 9 || idx === 6 || idx === 3;
+  const labelPos = polarToCartesian(center, center, (rHouses + rAspects) / 2, lonToSvgAngle(cuspLon + 15));
+
+  return {
+    number: idx + 1,
+    angle,
+    p1,
+    p2,
+    isAngle,
+    labelPos
+  };
+});
+
+// Avoid overlapping planet icons
+const sortedPlanets = [...chart.planets].sort((a, b) => a.longitude - b.longitude);
+const renderedPlanets = sortedPlanets.map((planet) => {
+  const baseAngle = lonToSvgAngle(planet.longitude);
+  const pPos = polarToCartesian(center, center, rPlanets, baseAngle);
+  const markerPos = polarToCartesian(center, center, rHouses, baseAngle);
+
+  return {
+    planet,
+    angle: baseAngle,
+    pPos,
+    markerPos
+  };
+});
+
+// Aspect Lines
+const aspectLines = chart.aspects.map(asp => {
+  const a1 = lonToSvgAngle(asp.planet1.longitude);
+  const a2 = lonToSvgAngle(asp.planet2.longitude);
+  const p1 = polarToCartesian(center, center, rAspects, a1);
+  const p2 = polarToCartesian(center, center, rAspects, a2);
+
+  return {
+    asp,
+    p1,
+    p2,
+    color: asp.definition.color,
+    p1Id: asp.planet1.id,
+    p2Id: asp.planet2.id
+  };
+});
+---
+
+<div class="relative flex flex-col items-center justify-center p-2 sm:p-4 w-full">
+  <!-- Interactive Tooltip Overlay -->
+  <div
+    id="radixTooltip"
+    class="pointer-events-none absolute z-30 hidden px-3.5 py-2 rounded-xl bg-slate-950/95 border border-amber-500/40 text-xs shadow-2xl text-white backdrop-blur-md transition-opacity duration-150"
+  >
+  </div>
+
+  <div class="relative w-full max-w-[640px] aspect-square">
+    <svg
+      id="radixSvg"
+      viewBox="0 0 700 700"
+      class="w-full h-full select-none drop-shadow-[0_0_35px_rgba(99,102,241,0.2)]"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <!-- Gradients & Glow Filters -->
+        <radialGradient id="cosmosCenterGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.6" />
+          <stop offset="70%" stop-color="#0f172a" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#070913" stop-opacity="0.95" />
+        </radialGradient>
+
+        <filter id="cosmicGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+
+      <!-- Background Circle -->
+      <circle cx={center} cy={center} r={rOuter + 8} fill="#0b0e1e" stroke="rgba(234, 179, 8, 0.3)" stroke-width="1.5" />
+      <circle cx={center} cy={center} r={rOuter} fill="url(#cosmosCenterGrad)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+
+      <!-- Zodiac Segments Ring -->
+      {zodiacSlices.map(slice => (
+        <g class="zodiac-slice transition-opacity hover:opacity-100 opacity-90 cursor-pointer">
+          <path
+            d={`${describeArc(center, center, rOuter, slice.startAngle, slice.endAngle)} L ${polarToCartesian(center, center, rZodiacInner, slice.startAngle).x} ${polarToCartesian(center, center, rZodiacInner, slice.startAngle).y} ${describeArc(center, center, rZodiacInner, slice.endAngle, slice.startAngle)} Z`}
+            fill={slice.bgColor}
+            stroke="rgba(255, 255, 255, 0.15)"
+            stroke-width="1"
+          />
+          <text
+            x={slice.glyphPos.x}
+            y={slice.glyphPos.y + 7}
+            font-size="22"
+            font-weight="bold"
+            fill={slice.color}
+            text-anchor="middle"
+            filter="url(#cosmicGlow)"
+            class="transition-transform duration-300 hover:scale-125"
+          >
+            {slice.sign.symbol}
+          </text>
+        </g>
+      ))}
+
+      <!-- Inner Circles -->
+      <circle cx={center} cy={center} r={rZodiacInner} fill="none" stroke="rgba(234, 179, 8, 0.4)" stroke-width="1.5" />
+      <circle cx={center} cy={center} r={rHouses} fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" stroke-dasharray="2 4" />
+      <circle cx={center} cy={center} r={rAspects} fill="#060914" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1" />
+
+      <!-- Aspect Lines in Center -->
+      <g id="aspectLinesGroup" class="aspect-lines">
+        {aspectLines.map(line => (
+          <line
+            x1={line.p1.x}
+            y1={line.p1.y}
+            x2={line.p2.x}
+            y2={line.p2.y}
+            stroke={line.color}
+            stroke-width={Math.max(0.8, 2.5 - line.asp.orb * 0.25)}
+            stroke-opacity={Math.max(0.35, 0.9 - line.asp.orb * 0.08)}
+            class="aspect-line transition-all duration-300 hover:stroke-amber-300 hover:stroke-width-2 cursor-pointer"
+            data-p1={line.p1Id}
+            data-p2={line.p2Id}
+            data-tooltip={`${line.asp.planet1.name} ${line.asp.definition.name} ${line.asp.planet2.name} (Orb: ${line.asp.orb.toFixed(1)}°)`}
+          />
+        ))}
+      </g>
+
+      <!-- House Cusps Lines -->
+      {houseLines.map(h => (
+        <g>
+          <line
+            x1={h.p1.x}
+            y1={h.p1.y}
+            x2={h.p2.x}
+            y2={h.p2.y}
+            stroke={h.isAngle ? '#eab308' : 'rgba(255, 255, 255, 0.2)'}
+            stroke-width={h.isAngle ? '2.2' : '0.8'}
+            stroke-dasharray={h.isAngle ? 'none' : '3 3'}
+          />
+          <text
+            x={h.labelPos.x}
+            y={h.labelPos.y + 4}
+            font-size="11"
+            font-weight="bold"
+            fill={h.isAngle ? '#fbbf24' : 'rgba(148, 163, 184, 0.7)'}
+            text-anchor="middle"
+          >
+            {h.number}
+          </text>
+        </g>
+      ))}
+
+      <!-- Cardinal Axes (AC-DC & MC-IC) Arrows -->
+      <!-- AC (Ascendant: 9 o'clock) -->
+      <g>
+        <line x1={center - rZodiacInner - 12} y1={center} x2={center - rHouses} y2={center} stroke="#f59e0b" stroke-width="3" />
+        <polygon points={`${center - rOuter - 10},${center} ${center - rOuter + 2},${center - 6} ${center - rOuter + 2},${center + 6}`} fill="#f59e0b" />
+        <text x={center - rOuter - 18} y={center + 5} font-size="14" font-weight="900" fill="#f59e0b" text-anchor="end">AC</text>
+      </g>
+
+      <!-- MC (Midheaven) -->
+      <g>
+        {(() => {
+          const mcAngle = lonToSvgAngle(mc);
+          const mcP1 = polarToCartesian(center, center, rHouses, mcAngle);
+          const mcP2 = polarToCartesian(center, center, rOuter + 8, mcAngle);
+          const mcText = polarToCartesian(center, center, rOuter + 24, mcAngle);
+          return (
+            <>
+              <line x1={mcP1.x} y1={mcP1.y} x2={mcP2.x} y2={mcP2.y} stroke="#f59e0b" stroke-width="2.5" />
+              <text x={mcText.x} y={mcText.y + 5} font-size="13" font-weight="900" fill="#f59e0b" text-anchor="middle">MC</text>
+            </>
+          );
+        })()}
+      </g>
+
+      <!-- Planets Markers and Glyphs -->
+      {renderedPlanets.map(rp => (
+        <g
+          class="planet-marker group cursor-pointer transition-transform duration-200"
+          data-id={rp.planet.id}
+          data-tooltip={`${rp.planet.symbol} ${rp.planet.name} in ${rp.planet.sign.name} (${rp.planet.degreeString}) – ${rp.planet.house}. Haus`}
+        >
+          <!-- Tick line from house circle to planet position -->
+          <line
+            x1={rp.markerPos.x}
+            y1={rp.markerPos.y}
+            x2={rp.pPos.x}
+            y2={rp.pPos.y}
+            stroke={rp.planet.color}
+            stroke-width="1"
+            stroke-opacity="0.5"
+          />
+          <!-- Planet Glyph Halo -->
+          <circle
+            cx={rp.pPos.x}
+            cy={rp.pPos.y}
+            r="15"
+            fill="#0b0e1e"
+            stroke={rp.planet.color}
+            stroke-width="1.5"
+            class="transition-all group-hover:scale-125 group-hover:stroke-amber-300"
+          />
+          <text
+            x={rp.pPos.x}
+            y={rp.pPos.y + 6}
+            font-size="16"
+            font-weight="bold"
+            fill={rp.planet.color}
+            text-anchor="middle"
+            filter="url(#cosmicGlow)"
+          >
+            {rp.planet.symbol}
+          </text>
+          <!-- Retrograde indicator if applicable -->
+          {rp.planet.isRetrograde && (
+            <text
+              x={rp.pPos.x + 11}
+              y={rp.pPos.y - 7}
+              font-size="9"
+              font-weight="bold"
+              fill="#ef4444"
+            >
+              ℞
+            </text>
+          )}
+        </g>
+      ))}
+
+      <!-- Center Sacred Geometry Symbol -->
+      <circle cx={center} cy={center} r="6" fill="#f59e0b" filter="url(#cosmicGlow)" />
+      <circle cx={center} cy={center} r="14" fill="none" stroke="rgba(234, 179, 8, 0.4)" stroke-width="1" />
+    </svg>
+  </div>
+
+  <!-- Legend & Quick Info -->
+  <div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-300">
+    <div class="flex items-center gap-1.5">
+      <span class="inline-block w-3 h-3 rounded-full bg-red-500/80"></span>
+      <span>Feuer</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="inline-block w-3 h-3 rounded-full bg-emerald-500/80"></span>
+      <span>Erde</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="inline-block w-3 h-3 rounded-full bg-cyan-400/80"></span>
+      <span>Luft</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="inline-block w-3 h-3 rounded-full bg-purple-500/80"></span>
+      <span>Wasser</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tooltip = document.getElementById('radixTooltip');
+  const svg = document.getElementById('radixSvg');
+  const aspectLines = document.querySelectorAll('.aspect-line') as NodeListOf<SVGLineElement>;
+  const planetMarkers = document.querySelectorAll('.planet-marker');
+
+  if (tooltip && svg) {
+    const showTooltip = (text: string, e: MouseEvent) => {
+      tooltip.textContent = text;
+      tooltip.classList.remove('hidden');
+      const rect = svg.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      tooltip.style.left = `${x + 10}px`;
+      tooltip.style.top = `${y - 30}px`;
+    };
+
+    const hideTooltip = () => {
+      tooltip.classList.add('hidden');
+    };
+
+    // Planet marker interactions & aspect highlighting
+    planetMarkers.forEach(el => {
+      el.addEventListener('mouseenter', (e: any) => {
+        const text = el.getAttribute('data-tooltip') || '';
+        const planetId = el.getAttribute('data-id');
+        showTooltip(text, e);
+
+        // Highlight connected aspect lines
+        if (planetId) {
+          aspectLines.forEach(line => {
+            const p1 = line.getAttribute('data-p1');
+            const p2 = line.getAttribute('data-p2');
+            if (p1 === planetId || p2 === planetId) {
+              line.style.strokeWidth = '2.8px';
+              line.style.strokeOpacity = '1';
+            } else {
+              line.style.strokeOpacity = '0.1';
+            }
+          });
+        }
+      });
+
+      el.addEventListener('mousemove', (e: any) => {
+        const text = el.getAttribute('data-tooltip') || '';
+        showTooltip(text, e);
+      });
+
+      el.addEventListener('mouseleave', () => {
+        hideTooltip();
+        aspectLines.forEach(line => {
+          line.style.strokeWidth = '';
+          line.style.strokeOpacity = '';
+        });
+      });
+    });
+
+    // Aspect line interactions
+    aspectLines.forEach(line => {
+      line.addEventListener('mouseenter', (e: any) => {
+        const text = line.getAttribute('data-tooltip') || '';
+        showTooltip(text, e);
+      });
+      line.addEventListener('mousemove', (e: any) => {
+        const text = line.getAttribute('data-tooltip') || '';
+        showTooltip(text, e);
+      });
+      line.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
+    });
+  }
+</script>

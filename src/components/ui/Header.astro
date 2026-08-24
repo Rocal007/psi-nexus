@@ -1,0 +1,312 @@
+---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+
+const SEMANTIC_MENU_CHAPTERS = [
+  {
+    title: 'Sphäre I: Wesen & Identität',
+    icon: '👑',
+    color: 'text-amber-400',
+    description: 'Das innere Fundament: Radix-Rad, Aspekte, 3 Lebensbühnen & Hohes Seelendossier',
+    gates: [
+      { id: 'radix', num: 'Tor I', name: 'Kosmisches Fundament (Radix & 4 Achsen)', icon: '🌌' },
+      { id: 'pillars', num: 'Tor II', name: 'Die 3 Lebens-Säulen (Liebe, Beruf, Erfüllung)', icon: '💖' },
+      { id: 'dossier', num: 'Tor III', name: 'Das Hohe Seelen-Dossier (Die 7 Strahlen)', icon: '✦' }
+    ]
+  },
+  {
+    title: 'Sphäre II: Karma & Schwingungscodes',
+    icon: '🔮',
+    color: 'text-purple-400',
+    description: 'Karmische Zeitlinien: Schicksalstore, pythagoräische Zahlenschwingung & Engelszeichen',
+    gates: [
+      { id: 'karmic', num: 'Tor IV', name: 'Karmische Tore (Mondknoten, Vertex, Lilith, Chiron)', icon: '☊' },
+      { id: 'numerology', num: 'Tor V', name: 'Pythagoräischer Schwingungscode (Lebensweg & Name)', icon: '🔢' },
+      { id: 'angel_numbers', num: 'Tor VI', name: 'Engelszahlen & Spiegeluhrzeiten (11:11, 222...)', icon: '🕊️' }
+    ]
+  },
+  {
+    title: 'Sphäre III: Praxis, Heilung & Rhythmus',
+    icon: '🌿',
+    color: 'text-emerald-400',
+    description: 'Alltägliche Kraftquellen: Heilstein-Apotheke, Mondkalender & Sternbilder-Atlas',
+    gates: [
+      { id: 'gemstones', num: 'Tor VII', name: 'Heilstein-Apotheke (Persönliche Seelen-Kristalle)', icon: '💎' },
+      { id: 'moon_wisdom', num: 'Tor VIII', name: 'Mond- & Lebensführer (Kalender & Leitspruch)', icon: '🌙' },
+      { id: 'constellations', num: 'Tor IX', name: 'Das Große Sternbilder-Kompendium & Atlas', icon: '✨' }
+    ]
+  },
+  {
+    title: 'Sphäre IV: Resonanz, Partner & Welt-Orte',
+    icon: '🌍',
+    color: 'text-cyan-400',
+    description: 'Das äußere Resonanzfeld: Globale Kraftorte & Partner- / Familien-Karmamatrix',
+    gates: [
+      { id: 'geochart', num: 'Tor X', name: 'Astro-Kartographie (Weltkarte der Kraftorte)', icon: '🌍' },
+      { id: 'synastry', num: 'Tor XI', name: 'Partner-Synastrie & Familien-Karmamatrix', icon: '💞' }
+    ]
+  }
+];
+---
+
+<header class="w-full border-b border-white/10 bg-slate-950/85 backdrop-blur-xl sticky top-0 z-50 transition-colors duration-500 header-bar">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+    
+    <!-- Logo & Branding -->
+    <a href="/" class="flex items-center gap-3 group shrink-0">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-500 to-purple-600 p-[1.5px] shadow-[0_0_20px_rgba(234,179,8,0.4)] brand-icon-box">
+        <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-amber-300 font-bold text-xl group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 font-serif brand-icon-letter">
+          Ψ
+        </div>
+      </div>
+      <div>
+        <div class="font-black text-base tracking-wide text-white flex items-center gap-1.5 brand-title">
+          <span class="cosmic-gold-gradient font-serif font-black text-lg">Ψ</span>
+          <span class="text-white font-black header-brand-text">NEXUS</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden xl:inline-block theme-badge-label">VFB</span>
+        </div>
+        <div class="text-[10px] uppercase tracking-widest text-slate-400 font-medium hidden sm:block header-subtitle-text">
+          Das Kosmische Seelenbuch & Radix
+        </div>
+      </div>
+    </a>
+
+    <!-- Center: Active Person Individual Summary in Header Bar -->
+    <a
+      href="#personalitySummarySection"
+      id="headerActivePersonBadge"
+      class="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs transition-all cursor-pointer shadow-sm group truncate"
+      title="Zur individuellen Persönlichkeits-Zusammenfassung springen"
+    >
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+      <span class="font-bold text-white group-hover:text-amber-300 transition-colors font-tech" id="headerPersonName">
+        Denise Christin
+      </span>
+      <span class="text-slate-400">|</span>
+      <span class="text-amber-300 font-mono text-[11px]" id="headerPersonSigns">
+        ☉ Stier • ☽ Krebs • ↑ Löwe
+      </span>
+    </a>
+
+    <!-- Right Actions: Multi-Theme Switcher & Hamburger Button -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      
+      <!-- Primary Theme Switcher in Header -->
+      <ThemeSwitcher variant="header" />
+
+      <a
+        href="#decoderToggleHeader"
+        class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-xs font-semibold text-purple-300 transition-all cursor-pointer"
+      >
+        <span>🧠</span>
+        <span>Birkenbihl</span>
+      </a>
+
+      <button
+        type="button"
+        onclick="window.print()"
+        class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+        title="Als PDF drucken oder exportieren"
+      >
+        <span>⎙</span>
+        <span>PDF</span>
+      </button>
+
+      <a
+        href="#form-section"
+        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all shadow-[0_0_15px_rgba(234,179,8,0.2)] cursor-pointer items-center gap-1.5 chart-btn"
+      >
+        <span>✧</span>
+        <span>Neues Chart</span>
+      </a>
+
+      <!-- Hamburger Toggle Button (Top Right) -->
+      <button
+        type="button"
+        id="hamburgerMenuBtn"
+        class="w-10 h-10 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-amber-300 flex items-center justify-center text-xl transition-all cursor-pointer shadow-lg hover:border-amber-400/40"
+        aria-label="Hauptmenü öffnen"
+      >
+        <span id="hamburgerIcon">☰</span>
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<!-- Cosmic Mega-Menu Off-Canvas Overlay / Drawer -->
+<div
+  id="cosmicMenuDrawer"
+  class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-2xl transition-all duration-300 opacity-0 pointer-events-none flex justify-end"
+>
+  <!-- Backdrop Click Listener -->
+  <div id="drawerBackdrop" class="absolute inset-0"></div>
+
+  <!-- Slide-Over Panel -->
+  <div
+    id="drawerPanel"
+    class="w-full max-w-xl bg-slate-950 border-l border-white/15 h-full overflow-y-auto p-6 md:p-8 space-y-6 relative z-10 shadow-2xl transform translate-x-full transition-transform duration-300 drawer-box"
+  >
+    <!-- Drawer Header -->
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xl border border-amber-500/30 font-serif">
+          Ψ
+        </div>
+        <div>
+          <h2 class="text-lg font-black text-white">Ψ-NEXUS Seelenmatrix</h2>
+          <div class="text-[10px] uppercase font-mono tracking-widest text-slate-400">
+            Die 4 Kognitiven Sphären (11 Tore)
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        id="closeDrawerBtn"
+        class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center text-lg transition-all cursor-pointer"
+        aria-label="Menü schließen"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Theme Switcher in Drawer -->
+    <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+      <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Design-Stil wählen</div>
+      <ThemeSwitcher variant="drawer" />
+    </div>
+
+    <!-- 3 Semantic Chapter Categories -->
+    <div class="space-y-6">
+      {SEMANTIC_MENU_CHAPTERS.map(chapter => (
+        <div class="space-y-3">
+          <div class="space-y-0.5">
+            <div class={`text-xs font-black uppercase tracking-wider flex items-center gap-2 ${chapter.color}`}>
+              <span>{chapter.icon}</span>
+              <span>{chapter.title}</span>
+            </div>
+            <p class="text-[11px] text-slate-400">{chapter.description}</p>
+          </div>
+
+          <div class="space-y-1.5">
+            {chapter.gates.map(gate => (
+              <button
+                type="button"
+                class="drawer-gate-btn w-full p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-amber-400/30 text-left transition-all flex items-center justify-between group cursor-pointer"
+                data-gate-target={gate.id}
+              >
+                <div class="flex items-center gap-2.5">
+                  <span class="text-lg">{gate.icon}</span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-200 group-hover:text-white">{gate.name}</div>
+                    <div class="text-[10px] text-slate-400">{gate.num}</div>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-400 group-hover:text-amber-300 font-mono">➔</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <!-- Gesamt-Seelenbuch Button -->
+      <div class="pt-2">
+        <button
+          type="button"
+          class="drawer-gate-btn w-full p-4 rounded-2xl bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-slate-900 border border-purple-500/40 text-left transition-all flex items-center justify-between group cursor-pointer shadow-xl"
+          data-gate-target="all"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">📜</span>
+            <div>
+              <div class="text-sm font-extrabold text-white">Das Gesamt-Seelenbuch (Alle 9 Mappen)</div>
+              <div class="text-[11px] text-purple-300/80">Alle Tore simultan auf einer Seite geöffnet</div>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-purple-300">Öffnen ➔</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Tools Footer -->
+    <div class="pt-6 border-t border-white/10 space-y-3">
+      <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Direkt-Werkzeuge</div>
+      
+      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+        <a
+          href="#decoderToggleHeader"
+          class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 text-center transition-all cursor-pointer close-drawer-link"
+        >
+          🧠 Birkenbihl-Decoder
+        </a>
+        <a
+          href="#form-section"
+          class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link"
+        >
+          ✧ Neues Chart
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCosmicDrawer() {
+    const menuBtn = document.getElementById('hamburgerMenuBtn');
+    const closeBtn = document.getElementById('closeDrawerBtn');
+    const drawer = document.getElementById('cosmicMenuDrawer');
+    const panel = document.getElementById('drawerPanel');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const gateButtons = document.querySelectorAll('.drawer-gate-btn');
+    const closeLinks = document.querySelectorAll('.close-drawer-link');
+
+    function openDrawer() {
+      if (!drawer || !panel) return;
+      drawer.classList.remove('opacity-0', 'pointer-events-none');
+      drawer.classList.add('opacity-100');
+      panel.classList.remove('translate-x-full');
+      panel.classList.add('translate-x-0');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      if (!drawer || !panel) return;
+      drawer.classList.remove('opacity-100');
+      drawer.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-0');
+      panel.classList.add('translate-x-full');
+      document.body.style.overflow = '';
+    }
+
+    menuBtn?.addEventListener('click', openDrawer);
+    closeBtn?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Gate Buttons trigger tab switch and close drawer
+    gateButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-gate-target') || 'radix';
+        const matchingTab = document.querySelector(`.tab-btn[data-tab-target="${targetId}"]`) as HTMLElement;
+        if (matchingTab) {
+          matchingTab.click();
+        }
+        closeDrawer();
+      });
+    });
+
+    closeLinks.forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCosmicDrawer);
+  } else {
+    initCosmicDrawer();
+  }
+</script>

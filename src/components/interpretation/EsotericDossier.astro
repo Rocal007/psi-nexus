@@ -1,0 +1,246 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const { synthesis } = chart;
+---
+
+<div class="space-y-10">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-2xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-cyan-300 text-xs font-semibold uppercase tracking-wider">
+      <span>✦</span> Tor V: Das Hohe Esoterische Seelen-Dossier <span>✦</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+      Die Kosmische Matrix Deiner Seeleninkarnation
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Die holistische Synthese aus esoterischer Astrologie, Sieben-Strahlen-Lehre und Tiefenpsychologie: Deine Schöpferkraft, deine Seelen-Urwunde und deine karmische Vollendung.
+    </p>
+  </div>
+
+  <!-- 1. The Core Trinity (Sun, Moon, Ascendant) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Sun (The Divine Self) -->
+    <div class="cosmic-glass-gold rounded-3xl p-6 md:p-7 relative overflow-hidden flex flex-col justify-between shadow-2xl border border-amber-500/40 cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+              ☉
+            </span>
+            <div>
+              <span class="text-[10px] uppercase tracking-widest font-extrabold text-amber-400">1. Strahl-Pol</span>
+              <div class="text-xs text-slate-200 font-bold">Schöpferisches Selbst</div>
+            </div>
+          </div>
+          <span id="dossierSunDeg" class="text-xs font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded border border-white/5">{synthesis.sun.planet.degreeString}</span>
+        </div>
+
+        <div>
+          <h3 id="dossierSunTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+            <span>Sonne in {synthesis.sun.planet.sign.name}</span>
+            <span class="text-amber-400 text-2xl">{synthesis.sun.planet.sign.symbol}</span>
+          </h3>
+          <p id="dossierSunMotto" class="text-xs text-amber-200/90 italic mt-1 font-medium">"{synthesis.sun.planet.esotericSign.soulMotto}"</p>
+        </div>
+
+        <p id="dossierSunInsight" class="text-sm text-slate-200 leading-relaxed">
+          {synthesis.sun.insight}
+        </p>
+
+        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs space-y-1">
+          <div class="font-bold text-amber-300 flex items-center gap-1">
+            <span>✦</span> Seelenauftrag der Sonne:
+          </div>
+          <div id="dossierSunPurpose" class="text-slate-300 leading-relaxed">{synthesis.sun.planet.esotericSign.soulPurpose}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moon (The Soul Ground & Subconscious) -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 relative overflow-hidden flex flex-col justify-between shadow-2xl border border-indigo-500/30 cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="w-10 h-10 rounded-2xl bg-slate-200/20 text-slate-100 flex items-center justify-center font-bold text-xl border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              ☽
+            </span>
+            <div>
+              <span class="text-[10px] uppercase tracking-widest font-extrabold text-slate-300">2. Strahl-Pol</span>
+              <div class="text-xs text-slate-200 font-bold">Emotionaler Urgrund</div>
+            </div>
+          </div>
+          <span id="dossierMoonDeg" class="text-xs font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded border border-white/5">{synthesis.moon.planet.degreeString}</span>
+        </div>
+
+        <div>
+          <h3 id="dossierMoonTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+            <span>Mond in {synthesis.moon.planet.sign.name}</span>
+            <span class="text-slate-300 text-2xl">{synthesis.moon.planet.sign.symbol}</span>
+          </h3>
+          <p id="dossierMoonMotto" class="text-xs text-slate-300/90 italic mt-1 font-medium">"{synthesis.moon.planet.esotericSign.soulMotto}"</p>
+        </div>
+
+        <p id="dossierMoonInsight" class="text-sm text-slate-200 leading-relaxed">
+          {synthesis.moon.insight}
+        </p>
+
+        <div class="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 text-xs space-y-1">
+          <div class="font-bold text-indigo-300 flex items-center gap-1">
+            <span>✦</span> Seelische Nährung & Schutz:
+          </div>
+          <div id="dossierMoonKey" class="text-slate-300 leading-relaxed">{synthesis.moon.planet.esotericSign.healingKey}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ascendant (The Soul Vehicle in the World) -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 relative overflow-hidden flex flex-col justify-between shadow-2xl border border-cyan-500/30 cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-cyan-500/15 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-base border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+              AC
+            </span>
+            <div>
+              <span class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400">3. Strahl-Pol</span>
+              <div class="text-xs text-slate-200 font-bold">Das Seelentor</div>
+            </div>
+          </div>
+          <span id="dossierAscDeg" class="text-xs font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded border border-white/5">{synthesis.ascendant.degreeString}</span>
+        </div>
+
+        <div>
+          <h3 id="dossierAscTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+            <span>Aszendent {synthesis.ascendant.sign.name}</span>
+            <span class="text-cyan-400 text-2xl">{chart.housesResult.angles.ascendant.sign.symbol}</span>
+          </h3>
+          <p id="dossierAscRay" class="text-xs text-cyan-200/90 italic mt-1 font-medium">{synthesis.ascendant.sign.esotericRay}</p>
+        </div>
+
+        <p id="dossierAscInsight" class="text-sm text-slate-200 leading-relaxed">
+          {synthesis.ascendant.insight}
+        </p>
+
+        <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 text-xs space-y-1">
+          <div class="font-bold text-cyan-300 flex items-center gap-1">
+            <span>✦</span> Esoterische Herrscher-Frequenz:
+          </div>
+          <div id="dossierAscRuler" class="text-slate-300 leading-relaxed">{synthesis.ascendant.sign.esotericRulerDescription}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 2. Karmic Axis: North Node (Evolutionary Leap) -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 relative overflow-hidden shadow-2xl">
+    <div class="flex items-center gap-3.5 mb-6">
+      <span class="w-11 h-11 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-400/40 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+        ☊
+      </span>
+      <div>
+        <div class="text-xs uppercase tracking-wider font-extrabold text-amber-400">Karmischer Evolutionsauftrag</div>
+        <h3 id="dossierNodeTitle" class="text-xl md:text-2xl font-extrabold text-white">{synthesis.northNode.deutung.title}</h3>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Where you come from (South Node Comfort Zone) -->
+      <div class="p-5 rounded-2xl bg-red-950/25 border border-red-500/30 space-y-2">
+        <div class="flex items-center gap-2 text-rose-300 text-xs font-bold uppercase tracking-wider">
+          <span>☋</span> Karmischer Ursprung (Vergangenes Karma)
+        </div>
+        <p id="dossierNodeOrigin" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+          {synthesis.northNode.deutung.karmicOrigin}
+        </p>
+      </div>
+
+      <!-- The Growth Leap (North Node) -->
+      <div class="p-5 rounded-2xl bg-amber-950/25 border border-amber-500/30 space-y-2">
+        <div class="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-wider">
+          <span>☊</span> Der evolutionäre Quantensprung
+        </div>
+        <p id="dossierNodeLeap" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+          {synthesis.northNode.deutung.evolutionaryLeap}
+        </p>
+      </div>
+
+      <!-- Integration Mastery -->
+      <div class="p-5 rounded-2xl bg-emerald-950/25 border border-emerald-500/30 space-y-2">
+        <div class="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+          <span>✦</span> Meisterschaft der Integration
+        </div>
+        <p id="dossierNodeTask" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+          {synthesis.northNode.deutung.integrationTask}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Shadow & Medicine: Chiron & Lilith -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Chiron (The Wounded Healer) -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-emerald-500/30 space-y-4 shadow-xl cosmic-corner-accent">
+      <div class="flex items-center gap-3.5">
+        <span class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xl border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.3)]">
+          ⚷
+        </span>
+        <div>
+          <div class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-400">Der verwundete Heiler</div>
+          <h3 id="dossierChironTitle" class="text-lg font-bold text-white">Chiron in {synthesis.chiron.planet.sign.name} ({synthesis.chiron.planet.house}. Haus)</h3>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+          <div class="text-xs font-bold text-rose-300">Die Seelen-Urwunde:</div>
+          <p id="dossierChironWound" class="text-slate-300 text-xs leading-relaxed">{synthesis.chiron.deutung.wound}</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
+          <div class="text-xs font-bold text-emerald-300">Die erwachende Heil-Medizin:</div>
+          <p id="dossierChironMed" class="text-slate-200 text-xs leading-relaxed">{synthesis.chiron.deutung.medicine}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lilith (The Black Moon / Shadow Autonomy) -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-pink-500/30 space-y-4 shadow-xl cosmic-corner-accent">
+      <div class="flex items-center gap-3.5">
+        <span class="w-10 h-10 rounded-2xl bg-pink-500/20 text-pink-300 flex items-center justify-center font-bold text-xl border border-pink-500/40 shadow-[0_0_12px_rgba(236,72,153,0.3)]">
+          ⚸
+        </span>
+        <div>
+          <div class="text-[10px] uppercase tracking-widest font-extrabold text-pink-400">Die wilde Urkraft</div>
+          <h3 id="dLilithTitle" class="text-lg font-bold text-white">Lilith in {synthesis.lilith.planet.sign.name} ({synthesis.lilith.planet.house}. Haus)</h3>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
+          <div class="text-xs font-bold text-slate-400">Der verdrängte Schatten:</div>
+          <p id="dLilithShadow" class="text-slate-300 text-xs leading-relaxed">{synthesis.lilith.deutung.shadow}</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-pink-500/10 border border-pink-500/25 space-y-1">
+          <div class="text-xs font-bold text-pink-300">Die ungezähmte Seelenkraft:</div>
+          <p id="dLilithPower" class="text-slate-200 text-xs leading-relaxed">{synthesis.lilith.deutung.power}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

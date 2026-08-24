@@ -1,0 +1,492 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { calculateCurrentMoonCalendar } from '../../lib/astrology/moonCalendar';
+import { generateProfileWisdom } from '../../lib/numerology/profileWisdom';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const moonCal = calculateCurrentMoonCalendar(new Date(), chart.input.cityName);
+const wisdom = generateProfileWisdom(chart, moonCal);
+---
+
+<div class="space-y-10">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-yellow-300 text-xs font-semibold uppercase tracking-wider">
+      <span>🌙</span> Tor VIII: Mondkalender & Persönlicher Seelen-Leitspruch <span>📜</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
+      Kosmischer Mond-Rhythmus & Ewige Seelenweisheit
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Lebe im Einklang mit den uralten Mondrhythmen für Haare, Haushalt, Garten und Gesundheit – gekrönt von deinem unverwechselbaren, persönlichen Seelen-Leitspruch.
+    </p>
+  </div>
+
+  <!-- 1. The Grand Eternal Soul Motto Hero Card -->
+  <div class="cosmic-glass-gold rounded-3xl p-6 md:p-9 border border-amber-500/50 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+    <div class="absolute -right-12 -bottom-12 w-56 h-56 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="space-y-6 relative z-10">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/30 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="w-11 h-11 rounded-2xl bg-amber-500/25 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.4)]">
+            🌟
+          </span>
+          <div>
+            <div class="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-extrabold">
+              Deine Höchste Seelensignatur
+            </div>
+            <h3 class="text-xl md:text-2xl font-black text-white" id="soulMottoTitle">{wisdom.grandSoulMotto.title}</h3>
+          </div>
+        </div>
+
+        <div class="text-xs font-mono text-amber-300/90 bg-black/50 px-3.5 py-1.5 rounded-full border border-amber-500/30" id="soulMottoFormula">
+          {wisdom.grandSoulMotto.astrologicalFormula}
+        </div>
+      </div>
+
+      <!-- Main Motto Quote -->
+      <div class="p-6 rounded-2xl bg-black/60 border border-amber-500/40 text-center space-y-3 shadow-inner">
+        <div class="text-2xl md:text-3xl text-amber-400 font-serif">„</div>
+        <p class="text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-300 to-amber-400 leading-relaxed max-w-3xl mx-auto" id="soulMottoText">
+          {wisdom.grandSoulMotto.motto.replace(/[„“]/g, '')}
+        </p>
+        <div class="text-2xl md:text-3xl text-amber-400 font-serif">“</div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-1">
+          <div class="font-bold text-amber-300 flex items-center gap-1.5">
+            <span>✨</span> Deine Seelen-Essenz:
+          </div>
+          <p class="text-slate-200 leading-relaxed" id="soulMottoEssence">{wisdom.grandSoulMotto.essence}</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 space-y-1">
+          <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+            <span>🪐</span> Astrologische Zusammensetzung:
+          </div>
+          <p class="text-slate-200 leading-relaxed" id="soulMottoSubline">{wisdom.grandSoulMotto.subline}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Dynamic Daily Lunar Mantra & Geography Box -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-6 relative overflow-hidden">
+    
+    <!-- Moon Phase & Geography Status Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div class="flex items-center gap-3.5">
+        <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-yellow-400/40 flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(234,179,8,0.25)]">
+          {moonCal.moonPhaseIcon}
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs uppercase font-extrabold tracking-widest text-amber-400">Aktueller Mondstand Heute</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              {moonCal.moonPhasePercent}% beleuchtet
+            </span>
+          </div>
+          <h3 class="text-xl font-black text-white">{moonCal.moonPhaseName}</h3>
+          <div class="text-xs text-slate-300 flex items-center gap-2 mt-0.5">
+            <span>Mond in <strong class="text-white">{moonCal.moonSign.name}</strong> ({moonCal.moonDegreeString})</span>
+            <span>•</span>
+            <span class="text-amber-300">{moonCal.elementQuality}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Badge -->
+      <div class="text-right text-xs bg-slate-950/80 px-4 py-2 rounded-2xl border border-white/10 space-y-0.5">
+        <div class="text-slate-400">Geografischer Bezugsort:</div>
+        <div class="font-bold text-white flex items-center justify-end gap-1.5">
+          <span>📍 {chart.input.cityName}</span>
+          <span class="text-slate-400 font-mono text-[10px]">({chart.input.latitude.toFixed(2)}° N, {chart.input.longitude.toFixed(2)}° E)</span>
+        </div>
+        <div class="text-[11px] text-amber-300/80 font-medium">
+          🗓️ {moonCal.dateString}
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Soul Mantra -->
+    <div class="p-5 md:p-6 rounded-2xl bg-gradient-to-r from-purple-950/40 via-indigo-950/40 to-slate-900 border border-purple-500/30 space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="text-xs uppercase font-bold tracking-wider text-purple-300 flex items-center gap-1.5">
+          <span>☀️</span> Dein Tagesleitsatz für heute
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-500/40">
+          FOKUS: {wisdom.dailySoulMantra.focusWord}
+        </span>
+      </div>
+
+      <p class="text-lg md:text-xl font-bold text-white italic">
+        {wisdom.dailySoulMantra.mantra}
+      </p>
+
+      <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+        {wisdom.dailySoulMantra.encouragement}
+      </p>
+
+      <div class="p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-purple-200/90 font-medium">
+        ✨ <strong>Tages-Affirmation:</strong> {wisdom.dailySoulMantra.affirmation}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 3. The 4 Life-Area Lunar Calendars (Haushalt, Haare, Garten, Ernährung) -->
+  <div class="space-y-6">
+    <div class="flex items-center gap-2.5 border-b border-white/10 pb-3">
+      <span class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center font-bold text-base border border-blue-500/40">
+        🌙
+      </span>
+      <div>
+        <h3 class="text-xl font-bold text-white">Der Alltags-Mondkalender nach Lebensbereichen</h3>
+        <p class="text-xs text-slate-400">Optimales Timing für Beauty, Haushalt, Garten und Ernährung laut heutigem Mondstand</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- A. Haare & Beauty -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-pink-500/30 space-y-4 shadow-xl flex flex-col justify-between cosmic-corner-accent">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">💇</span>
+              <div>
+                <h4 class="text-lg font-bold text-white">Haare, Beauty & Körperpflege</h4>
+                <div class="text-[11px] text-pink-300">Schneiden, Färben, Kosmetik & Nägel</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-300 border border-pink-500/30">
+              {moonCal.moonSign.name}
+            </span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <!-- Hair growth -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Haare schneiden (für schnelles Wachstum):</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.hairAndBeauty.hairCutForGrowth.badgeColor}`}>
+                  {moonCal.hairAndBeauty.hairCutForGrowth.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.hairAndBeauty.hairCutForGrowth.detail}</p>
+            </div>
+
+            <!-- Hair density -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Haare schneiden (für dichte Fülle & Kurzhaar):</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.hairAndBeauty.hairCutForDensity.badgeColor}`}>
+                  {moonCal.hairAndBeauty.hairCutForDensity.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.hairAndBeauty.hairCutForDensity.detail}</p>
+            </div>
+
+            <!-- Hair coloring -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Haare färben & tönen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.hairAndBeauty.hairColoring.badgeColor}`}>
+                  {moonCal.hairAndBeauty.hairColoring.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.hairAndBeauty.hairColoring.detail}</p>
+            </div>
+
+            <!-- Skin care -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Hautpflege & Peeling:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.hairAndBeauty.skinCareAndPeeling.badgeColor}`}>
+                  {moonCal.hairAndBeauty.skinCareAndPeeling.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.hairAndBeauty.skinCareAndPeeling.detail}</p>
+            </div>
+
+            <!-- Nails -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Maniküre & Nägel feilen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.hairAndBeauty.nailCare.badgeColor}`}>
+                  {moonCal.hairAndBeauty.nailCare.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.hairAndBeauty.nailCare.detail}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-pink-500/10 border border-pink-500/20 text-xs text-pink-200">
+          💡 <strong>Beauty-Tipp des Tages:</strong> {moonCal.hairAndBeauty.hairCutForGrowth.tip}
+        </div>
+      </div>
+
+      <!-- B. Hausputz & Wäsche -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-cyan-500/30 space-y-4 shadow-xl flex flex-col justify-between cosmic-corner-accent">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🧹</span>
+              <div>
+                <h4 class="text-lg font-bold text-white">Hausputz, Wäsche & Ordnung</h4>
+                <div class="text-[11px] text-cyan-300">Fenster, Flecken, Entrümpeln & Lüften</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+              {moonCal.element}-Tag
+            </span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <!-- Window cleaning -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Fenster putzen (streifenfrei):</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.householdAndCleaning.windowCleaning.badgeColor}`}>
+                  {moonCal.householdAndCleaning.windowCleaning.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.householdAndCleaning.windowCleaning.detail}</p>
+            </div>
+
+            <!-- Laundry -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Wäsche waschen (hartnäckige Flecken):</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.householdAndCleaning.laundry.badgeColor}`}>
+                  {moonCal.householdAndCleaning.laundry.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.householdAndCleaning.laundry.detail}</p>
+            </div>
+
+            <!-- Decluttering -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Ausmisten & Keller entrümpeln:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.householdAndCleaning.decluttering.badgeColor}`}>
+                  {moonCal.householdAndCleaning.decluttering.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.householdAndCleaning.decluttering.detail}</p>
+            </div>
+
+            <!-- Mold & Airing -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Wohnung lüften & Feuchtigkeit austreiben:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.householdAndCleaning.moldAndAirCleaning.badgeColor}`}>
+                  {moonCal.householdAndCleaning.moldAndAirCleaning.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.householdAndCleaning.moldAndAirCleaning.detail}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-200">
+          💡 <strong>Haushalts-Tipp:</strong> {moonCal.householdAndCleaning.windowCleaning.tip}
+        </div>
+      </div>
+
+      <!-- C. Pflanzen & Garten -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-emerald-500/30 space-y-4 shadow-xl flex flex-col justify-between cosmic-corner-accent">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🌿</span>
+              <div>
+                <h4 class="text-lg font-bold text-white">Garten, Balkon & Zimmerpflanzen</h4>
+                <div class="text-[11px] text-emerald-300">Gießen, Umtopfen, Düngen & Jäten</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+              {moonCal.elementQuality.split(' ')[0]}
+            </span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <!-- Watering -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Pflanzen gießen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.plantsAndGarden.watering.badgeColor}`}>
+                  {moonCal.plantsAndGarden.watering.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.plantsAndGarden.watering.detail}</p>
+            </div>
+
+            <!-- Repotting -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Umtopfen & Neuanpflanzungen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.plantsAndGarden.repottingAndPlanting.badgeColor}`}>
+                  {moonCal.plantsAndGarden.repottingAndPlanting.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.plantsAndGarden.repottingAndPlanting.detail}</p>
+            </div>
+
+            <!-- Fertilizing -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Pflanzendünger verabreichen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.plantsAndGarden.fertilizing.badgeColor}`}>
+                  {moonCal.plantsAndGarden.fertilizing.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.plantsAndGarden.fertilizing.detail}</p>
+            </div>
+
+            <!-- Weeding -->
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-200">Unkraut jäten & Schädlinge bekämpfen:</span>
+                <span class={`px-2 py-0.5 rounded text-[10px] font-bold border ${moonCal.plantsAndGarden.weeding.badgeColor}`}>
+                  {moonCal.plantsAndGarden.weeding.statusText}
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-300">{moonCal.plantsAndGarden.weeding.detail}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-200">
+          💡 <strong>Garten-Tipp:</strong> {moonCal.plantsAndGarden.watering.tip}
+        </div>
+      </div>
+
+      <!-- D. Ernährung & Gesundheit -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-xl flex flex-col justify-between cosmic-corner-accent">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">🥗</span>
+              <div>
+                <h4 class="text-lg font-bold text-white">Ernährung & Organ-Schonung</h4>
+                <div class="text-[11px] text-amber-300">Stoffwechsel, Fasten & Vitalität</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
+              Zone: {moonCal.bodyRegion.split(',')[0]}
+            </span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+              <div class="font-bold text-amber-300">🍽️ Nahrungsschwerpunkt heute:</div>
+              <p class="text-slate-200">{moonCal.nutritionAndHealth.foodFocus}</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">{moonCal.nutritionAndHealth.nutritionQuality}</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/20 space-y-1">
+              <div class="font-bold text-rose-300">🩺 Zu schonende Körperregion:</div>
+              <p class="text-slate-200 font-medium">{moonCal.nutritionAndHealth.organToProtect}</p>
+              <p class="text-[11px] text-slate-400">{moonCal.nutritionAndHealth.beneficialHealthTip}</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+              <span class="font-bold text-slate-200">Fasten & Entgiftungs-Effizienz:</span>
+              <span class={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${moonCal.nutritionAndHealth.detoxEfficiency.badgeColor}`}>
+                {moonCal.nutritionAndHealth.detoxEfficiency.statusText}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200">
+          💡 <strong>Gesundheits-Tipp:</strong> {moonCal.nutritionAndHealth.detoxEfficiency.tip}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. The 3 Pillars Life Maxims (Liebe, Beruf, Heilung) -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 space-y-6 shadow-2xl">
+    <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+      <span class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-lg border border-purple-500/30">
+        📜
+      </span>
+      <div>
+        <h3 class="text-xl font-bold text-white">Die 3 Säulen-Lebensweisheiten deines Seelenplans</h3>
+        <p class="text-xs text-slate-400">Konkrete Leitsätze für Herz, Berufung und Seelenfrieden</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Love -->
+      <div class="p-5 rounded-2xl bg-pink-950/20 border border-pink-500/30 space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-pink-300 text-xs font-bold uppercase tracking-wider">
+            <span>💖</span> 1. Säule: Liebe & Partnerschaft
+          </div>
+          <h4 class="text-base font-extrabold text-white">{wisdom.threePillarsWisdom.loveAndHeart.motto}</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            {wisdom.threePillarsWisdom.loveAndHeart.deepInsight}
+          </p>
+        </div>
+        <div class="pt-3 border-t border-white/10 text-xs text-pink-200 font-medium italic">
+          „{wisdom.threePillarsWisdom.loveAndHeart.ruleOfLife}“
+        </div>
+      </div>
+
+      <!-- Vocation -->
+      <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-wider">
+            <span>💼</span> 2. Säule: Berufung & Erfolg
+          </div>
+          <h4 class="text-base font-extrabold text-white">{wisdom.threePillarsWisdom.vocationAndMastery.motto}</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            {wisdom.threePillarsWisdom.vocationAndMastery.deepInsight}
+          </p>
+        </div>
+        <div class="pt-3 border-t border-white/10 text-xs text-amber-200 font-medium italic">
+          „{wisdom.threePillarsWisdom.vocationAndMastery.ruleOfLife}“
+        </div>
+      </div>
+
+      <!-- Peace & Healing -->
+      <div class="p-5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-3 flex flex-col justify-between">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+            <span>🧘</span> 3. Säule: Seelenfrieden & Heilung
+          </div>
+          <h4 class="text-base font-extrabold text-white">{wisdom.threePillarsWisdom.innerPeaceAndHealing.motto}</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            {wisdom.threePillarsWisdom.innerPeaceAndHealing.deepInsight}
+          </p>
+        </div>
+        <div class="pt-3 border-t border-white/10 text-xs text-emerald-200 font-medium italic">
+          „{wisdom.threePillarsWisdom.innerPeaceAndHealing.ruleOfLife}“
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dragon Path Courage Booster -->
+    <div class="p-5 rounded-2xl bg-gradient-to-r from-yellow-950/40 via-amber-950/40 to-slate-900 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400">Karmische Ermutigung (Nordknoten)</div>
+        <h4 class="text-sm md:text-base font-bold text-white">{wisdom.karmicEvolutionWisdom.dragonPathMotto}</h4>
+        <p class="text-xs text-slate-300">{wisdom.karmicEvolutionWisdom.courageBooster}</p>
+      </div>
+      <span class="text-3xl">🐉</span>
+    </div>
+  </div>
+</div>

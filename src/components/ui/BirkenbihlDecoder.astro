@@ -1,0 +1,184 @@
+---
+// Birkenbihl Neurodidactic Concept Decoder
+// Translates abstract astrology & numerology terms instantly into brain-friendly mental models.
+const DECODED_TERMS = [
+  {
+    term: 'Das Radix (Geburtshoroskop)',
+    symbol: '🌌',
+    color: 'border-amber-500/40 text-amber-300',
+    simpleTitle: 'Dein Kosmischer Bauplan',
+    analogy: 'Ein präziser Himmels-Schnappschuss zum Zeitpunkt deines ersten Atemzugs.',
+    benefit: 'Zeigt deine angeborenen Grundkräfte, Talente und inneren Reibungspunkte.'
+  },
+  {
+    term: 'Der Aszendent (AC)',
+    symbol: '↑',
+    color: 'border-cyan-500/40 text-cyan-300',
+    simpleTitle: 'Das Seelentor / Deine Brille',
+    analogy: 'Wie du die Welt betrittst und welcher erste Eindruck bei Mitmenschen entsteht.',
+    benefit: 'Dein spontaner Handlungsimpuls und deine energetische Eintrittskarte in jede Situation.'
+  },
+  {
+    term: 'Das Medium Coeli (MC)',
+    symbol: '❖',
+    color: 'border-purple-500/40 text-purple-300',
+    simpleTitle: 'Dein Nordstern & Gipfel',
+    analogy: 'Der höchste sichtbare Punkt am Himmel zum Geburtszeitpunkt.',
+    benefit: 'Deine berufliche Lebensvision, gesellschaftliche Meisterschaft und dein Vermächtnis.'
+  },
+  {
+    term: 'Die 3 Lebens-Säulen',
+    symbol: '💖',
+    color: 'border-pink-500/40 text-pink-300',
+    simpleTitle: 'Liebe, Beruf & Erfüllung',
+    analogy: 'Die 3 praktischen Lebensbühnen, auf denen du deine Seele manifestierst.',
+    benefit: 'Verbindet Himmelsdaten mit greifbaren Entscheidungen in Partnerschaft und Job.'
+  },
+  {
+    term: 'Mondknoten-Achse (☊ / ☋)',
+    symbol: '☊',
+    color: 'border-amber-500/40 text-amber-300',
+    simpleTitle: 'Die Seelen-Wachstumsbrücke',
+    analogy: 'Vom gemütlichen Sofa der Vergangenheit (Südknoten) zum Gipfel der Zukunft (Nordknoten).',
+    benefit: 'Verhindert Stagnation und zeigt dir, wo dein größtes seelisches Wachstum wartet.'
+  },
+  {
+    term: 'Das Stellium (⚡)',
+    symbol: '⚡',
+    color: 'border-yellow-500/40 text-yellow-300',
+    simpleTitle: 'Kosmisches Kraftwerk',
+    analogy: 'Wenn 3 oder mehr Gestirne an einem Ort gebündelt wie ein Scheinwerfer strahlen.',
+    benefit: 'Ein Bereich mit enormer Spezialbegabung und magnetischer Konzentrationskraft.'
+  },
+  {
+    term: 'Chiron & Lilith',
+    symbol: '⚷',
+    color: 'border-emerald-500/40 text-emerald-300',
+    simpleTitle: 'Die Heil-Medizin & Urkraft',
+    analogy: 'Chiron heilt deine tiefste Wunde; Lilith befreit deine ungezähmte Eigenständigkeit.',
+    benefit: 'Echte Selbstannahme ohne Angst vor Zurückweisung oder gesellschaftlicher Anpassung.'
+  },
+  {
+    term: 'Lebensweg- & Herzzahl',
+    symbol: '🔢',
+    color: 'border-indigo-500/40 text-indigo-300',
+    simpleTitle: 'Deine Seelen-Schwingung',
+    analogy: 'Pythagoräische Klangfrequenzen, die in deinem Geburtsdatum und Namen schwingen.',
+    benefit: 'Enthüllt deinen inneren Herzensdrang, den du oft selbst noch nie in Worte gefasst hast.'
+  },
+  {
+    term: 'Heilsteine & Resonanz (💎)',
+    symbol: '💎',
+    color: 'border-emerald-500/40 text-emerald-300',
+    simpleTitle: 'Bio-Energetische Stimmgabeln',
+    analogy: 'Hochgeordnete Silizium- und Mineralkristalle, die dein Energiefeld wieder einschwingen.',
+    benefit: 'Gleicht Schwächen deiner Elemente aus und schützt dein Nervensystem im Alltag.'
+  },
+  {
+    term: 'Mond-Biorhythmus & Haare/Haushalt (🌙)',
+    symbol: '🌙',
+    color: 'border-yellow-500/40 text-yellow-300',
+    simpleTitle: 'Kosmische Gezeiten-Uhr',
+    analogy: 'So wie der Mond Ebbe und Flut lenkt, steuert er den Saftfluss in Haaren, Pflanzen und Zellen.',
+    benefit: 'Perfektes Timing für Haarschnitt, streifenfreie Fenster, Wäsche und gezielte Entgiftung.'
+  }
+];
+---
+
+<div class="birkenbihl-box cosmic-glass-gold shadow-2xl relative overflow-hidden transition-all duration-300 no-print">
+  <!-- Glowing subtle constellation accent -->
+  <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+  <!-- Header with toggle button -->
+  <div class="flex flex-wrap items-center justify-between gap-3 cursor-pointer" id="decoderToggleHeader">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/30">
+        🧠
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs uppercase font-extrabold tracking-widest text-amber-400">Vera F. Birkenbihl Methode</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            Pauken → 0
+          </span>
+        </div>
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>Der Kosmische Sofort-Dekodierer</span>
+          <span class="text-xs text-slate-400 font-normal hidden sm:inline">(Astrologie ohne Fachjargon intuitiv verstehen)</span>
+        </h3>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      id="decoderToggleBtn"
+      class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition-all cursor-pointer"
+    >
+      <span id="decoderToggleLabel">Begriffe einblenden</span>
+      <span id="decoderToggleIcon" class="transform transition-transform duration-300">▼</span>
+    </button>
+  </div>
+
+  <!-- Collapsible Content -->
+  <div id="decoderContent" class="hidden mt-5 pt-4 border-t border-white/10 space-y-4">
+    <p class="text-xs text-slate-300 leading-relaxed max-w-3xl">
+      Gehirngerechte Informationsverarbeitung: Jedes Symbol und jeder Begriff wird sofort in Alltagssprache übersetzt. Keine Vorkenntnisse nötig – du kannst dein Chart direkt intuitiv erfassen.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-1">
+      {DECODED_TERMS.map(item => (
+        <div class={`p-3.5 rounded-2xl bg-black/40 border ${item.color} space-y-2 flex flex-col justify-between hover:bg-black/60 transition-all`}>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-base">{item.symbol}</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider opacity-80">{item.term}</span>
+            </div>
+            <div class="font-bold text-sm text-white">{item.simpleTitle}</div>
+            <p class="text-xs text-slate-300 mt-1 leading-snug">{item.analogy}</p>
+          </div>
+          <div class="text-[11px] text-amber-300/90 pt-1.5 border-t border-white/5 italic">
+            <span class="font-semibold">Nutzen:</span> {item.benefit}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  const header = document.getElementById('decoderToggleHeader');
+  const btn = document.getElementById('decoderToggleBtn');
+  const content = document.getElementById('decoderContent');
+  const label = document.getElementById('decoderToggleLabel');
+  const icon = document.getElementById('decoderToggleIcon');
+
+  function toggleDecoder() {
+    if (!content || !icon || !label) return;
+    const isHidden = content.classList.contains('hidden');
+    if (isHidden) {
+      content.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+      label.textContent = 'Begriffe einklappen';
+    } else {
+      content.classList.add('hidden');
+      icon.classList.remove('rotate-180');
+      label.textContent = 'Begriffe einblenden';
+    }
+  }
+
+  if (header) {
+    header.addEventListener('click', (e) => {
+      // Avoid double trigger if clicking directly on button
+      if (e.target !== btn && !btn?.contains(e.target as Node)) {
+        toggleDecoder();
+      }
+    });
+  }
+
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDecoder();
+    });
+  }
+</script>

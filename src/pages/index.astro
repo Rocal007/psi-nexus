@@ -1,0 +1,805 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BirthForm from '../components/ui/BirthForm.astro';
+import FolderTabs from '../components/ui/FolderTabs.astro';
+import SoulJourneyProgress from '../components/ui/SoulJourneyProgress.astro';
+import BirkenbihlDecoder from '../components/ui/BirkenbihlDecoder.astro';
+import RadixWheel from '../components/chart/RadixWheel.astro';
+import AspectMatrix from '../components/chart/AspectMatrix.astro';
+import ElementBalance from '../components/chart/ElementBalance.astro';
+import PlanetCard from '../components/chart/PlanetCard.astro';
+import EsotericDossier from '../components/interpretation/EsotericDossier.astro';
+import LifePillarsSection from '../components/interpretation/LifePillarsSection.astro';
+import NumerologySection from '../components/interpretation/NumerologySection.astro';
+import KarmicNodesSection from '../components/interpretation/KarmicNodesSection.astro';
+import AngelNumbersSection from '../components/interpretation/AngelNumbersSection.astro';
+import GemstoneSection from '../components/interpretation/GemstoneSection.astro';
+import MoonAndWisdomSection from '../components/interpretation/MoonAndWisdomSection.astro';
+import ConstellationExplorer from '../components/chart/ConstellationExplorer.astro';
+import GeoAstroChart from '../components/chart/GeoAstroChart.astro';
+import SynastryFamilySection from '../components/interpretation/SynastryFamilySection.astro';
+import PersonalitySummarySection from '../components/interpretation/PersonalitySummarySection.astro';
+import ShadowHealthDialecticSection from '../components/interpretation/ShadowHealthDialecticSection.astro';
+import EeatTrustSection from '../components/ui/EeatTrustSection.astro';
+import PersonSoulSidebar from '../components/ui/PersonSoulSidebar.astro';
+import { generateNatalChart, type ChartInput } from '../lib/astrology/engine';
+import { generatePersonalitySummary } from '../lib/astrology/personalitySynthesis';
+
+// Extract query parameters or use defaults
+const searchParams = Astro.url.searchParams;
+
+const birthDate = searchParams.get('birthDate') || '1991-05-05';
+const birthTime = searchParams.get('birthTime') || '13:00';
+const cityName = searchParams.get('cityName') || 'Wien';
+const latitude = parseFloat(searchParams.get('latitude') || '48.2082');
+const longitude = parseFloat(searchParams.get('longitude') || '16.3738');
+const timezone = searchParams.get('timezone') || 'Europe/Vienna';
+const userName = searchParams.get('name') || 'Denise Christin';
+const houseSystem = (searchParams.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as 'placidus' | 'equal';
+
+const chartInput: ChartInput = {
+  birthDate,
+  birthTime,
+  cityName,
+  latitude,
+  longitude,
+  timezone,
+  name: userName,
+  houseSystem
+};
+
+// Generate complete chart calculations
+const chart = generateNatalChart(chartInput);
+const personalitySummary = generatePersonalitySummary(chart);
+
+const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString('de-DE', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric'
+});
+---
+
+<Layout title={`Ψ-NEXUS Seelen-Matrix | ${userName ? userName + ' • ' : ''}${chart.synthesis.sun.planet.sign.name}`}>
+  <div class="space-y-10">
+    
+    <!-- Hero / Title Section with Noble Stardust Glow -->
+    <div class="text-center space-y-4 max-w-4xl mx-auto pt-4 pb-2 relative">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full birkenbihl-badge text-amber-300 text-xs font-bold uppercase tracking-widest shadow-lg">
+        <span class="font-serif">Ψ</span> Die Göttliche Geometrie Deines Seelenplans (Ψ-NEXUS) <span class="font-serif">Ψ</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight" id="heroName">
+        {userName ? (
+          <span><span class="cosmic-gold-gradient">{userName}s</span> Kosmisches Seelenbuch</span>
+        ) : (
+          <span>Dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>
+        )}
+      </h1>
+
+      <!-- Individuelle Zusammenfassung der Person im Header -->
+      <div class="space-y-2.5 max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold font-tech">
+          <span>🌟</span>
+          <span id="heroArchetypeTitle">{personalitySummary.archetypeName}</span>
+        </div>
+        <p class="text-slate-200 text-sm md:text-base leading-relaxed font-lato" id="heroPersonalitySummary">
+          {personalitySummary.shortEssence}
+        </p>
+        <blockquote class="font-cormorant italic text-base md:text-lg text-amber-200/90 font-medium tracking-wide" id="heroPersonalityMantra">
+          {personalitySummary.personalityMantra}
+        </blockquote>
+      </div>
+
+      <!-- Key Identity Highlights Pill Bar (System 1 Ergonomics) -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-2">
+        <button type="button" id="pillSun" data-pill-gate="radix" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zum Sonnen-Stand in Tor I springen">
+          <span class="text-amber-400 text-sm group-hover:rotate-12 transition-transform">☉ Sonne:</span>
+          <span class="text-white font-black">{chart.synthesis.sun.planet.sign.name}</span>
+          <span class="text-amber-300 font-mono text-[11px]">({chart.synthesis.sun.planet.degreeString})</span>
+          <span class="text-amber-400 text-base">{chart.synthesis.sun.planet.sign.symbol}</span>
+        </button>
+
+        <button type="button" id="pillMoon" data-pill-gate="moon_wisdom" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-500/15 border border-slate-400/35 text-slate-200 text-xs font-bold shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zum Mond- & Lebensführer (Tor VIII) springen">
+          <span class="text-slate-300 text-sm group-hover:rotate-12 transition-transform">☽ Mond:</span>
+          <span class="text-white font-black">{chart.synthesis.moon.planet.sign.name}</span>
+          <span class="text-slate-300 font-mono text-[11px]">({chart.synthesis.moon.planet.degreeString})</span>
+          <span class="text-slate-300 text-base">{chart.synthesis.moon.planet.sign.symbol}</span>
+        </button>
+
+        <button type="button" id="pillAsc" data-pill-gate="radix" data-pill-subtarget="cardAC" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zum Aszendenten (1. Haus) springen">
+          <span class="text-cyan-400 text-sm group-hover:rotate-12 transition-transform">↑ AC:</span>
+          <span class="text-white font-black">{chart.housesResult.angles.ascendant.sign.name}</span>
+          <span class="text-cyan-300 font-mono text-[11px]">({chart.housesResult.angles.ascendant.degreeString})</span>
+          <span class="text-cyan-400 text-base">{chart.housesResult.angles.ascendant.sign.symbol}</span>
+        </button>
+
+        <button type="button" id="pillMc" data-pill-gate="radix" data-pill-subtarget="cardMC" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-purple-500/15 border border-purple-500/35 text-purple-300 text-xs font-bold shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zum Medium Coeli (Beruf & 10. Haus) springen">
+          <span class="text-purple-400 text-sm group-hover:rotate-12 transition-transform">❖ MC:</span>
+          <span class="text-white font-black">{chart.housesResult.angles.midheaven.sign.name}</span>
+          <span class="text-purple-300 font-mono text-[11px]">({chart.housesResult.angles.midheaven.degreeString})</span>
+          <span class="text-purple-400 text-base">{chart.housesResult.angles.midheaven.sign.symbol}</span>
+        </button>
+
+        <button type="button" id="pillLifePath" data-pill-gate="numerology" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-yellow-500/15 border border-yellow-500/35 text-yellow-300 text-xs font-bold shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zu den Pythagoräischen Lebenszahlen (Tor IV) springen">
+          <span class="text-yellow-400 text-sm group-hover:rotate-12 transition-transform">🔢 Lebenszahl:</span>
+          <span class="text-white font-black">{chart.numerology.lifePath.number}</span>
+          <span class="text-yellow-300 text-[11px]">({chart.numerology.lifePath.archetype})</span>
+        </button>
+      </div>
+
+      <div id="heroDetails" class="text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
+        <span>📍 {cityName}</span>
+        <span>•</span>
+        <span>🗓️ {formattedBirthDate}, {birthTime} Uhr</span>
+        <span>•</span>
+        <span>🌐 UTC: {chart.utcDate.toUTCString().slice(17, 22)} Uhr</span>
+        <span>•</span>
+        <span class="text-amber-400/90 font-medium">Häuser: {houseSystem === 'placidus' ? 'Placidus' : 'Equal'}</span>
+      </div>
+    </div>
+
+    <!-- Birkenbihl Instant Decoder Widget -->
+    <BirkenbihlDecoder />
+
+    <!-- Input Form Section -->
+    <div id="form-section" class="relative z-40 overflow-visible">
+      <BirthForm initialValues={chartInput} />
+    </div>
+
+    <!-- 5-Step Soul Journey Stepper (Gamified Progression) -->
+    <SoulJourneyProgress activeStep="radix" />
+
+    <!-- Cosmic Dossier Folders Navigation Bar -->
+    <FolderTabs activeTab="radix" />
+
+    <!-- 2-Column Main Dossier Layout: Person Sidebar (Left) & Gates Panels (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Personal Soul Profile Sidebar -->
+      <div class="lg:col-span-4 xl:col-span-3">
+        <PersonSoulSidebar chart={chart} />
+      </div>
+
+      <!-- Right Column: Active Gate Content Panels -->
+      <div class="lg:col-span-8 xl:col-span-9 space-y-8 min-w-0">
+        <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
+        <div id="panel-radix" class="tab-content-panel active space-y-8">
+          
+          <!-- Hauptpunkt: Kompakte Persönlichkeits-Zusammenfassung -->
+          <PersonalitySummarySection chart={chart} />
+      
+          <!-- Main Chart Section: Radix Wheel & Overview -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Left / Center: Interactive Radix Wheel (7 Cols) -->
+        <div class="lg:col-span-7 cosmic-glass rounded-3xl p-6 md:p-7 border border-white/15 shadow-2xl flex flex-col items-center cosmic-corner-accent">
+          <div class="w-full flex items-center justify-between border-b border-white/10 pb-4 mb-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/40">
+                ✦
+              </span>
+              <div>
+                <h2 class="text-lg font-bold text-white">Das Kosmische Radix-Rad</h2>
+                <p class="text-[11px] text-slate-400">Interaktive Gestirns- & Aspekt-Projektion</p>
+              </div>
+            </div>
+            <span class="text-xs text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/30">
+              {houseSystem === 'placidus' ? 'Placidus Häuser' : 'Equal Houses'}
+            </span>
+          </div>
+
+          <RadixWheel chart={chart} />
+
+          <div class="mt-4 p-3.5 rounded-2xl bg-black/40 border border-white/10 text-center text-xs text-slate-300 max-w-xl">
+            <p>💡 <span class="font-semibold text-amber-300">Interaktion:</span> Fahre mit der Maus über ein Planetensymbol oder eine Aspektlinie im Zentrum, um verbundene Kraftströme hervorzuheben.</p>
+          </div>
+        </div>
+
+        <!-- Right: Balance & Key Angles (5 Cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          <ElementBalance balance={chart.balance} />
+
+          <!-- Key Cardinal Angles Card -->
+          <div class="cosmic-glass rounded-3xl p-6 border border-white/15 shadow-2xl space-y-4 cosmic-corner-accent">
+            <div class="flex items-center gap-2.5 border-b border-white/10 pb-3">
+              <span class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-base border border-cyan-500/40">
+                ❖
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-slate-100">Die 4 Kardinalen Achsen</h3>
+                <p class="text-[11px] text-slate-400">Eckpfeiler deiner irdischen Existenz</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div id="cardAC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-cyan-500/30 space-y-1 hover:bg-cyan-500/5 transition-all">
+                <div class="font-bold text-cyan-300 flex items-center gap-1">
+                  <span>AC</span> Aszendent (1. Haus)
+                </div>
+                <div class="text-white font-semibold">{chart.housesResult.angles.ascendant.sign.name} ({chart.housesResult.angles.ascendant.degreeString})</div>
+                <div class="text-slate-400 text-[11px]">Auftreten & Seelentor</div>
+              </div>
+
+              <div id="cardMC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-amber-500/30 space-y-1 hover:bg-amber-500/5 transition-all">
+                <div class="font-bold text-amber-300 flex items-center gap-1">
+                  <span>MC</span> Medium Coeli (10. Haus)
+                </div>
+                <div class="text-white font-semibold">{chart.housesResult.angles.midheaven.sign.name} ({chart.housesResult.angles.midheaven.degreeString})</div>
+                <div class="text-slate-400 text-[11px]">Berufung & Lebensziel</div>
+              </div>
+
+              <div id="cardDC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-rose-500/30 space-y-1 hover:bg-rose-500/5 transition-all">
+                <div class="font-bold text-rose-300 flex items-center gap-1">
+                  <span>DC</span> Deszendent (7. Haus)
+                </div>
+                <div class="text-white font-semibold">{chart.housesResult.angles.descendant.sign.name} ({chart.housesResult.angles.descendant.degreeString})</div>
+                <div class="text-slate-400 text-[11px]">Begegnung & Partner</div>
+              </div>
+
+              <div id="cardIC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-indigo-500/30 space-y-1 hover:bg-indigo-500/5 transition-all">
+                <div class="font-bold text-indigo-300 flex items-center gap-1">
+                  <span>IC</span> Imum Coeli (4. Haus)
+                </div>
+                <div class="text-white font-semibold">{chart.housesResult.angles.imumCoeli.sign.name} ({chart.housesResult.angles.imumCoeli.degreeString})</div>
+                <div class="text-slate-400 text-[11px]">Wurzeln & Seelenheimat</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Planetary Table & Aspect Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-7">
+          <PlanetCard planets={chart.planets} />
+        </div>
+        <div class="lg:col-span-5">
+          <AspectMatrix aspects={chart.aspects} />
+        </div>
+      </div>
+
+      <!-- Tab Next Navigation Banner (Tor I -> Tor II) -->
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-pink-950/40 via-purple-950/40 to-slate-900 border border-pink-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <div class="space-y-1 text-center sm:text-left">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-pink-400">Nächste Seelenebene lüften</div>
+          <h4 class="text-lg font-extrabold text-white">Tor II: Die 3 Lebens-Säulen (Liebe, Beruf & Erfüllung)</h4>
+          <p class="text-xs text-slate-300">Erfahre, wie deine Gestirne in Liebe und Karriere wirksam werden.</p>
+        </div>
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(236,72,153,0.4)]"
+          data-switch-to="pillars"
+        >
+          <span>Weiter zu Tor II</span>
+          <span class="text-lg">💖 →</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: Die 3 Lebens-Säulen Panel (Tor II) -->
+    <div id="panel-pillars" class="tab-content-panel space-y-8">
+      <LifePillarsSection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-purple-950/40 via-indigo-950/40 to-slate-900 border border-purple-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="radix"
+        >
+          <span>← Zurück zu Tor I (Fundament)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-purple-400">Nächste Seelenebene</div>
+          <div class="text-sm font-bold text-white">Tor III: Karmische Tore & Schicksalsachsen</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+          data-switch-to="karmic"
+        >
+          <span>Weiter zu Tor III</span>
+          <span class="text-lg">☊ →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 3: Karmische Knoten & Tore Panel (Tor III) -->
+    <div id="panel-karmic" class="tab-content-panel space-y-8">
+      <KarmicNodesSection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-amber-950/40 via-yellow-950/40 to-slate-900 border border-amber-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="pillars"
+        >
+          <span>← Zurück zu Tor II (3 Säulen)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-yellow-400">Nächste Seelenebene</div>
+          <div class="text-sm font-bold text-white">Tor IV: Pythagoräische Seelen-Numerologie</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(234,179,8,0.4)]"
+          data-switch-to="numerology"
+        >
+          <span>Weiter zu Tor IV</span>
+          <span class="text-lg">🔢 →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 4: Seelen-Numerologie Panel (Tor IV) -->
+    <div id="panel-numerology" class="tab-content-panel space-y-8">
+      <NumerologySection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-amber-950/40 via-orange-950/40 to-slate-900 border border-amber-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="karmic"
+        >
+          <span>← Zurück zu Tor III (Karmische Tore)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-amber-300">Nächste Seelenebene</div>
+          <div class="text-sm font-bold text-white">Tor V: Engelszahlen & Spiegeluhrzeiten</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(234,179,8,0.4)]"
+          data-switch-to="angel_numbers"
+        >
+          <span>Weiter zu Tor V (Engelszahlen)</span>
+          <span class="text-lg">🕊️ →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 5: Engelszahlen & Spiegeluhrzeiten Panel (Tor V) -->
+    <div id="panel-angel_numbers" class="tab-content-panel space-y-8">
+      <AngelNumbersSection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-cyan-950/40 via-blue-950/40 to-slate-900 border border-cyan-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="numerology"
+        >
+          <span>← Zurück zu Tor IV (Numerologie)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-cyan-400">Die Hohe Seelenmatrix</div>
+          <div class="text-sm font-bold text-white">Tor VI: Das Hohe Esoterische Seelen-Dossier</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+          data-switch-to="dossier"
+        >
+          <span>Weiter zu Tor VI (Seelen-Dossier)</span>
+          <span class="text-lg">✦ →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 6: Esoterisches Seelen-Dossier Panel (Tor VI) -->
+    <div id="panel-dossier" class="tab-content-panel space-y-8">
+      <EsotericDossier chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-cyan-950/40 via-emerald-950/40 to-slate-900 border border-emerald-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="angel_numbers"
+        >
+          <span>← Zurück zu Tor V (Engelszahlen)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Die Kristall-Apotheke</div>
+          <div class="text-sm font-bold text-white">Tor VII: Heilsteine & Kristall-Resonanz</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+          data-switch-to="gemstones"
+        >
+          <span>Weiter zu Tor VII (Kristalle)</span>
+          <span class="text-lg">💎 →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 7: Heilsteine & Kristall-Resonanz Panel (Tor VII) -->
+    <div id="panel-gemstones" class="tab-content-panel space-y-8">
+      <GemstoneSection chart={chart} />
+
+      <!-- Psychosomatische Schatten-Analyse, Organe & Positive Dialektik -->
+      <ShadowHealthDialecticSection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-yellow-950/40 to-slate-900 border border-yellow-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="dossier"
+        >
+          <span>← Zurück zu Tor VI (Seelen-Dossier)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-yellow-400">Das Kosmische Alltags-Tor</div>
+          <div class="text-sm font-bold text-white">Tor VIII: Mondkalender & Seelen-Leitspruch</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950 font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(234,179,8,0.4)]"
+          data-switch-to="moon_wisdom"
+        >
+          <span>Weiter zu Tor VIII (Mond & Leitspruch)</span>
+          <span class="text-lg">🌙 →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 8: Mondkalender & Ewiger Seelen-Leitspruch Panel (Tor VIII) -->
+    <div id="panel-moon_wisdom" class="tab-content-panel space-y-8">
+      <MoonAndWisdomSection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-yellow-950/40 via-amber-950/40 to-slate-900 border border-cyan-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="gemstones"
+        >
+          <span>← Zurück zu Tor VII (Heilsteine)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-cyan-400">Das Finale Sternen-Tor</div>
+          <div class="text-sm font-bold text-white">Tor IX: Das Große Sternbilder-Kompendium & Himmelsatlas</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+          data-switch-to="constellations"
+        >
+          <span>Weiter zu Tor IX (Sternbilder)</span>
+          <span class="text-lg">✨ →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 9: Sternbilder-Atlas & Mythologie Panel (Tor IX) -->
+    <div id="panel-constellations" class="tab-content-panel space-y-8">
+      <ConstellationExplorer chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-purple-950/30 to-slate-900 border border-amber-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="moon_wisdom"
+        >
+          <span>← Zurück zu Tor VIII (Mond & Leitspruch)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-[10px] uppercase font-bold tracking-widest text-cyan-400">Das Finale Sternen-Tor</div>
+          <div class="text-sm font-bold text-white">Tor IX: Das Große Sternbilder-Kompendium & Himmelsatlas</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+          data-switch-to="geochart"
+        >
+          <span>Weiter zu Tor X (Astro-Kartographie & Weltkarte)</span>
+          <span class="text-lg">🌍 →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 10: Astro-Kartographie & Globale Kraftorte Panel (Tor X) -->
+    <div id="panel-geochart" class="tab-content-panel space-y-8">
+      <GeoAstroChart chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 border border-amber-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="constellations"
+        >
+          <span>← Zurück zu Tor IX (Sternbilder)</span>
+        </button>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(244,63,94,0.3)]"
+          data-switch-to="synastry"
+        >
+          <span>Weiter zu Tor XI (Partner & Familie) ➔</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 11: Partner-Synastrie & Familien-Karmamatrix Panel (Tor XI) -->
+    <div id="panel-synastry" class="tab-content-panel space-y-8">
+      <SynastryFamilySection chart={chart} />
+
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-rose-950/30 to-slate-900 border border-rose-500/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <button
+          type="button"
+          class="tab-nav-btn px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+          data-switch-to="geochart"
+        >
+          <span>← Zurück zu Tor X (Astro-Kartographie)</span>
+        </button>
+
+        <div class="text-center">
+          <div class="text-xs text-rose-300 font-bold">✦ Alle 11 Seelentore vollständig erschlossen ✦</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">Dein persönliches, partnerschaftliches & familiäres Seelenbuch ist komplett</div>
+        </div>
+
+        <button
+          type="button"
+          class="tab-nav-btn px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-[0_0_20px_rgba(234,179,8,0.3)]"
+          data-switch-to="radix"
+        >
+          <span>Zurück an den Anfang (Radix) ↺</span>
+        </button>
+      </div>
+    </div>
+    </div>
+
+    <!-- E-E-A-T Quality, Methodology & Trust Framework -->
+    <div class="mt-12">
+      <EeatTrustSection />
+    </div>
+
+  </div>
+
+  <!-- Client-Side Live Calculation & Tab Switcher Script -->
+  <script>
+    import { generateNatalChart, type ChartInput } from '../lib/astrology/engine';
+    import { updateDomWithChart } from '../scripts/liveEngine';
+
+    function initTabNavigation() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const stepButtons = document.querySelectorAll('.soul-step-btn');
+      const panels = document.querySelectorAll('.tab-content-panel');
+      const navButtons = document.querySelectorAll('.tab-nav-btn');
+      const heroPills = document.querySelectorAll('.hero-identity-pill');
+
+      function getDynamicScrollOffset(): number {
+        const header = document.querySelector('header');
+        const folderTabs = document.getElementById('folderTabsContainer');
+        let totalOffset = 0;
+        if (header) {
+          totalOffset += header.offsetHeight;
+        }
+        if (folderTabs) {
+          totalOffset += folderTabs.offsetHeight;
+        }
+        // Add 32px safety buffer so headers, badges, borders and subtitles are 100% visible and unclipped
+        return Math.max(190, totalOffset + 32);
+      }
+
+      function scrollToTarget(el: HTMLElement | null, extraOffset = 0) {
+        if (!el) return;
+        requestAnimationFrame(() => {
+          const offset = getDynamicScrollOffset() + extraOffset;
+          const rect = el.getBoundingClientRect();
+          const targetTop = window.pageYOffset + rect.top - offset;
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      function switchTab(targetId: string, shouldScroll = true, subTargetId = '') {
+        // Update FolderTabs
+        tabButtons.forEach(btn => {
+          const btnTarget = btn.getAttribute('data-tab-target');
+          if (btnTarget === targetId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+
+        // Update Stepper buttons
+        stepButtons.forEach(btn => {
+          const btnTarget = btn.getAttribute('data-step-target');
+          if (btnTarget === targetId) {
+            btn.classList.add('scale-[1.02]');
+          } else {
+            btn.classList.remove('scale-[1.02]');
+          }
+        });
+
+        // Show/Hide Panels
+        panels.forEach(panel => {
+          if (targetId === 'all') {
+            panel.classList.add('active');
+          } else {
+            if (panel.id === `panel-${targetId}`) {
+              panel.classList.add('active');
+            } else {
+              panel.classList.remove('active');
+            }
+          }
+        });
+
+        // Smooth scroll to relevant content with full readability & zero overflow clipping
+        if (shouldScroll) {
+          setTimeout(() => {
+            if (subTargetId) {
+              const subEl = document.getElementById(subTargetId);
+              if (subEl) {
+                scrollToTarget(subEl, 0);
+                return;
+              }
+            }
+
+            if (targetId === 'all') {
+              const folderTabs = document.getElementById('folderTabsContainer');
+              scrollToTarget(folderTabs, 0);
+            } else {
+              const activePanel = document.getElementById(`panel-${targetId}`);
+              const folderTabs = document.getElementById('folderTabsContainer');
+              if (activePanel) {
+                scrollToTarget(activePanel, 0);
+              } else if (folderTabs) {
+                scrollToTarget(folderTabs, 0);
+              }
+            }
+          }, 60);
+        }
+      }
+
+      // Folder Tab Buttons Click
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab-target') || 'radix';
+          switchTab(target, true);
+        });
+      });
+
+      // Stepper Journey Buttons Click
+      stepButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-step-target') || 'radix';
+          switchTab(target, true);
+        });
+      });
+
+      // Next / Previous Gate Navigation Buttons Click
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-switch-to') || 'radix';
+          switchTab(target, true);
+        });
+      });
+
+      // Hero Identity Pills Click (Instant jump to gate or angle)
+      heroPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const gate = pill.getAttribute('data-pill-gate') || 'radix';
+          const subtarget = pill.getAttribute('data-pill-subtarget') || '';
+          switchTab(gate, true, subtarget);
+        });
+      });
+
+      // Header Active Person summary badge click -> smooth scroll to personality summary
+      const headerPersonBadge = document.getElementById('headerActivePersonBadge');
+      headerPersonBadge?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const summarySection = document.getElementById('personalitySummarySection');
+        if (summarySection) {
+          scrollToTarget(summarySection, 120);
+        }
+      });
+
+      // Header Birkenbihl link click -> smooth scroll to decoder
+      const decoderHeaderLink = document.getElementById('decoderToggleHeader');
+      decoderHeaderLink?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const decoderEl = document.getElementById('birkenbihlDecoderWidget');
+        if (decoderEl) {
+          scrollToTarget(decoderEl, 120);
+        }
+      });
+    }
+
+    function runLiveCalculation() {
+      const dateEl = document.getElementById('birthDate') as HTMLInputElement;
+      const timeEl = document.getElementById('birthTime') as HTMLInputElement;
+      const cityEl = document.getElementById('citySearch') as HTMLInputElement;
+      const latEl = document.getElementById('latitude') as HTMLInputElement;
+      const lngEl = document.getElementById('longitude') as HTMLInputElement;
+      const tzEl = document.getElementById('timezone') as HTMLInputElement;
+      const nameEl = document.getElementById('userName') as HTMLInputElement;
+      const sysEl = document.getElementById('houseSystem') as HTMLSelectElement;
+
+      if (!dateEl || !timeEl) return;
+
+      const input: ChartInput = {
+        birthDate: dateEl.value || '1990-05-15',
+        birthTime: timeEl.value || '14:30',
+        cityName: cityEl?.value || 'Wien',
+        latitude: parseFloat(latEl?.value || '48.2082'),
+        longitude: parseFloat(lngEl?.value || '16.3738'),
+        timezone: tzEl?.value || 'Europe/Vienna',
+        name: nameEl?.value || '',
+        houseSystem: (sysEl?.value === 'equal' ? 'equal' : 'placidus') as 'placidus' | 'equal'
+      };
+
+      const chart = generateNatalChart(input);
+      updateDomWithChart(chart);
+
+      // Update URL without full page reload
+      const url = new URL(window.location.href);
+      url.searchParams.set('birthDate', input.birthDate);
+      url.searchParams.set('birthTime', input.birthTime);
+      url.searchParams.set('cityName', input.cityName);
+      url.searchParams.set('latitude', input.latitude.toString());
+      url.searchParams.set('longitude', input.longitude.toString());
+      url.searchParams.set('timezone', input.timezone);
+      url.searchParams.set('houseSystem', input.houseSystem || 'placidus');
+      if (input.name) url.searchParams.set('name', input.name);
+      else url.searchParams.delete('name');
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTabNavigation();
+
+      // Check if URL parameters exist and immediately calculate live chart
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('birthDate') || params.has('name')) {
+        const initialInput: ChartInput = {
+          birthDate: params.get('birthDate') || '1991-05-05',
+          birthTime: params.get('birthTime') || '13:00',
+          cityName: params.get('cityName') || 'Wien',
+          latitude: parseFloat(params.get('latitude') || '48.2082'),
+          longitude: parseFloat(params.get('longitude') || '16.3738'),
+          timezone: params.get('timezone') || 'Europe/Vienna',
+          name: params.get('name') || '',
+          houseSystem: (params.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as any
+        };
+        const chart = generateNatalChart(initialInput);
+        updateDomWithChart(chart);
+      }
+
+      window.addEventListener('astro_recalculate_chart', (e: any) => {
+        const input: ChartInput = e.detail;
+        if (input) {
+          const chart = generateNatalChart(input);
+          updateDomWithChart(chart);
+        }
+      });
+
+      const form = document.getElementById('astroForm') || document.getElementById('birthForm');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          runLiveCalculation();
+        });
+      }
+    });
+  </script>
+</Layout>
+

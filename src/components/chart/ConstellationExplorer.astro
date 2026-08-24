@@ -1,0 +1,284 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { CONSTELLATIONS, type ConstellationData } from '../../lib/astrology/constellations';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const sunSignId = chart.synthesis.sun.planet.sign.id;
+const moonSignId = chart.synthesis.moon.planet.sign.id;
+const ascSignId = chart.housesResult.angles.ascendant.sign.id;
+---
+
+<div class="space-y-10" id="constellationExplorerRoot">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-cyan-300 text-xs font-semibold uppercase tracking-wider">
+      <span>✨</span> Das Große Sternbilder-Kompendium & Sternenatlas <span>🔭</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
+      Die Geheimnisse der Sternbilder & Fixsterne
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Tauche ein in die uralte Mythologie, Geometrie und Seelenweisheit der 12 Tierkreis-Sternbilder und der legendären Himmelsgiganten wie Orion, Sirius und Kassiopeia.
+    </p>
+  </div>
+
+  <!-- Birkenbihl Neurodidactic Anchor Box -->
+  <div class="birkenbihl-box p-5 md:p-6 rounded-3xl space-y-3 shadow-xl">
+    <div class="flex items-center gap-2.5">
+      <span class="text-xl">💡</span>
+      <h3 class="text-sm font-extrabold uppercase tracking-widest text-amber-300">
+        Birkenbihl-Konzept: Sternbilder als seelische Urbilder (Archetypen)
+      </h3>
+    </div>
+    <p class="text-xs md:text-sm text-slate-200 leading-relaxed">
+      Seit Jahrtausenden blicken Menschen zu den Sternen auf und verbinden Lichtpunkte zu Gestalten. Diese <strong class="text-white">kosmischen Liniennetze</strong> sind keine Zufallsmuster, sondern archaische Gedächtnisanker der Menschheit. Jedes Sternbild verkörpert eine zeitlose seelische Lektion und schenkt uns Orientierung am realen Nachthimmel wie in unserem inneren Leben.
+    </p>
+  </div>
+
+  <!-- Interactive Filter Controls -->
+  <div class="flex flex-wrap items-center justify-center gap-2 no-print">
+    <button
+      type="button"
+      class="constellation-filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(234,179,8,0.4)]"
+      data-filter="all"
+    >
+      ✦ Alle Sternbilder (17)
+    </button>
+    <button
+      type="button"
+      class="constellation-filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
+      data-filter="zodiac"
+    >
+      ♈ 12 Tierkreis-Bilder
+    </button>
+    <button
+      type="button"
+      class="constellation-filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
+      data-filter="mythical"
+    >
+      ⚔️ Mythische Giganten (Orion, Sirius & Co.)
+    </button>
+    <button
+      type="button"
+      class="constellation-filter-btn px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
+      data-filter="personal"
+    >
+      🌟 In deinem Geburtshoroskop aktiv
+    </button>
+  </div>
+
+  <!-- Constellations Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="constellationsGrid">
+    {CONSTELLATIONS.map(c => {
+      const isSun = c.id === sunSignId;
+      const isMoon = c.id === moonSignId;
+      const isAsc = c.id === ascSignId;
+      const isPersonal = isSun || isMoon || isAsc;
+
+      return (
+        <div
+          class={`constellation-card cosmic-glass rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent ${
+            isPersonal ? 'border-amber-500/60 ring-1 ring-amber-500/40' : 'border-white/10 hover:border-cyan-400/40'
+          }`}
+          data-category={c.category}
+          data-personal={isPersonal ? 'true' : 'false'}
+        >
+          <!-- Top Header & Personal Badges -->
+          <div class="space-y-4">
+            
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">{c.symbol}</span>
+                <div>
+                  <h3 class="text-xl font-black text-white">{c.name}</h3>
+                  <div class="text-[11px] text-cyan-300/80 font-mono italic">{c.latinName}</div>
+                </div>
+              </div>
+
+              <!-- Element Badge -->
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-white/10 bg-white/5 text-slate-300">
+                {c.element}
+              </span>
+            </div>
+
+            <!-- Personal Connection Ribbons -->
+            {isSun && (
+              <div class="px-3 py-1 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                <span>☉</span> Dein Sonnen-Sternbild (Kern-Identität)
+              </div>
+            )}
+            {isMoon && (
+              <div class="px-3 py-1 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                <span>☽</span> Dein Mond-Sternbild (Seelen-Heimat)
+              </div>
+            )}
+            {isAsc && (
+              <div class="px-3 py-1 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+                <span>↑</span> Dein Aszendent-Sternbild (Seelentor)
+              </div>
+            )}
+
+            <!-- Interactive SVG Star Geometry Canvas -->
+            <div class="w-full h-44 rounded-2xl bg-black/60 border border-white/10 relative overflow-hidden flex items-center justify-center shadow-inner">
+              <!-- Celestial Grid Lines Background -->
+              <div class="absolute inset-0 bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-40"></div>
+
+              <svg class="w-full h-full p-4" viewBox="0 0 100 100">
+                <!-- Constellation Lines -->
+                {c.lines.map(line => {
+                  const p1 = c.stars[line.from];
+                  const p2 = c.stars[line.to];
+                  if (!p1 || !p2) return null;
+                  return (
+                    <line
+                      x1={p1.x}
+                      y1={p1.y}
+                      x2={p2.x}
+                      y2={p2.y}
+                      stroke="rgba(251, 191, 36, 0.6)"
+                      stroke-width="1.2"
+                      stroke-dasharray="0"
+                      class="transition-all"
+                    />
+                  );
+                })}
+
+                <!-- Star Nodes -->
+                {c.stars.map((star, idx) => (
+                  <g>
+                    <!-- Outer Glow -->
+                    <circle
+                      cx={star.x}
+                      cy={star.y}
+                      r={star.size * 1.8}
+                      fill="rgba(251, 191, 36, 0.25)"
+                      class="animate-pulse"
+                    />
+                    <!-- Core Star -->
+                    <circle
+                      cx={star.x}
+                      cy={star.y}
+                      r={star.size * 0.9}
+                      fill={idx === 0 ? '#fef08a' : '#ffffff'}
+                      stroke="#f59e0b"
+                      stroke-width="0.6"
+                    />
+                    {/* Star Name Label */}
+                    {star.name && (
+                      <text
+                        x={star.x + 3.5}
+                        y={star.y - 3}
+                        font-size="4.2"
+                        fill="rgba(226, 232, 240, 0.9)"
+                        font-family="monospace"
+                        font-weight="bold"
+                      >
+                        {star.name.split(' ')[0]}
+                      </text>
+                    )}
+                  </g>
+                ))}
+              </svg>
+
+              <!-- Season Tag in Corner -->
+              <div class="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400 bg-black/70 px-2 py-0.5 rounded border border-white/5">
+                🔭 {c.bestSeason.split('(')[0]}
+              </div>
+            </div>
+
+            <!-- Alpha Star Info -->
+            <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+              <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+                <span>⭐ Hauptstern: {c.alphaStar.name}</span>
+                <span class="text-[10px] font-mono text-slate-400">{c.alphaStar.distanceLightYears} Lichtjahre</span>
+              </div>
+              <p class="text-[11px] text-slate-300 leading-snug">{c.alphaStar.meaning}</p>
+            </div>
+
+            <!-- Soul Gift -->
+            <div class="space-y-1 text-xs">
+              <div class="font-bold text-cyan-300 flex items-center gap-1">
+                <span>✨</span> Die Seelengabe des Sternbilds:
+              </div>
+              <p class="text-slate-200 leading-relaxed text-[11px] font-medium">{c.soulGift}</p>
+            </div>
+
+            <!-- Mythology -->
+            <div class="space-y-1 text-xs">
+              <div class="font-bold text-slate-300 flex items-center gap-1">
+                <span>📜</span> Mythologischer Ursprung:
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[11px]">{c.mythology}</p>
+            </div>
+          </div>
+
+          <!-- Bottom: Observation Tip & Gemstone -->
+          <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+            <div class="text-slate-300">
+              <strong class="text-cyan-300">🔭 Am Himmel finden:</strong> {c.skyObservationTip}
+            </div>
+            <div class="flex items-center justify-between text-slate-400">
+              <span>💎 <strong>Kristall:</strong> {c.associatedGemstone}</span>
+              <span>🌀 <strong>Chakra:</strong> {c.associatedChakra.split('&')[0]}</span>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  function initConstellationFilters() {
+    const filterButtons = document.querySelectorAll('.constellation-filter-btn');
+    const cards = document.querySelectorAll('.constellation-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') || 'all';
+
+        // Update button styles
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-amber-500', 'text-slate-950', 'shadow-[0_0_15px_rgba(234,179,8,0.4)]');
+          b.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+        });
+
+        btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+        btn.classList.add('bg-amber-500', 'text-slate-950', 'shadow-[0_0_15px_rgba(234,179,8,0.4)]');
+
+        // Filter cards
+        cards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          const isPersonal = card.getAttribute('data-personal') === 'true';
+
+          let show = false;
+          if (filter === 'all') {
+            show = true;
+          } else if (filter === 'zodiac' && category === 'zodiac') {
+            show = true;
+          } else if (filter === 'mythical' && category !== 'zodiac') {
+            show = true;
+          } else if (filter === 'personal' && isPersonal) {
+            show = true;
+          }
+
+          if (show) {
+            (card as HTMLElement).style.display = 'flex';
+          } else {
+            (card as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initConstellationFilters);
+  } else {
+    initConstellationFilters();
+  }
+</script>

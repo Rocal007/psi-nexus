@@ -1,0 +1,124 @@
+---
+// Neurodidactic Birkenbihl Soul Journey Progress
+// 4 Master Dimension Spheres for intuitive, frictionless exploration
+interface Props {
+  activeStep?: string;
+}
+
+const { activeStep = 'radix' } = Astro.props;
+
+const SPHERES_JOURNEY = [
+  {
+    sphereNum: 'Sphäre I',
+    sphereName: 'Wesen & Identität',
+    sphereColor: 'border-amber-500/30 bg-amber-500/5',
+    tagColor: 'text-amber-300',
+    gates: [
+      { id: 'radix', num: '1', title: 'Fundament', subtitle: 'Radix & 4 Achsen', icon: '🌌', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
+      { id: 'pillars', num: '2', title: '3 Lebens-Säulen', subtitle: 'Liebe & Beruf', icon: '💖', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
+      { id: 'dossier', num: '3', title: '7 Strahlen', subtitle: 'Hohes Seelen-Dossier', icon: '✦', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' }
+    ]
+  },
+  {
+    sphereNum: 'Sphäre II',
+    sphereName: 'Karma & Schwingung',
+    sphereColor: 'border-purple-500/30 bg-purple-500/5',
+    tagColor: 'text-purple-300',
+    gates: [
+      { id: 'karmic', num: '4', title: 'Karmische Tore', subtitle: 'Mondknoten & Vertex', icon: '☊', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
+      { id: 'numerology', num: '5', title: 'Numerologie', subtitle: 'Pythagoras Schwingung', icon: '🔢', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
+      { id: 'angel_numbers', num: '6', title: 'Engelszahlen', subtitle: 'Synchronizitäten & Uhren', icon: '🕊️', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' }
+    ]
+  },
+  {
+    sphereNum: 'Sphäre III',
+    sphereName: 'Praxis, Heilung & Rhythmus',
+    sphereColor: 'border-emerald-500/30 bg-emerald-500/5',
+    tagColor: 'text-emerald-300',
+    gates: [
+      { id: 'gemstones', num: '7', title: 'Heilsteine', subtitle: 'Persönliche Kristalle', icon: '💎', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
+      { id: 'moon_wisdom', num: '8', title: 'Mond & Lebensanker', subtitle: 'Rhythmus & Tages-Leitsatz', icon: '🌙', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
+      { id: 'constellations', num: '9', title: 'Sternbilder-Atlas', subtitle: '12 Zeichen & Sterne', icon: '✨', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' }
+    ]
+  },
+  {
+    sphereNum: 'Sphäre IV',
+    sphereName: 'Resonanz & Welt-Orte',
+    sphereColor: 'border-cyan-500/30 bg-cyan-500/5',
+    tagColor: 'text-cyan-300',
+    gates: [
+      { id: 'geochart', num: '10', title: 'Astro-Kartographie', subtitle: 'Globale Kraftorte', icon: '🌍', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' },
+      { id: 'synastry', num: '11', title: 'Partner & Familie', subtitle: 'Synastrie & Harmonie', icon: '💞', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' }
+    ]
+  }
+];
+---
+
+<div class="w-full py-3 no-print" id="soulJourneyContainer">
+  <div class="max-w-7xl mx-auto px-2 sm:px-4 space-y-3">
+    
+    <!-- Title Ribbon -->
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 text-sm">✧</span>
+        <span class="text-xs font-black uppercase tracking-widest text-slate-200 font-cinzel">Die 4 Sphären deiner Seelenreise (11 Tore)</span>
+      </div>
+      <div class="text-[11px] text-slate-400 font-lato">
+        Birkenbihl-Kategoriensystem • Klicke auf ein Tor zum direkten Reisen ➔
+      </div>
+    </div>
+
+    <!-- 4-Sphere Responsive Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      {SPHERES_JOURNEY.map(sphere => (
+        <div class={`p-3 rounded-2xl border ${sphere.sphereColor} space-y-2`}>
+          <!-- Sphere Header -->
+          <div class="flex items-center justify-between border-b border-white/5 pb-1.5">
+            <span class={`text-[10px] font-bold uppercase tracking-wider font-tech ${sphere.tagColor}`}>
+              {sphere.sphereNum}: {sphere.sphereName}
+            </span>
+            <span class="text-[9px] font-mono text-slate-500">{sphere.gates.length} Tore</span>
+          </div>
+
+          <!-- Gates in this sphere -->
+          <div class="space-y-1.5">
+            {sphere.gates.map(gate => {
+              const isActive = activeStep === gate.id;
+              return (
+                <button
+                  type="button"
+                  class={`soul-step-btn w-full p-2 rounded-xl border text-left cursor-pointer transition-all duration-300 flex items-center gap-2.5 overflow-hidden ${
+                    isActive
+                      ? `bg-gradient-to-r ${gate.color}/20 ${gate.borderColor} shadow-[0_0_15px_rgba(234,179,8,0.25)] scale-[1.02]`
+                      : 'bg-slate-900/60 border-white/5 hover:border-white/20 hover:bg-slate-800/60'
+                  }`}
+                  data-step-target={gate.id}
+                >
+                  <div class={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 border ${
+                    isActive
+                      ? `bg-gradient-to-br ${gate.color} text-slate-950 border-white/40 shadow-sm`
+                      : 'bg-white/5 border-white/10 text-slate-300'
+                  }`}>
+                    {gate.icon}
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center justify-between">
+                      <span class={`text-xs font-bold truncate ${isActive ? 'text-white' : 'text-slate-200'}`}>
+                        {gate.title}
+                      </span>
+                      <span class="text-[9px] font-mono text-slate-400">Tor {gate.num}</span>
+                    </div>
+                    <div class="text-[10px] text-slate-400 truncate">
+                      {gate.subtitle}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</div>

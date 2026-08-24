@@ -1,0 +1,101 @@
+---
+import type { ElementModalityBalance } from '../../lib/astrology/dignities';
+
+interface Props {
+  balance: ElementModalityBalance;
+}
+
+const { balance } = Astro.props;
+
+const elementInfo: Record<string, { label: string; color: string; bg: string; meaning: string }> = {
+  fire: {
+    label: 'Feuer (Schöpferkraft & Impuls)',
+    color: '#ef4444',
+    bg: 'bg-red-500',
+    meaning: 'Inspiration, Mut, dynamischer Antrieb und Begeisterungsfähigkeit.'
+  },
+  earth: {
+    label: 'Erde (Verankerung & Form)',
+    color: '#10b981',
+    bg: 'bg-emerald-500',
+    meaning: 'Pragmatismus, Stabilität, Geduld und greifbare Manifestation.'
+  },
+  air: {
+    label: 'Luft (Geist & Vernetzung)',
+    color: '#06b6d4',
+    bg: 'bg-cyan-500',
+    meaning: 'Intellektuelle Weite, Kommunikation, Ideenfluss und Objektivität.'
+  },
+  water: {
+    label: 'Wasser (Seelentiefe & Intuition)',
+    color: '#8b5cf6',
+    bg: 'bg-purple-500',
+    meaning: 'Empathie, emotionale Tiefe, feinstoffliche Wahrnehmung und Hingabe.'
+  }
+};
+---
+
+<div class="cosmic-glass rounded-2xl p-6 border border-white/10 shadow-xl space-y-6">
+  <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <div class="flex items-center gap-2">
+      <span class="text-xl text-amber-400">✦</span>
+      <h3 class="text-lg font-bold text-slate-100">Elemente & Dynamik-Gleichgewicht</h3>
+    </div>
+    <div class="flex gap-2">
+      <span id="elDomBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+        Dominant: {balance.dominantElement}
+      </span>
+      <span id="modDomBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+        Modus: {balance.dominantModality}
+      </span>
+    </div>
+  </div>
+
+  <!-- Elements Bars -->
+  <div class="space-y-3.5">
+    <h4 class="text-xs uppercase tracking-wider font-semibold text-slate-400">Die Vier Ur-Elemente</h4>
+
+    {Object.entries(balance.elements).map(([key, data]) => {
+      const info = elementInfo[key];
+      return (
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs font-medium">
+            <span class="text-slate-300">{info.label}</span>
+            <span id={`elVal_${key}`} class="font-mono font-bold" style={`color: ${info.color}`}>
+              {data.percentage}% ({data.count} {data.count === 1 ? 'Körper' : 'Körper'})
+            </span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-slate-800/80 overflow-hidden border border-white/5">
+            <div
+              id={`elBar_${key}`}
+              class={`h-full rounded-full transition-all duration-700 ${info.bg}`}
+              style={`width: ${Math.max(5, data.percentage)}%`}
+            ></div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Modalities -->
+  <div class="space-y-3 pt-2 border-t border-white/5">
+    <h4 class="text-xs uppercase tracking-wider font-semibold text-slate-400">Die Drei Seelen-Modi</h4>
+    <div class="grid grid-cols-3 gap-2.5 text-center">
+      <div id="modVal_cardinal" class="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Kardinal (Beginn)</div>
+        <div class="text-lg font-bold text-amber-300">{balance.modalities.cardinal.percentage}%</div>
+        <div class="text-[10px] text-slate-500">{balance.modalities.cardinal.count} Planeten</div>
+      </div>
+      <div id="modVal_fixed" class="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Fix (Bewahrung)</div>
+        <div class="text-lg font-bold text-emerald-300">{balance.modalities.fixed.percentage}%</div>
+        <div class="text-[10px] text-slate-500">{balance.modalities.fixed.count} Planeten</div>
+      </div>
+      <div id="modVal_mutable" class="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Veränderlich (Wandlung)</div>
+        <div class="text-lg font-bold text-cyan-300">{balance.modalities.mutable.percentage}%</div>
+        <div class="text-[10px] text-slate-500">{balance.modalities.mutable.count} Planeten</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,456 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { generatePersonalGemstones } from '../../lib/astrology/gemstones';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const gemstones = generatePersonalGemstones(chart);
+---
+
+<div class="space-y-10">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+      <span>💎</span> Tor VI: Kosmische Kristall-Resonanz & Heilsteine <span>💎</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
+      Deine Persönliche Seelen-Kristall-Apotheke
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Heilsteine sind geometrisch hochgeordnete Mineralgitter, deren Schwingungsfrequenz direkt mit deinen Gestirnen, Chakren und seelischen Grundbedürfnissen in Resonanz tritt.
+    </p>
+  </div>
+
+  <!-- Birkenbihl Neurodidaktik Box for Crystals -->
+  <div class="birkenbihl-box p-5 md:p-6 rounded-3xl space-y-3 shadow-xl">
+    <div class="flex items-center gap-2.5">
+      <span class="text-xl">💡</span>
+      <h3 class="text-sm font-extrabold uppercase tracking-widest text-amber-300">
+        Birkenbihl-Versteher-Schlüssel: Wie & Warum Heilsteine wirken
+      </h3>
+    </div>
+    <p class="text-xs md:text-sm text-slate-200 leading-relaxed">
+      Jeder echte Kristall besitzt eine <strong class="text-white">stabile piezoelektrische und atomare Eigenschwingung</strong>. Wenn du gestresst, erschöpft oder emotional aus der Mitte bist, gerät dein körpereigenes Biofeld in Unruhe. Ein resonanter Heilstein dient deinem Nervensystem und deinen Chakren als <strong class="text-amber-300">stabile Stimmgabel</strong>, um mühelos in deine natürliche seelische Harmonie zurückzufinden.
+    </p>
+  </div>
+
+  <!-- Primary Personal 6 Crystals Grid -->
+  <div class="space-y-4">
+    <div class="flex items-center gap-2.5 border-b border-white/10 pb-3">
+      <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-base border border-amber-500/40">
+        ✦
+      </span>
+      <div>
+        <h3 class="text-xl font-bold text-white">Deine 6 Persönlichen Seelen-Heilsteine</h3>
+        <p class="text-xs text-slate-400">Exakt berechnet aus deiner Sonne, deinem Mond, Aszendenten, Chiron, Elementen und Schicksalsknoten</p>
+      </div>
+    </div>
+
+    <div id="personalGemstonesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- 1. Sun Stone -->
+      <div class="cosmic-glass-gold rounded-3xl p-6 border border-amber-500/40 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-amber-400">1. Kern-Vitalität (☉ Sonne)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-amber-300 bg-amber-500/20 border-amber-500/40">
+              {gemstones.sunStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.sunStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.sunStone.name}</h4>
+            </div>
+            <div class="text-xs text-amber-300/80 font-medium mt-0.5">{gemstones.sunStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.sunStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-1">
+            <div class="text-xs font-bold text-amber-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.sunStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.sunStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-amber-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.sunStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-amber-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-amber-300">🧘 Alltags-Ritual:</strong> {gemstones.sunStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.sunStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Moon Stone -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-indigo-500/35 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-indigo-300">2. Seelenfrieden & Schutz (☽ Mond)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-indigo-300 bg-indigo-500/20 border-indigo-500/40">
+              {gemstones.moonStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.moonStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.moonStone.name}</h4>
+            </div>
+            <div class="text-xs text-indigo-300/80 font-medium mt-0.5">{gemstones.moonStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.moonStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 space-y-1">
+            <div class="text-xs font-bold text-indigo-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.moonStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.moonStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-indigo-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.moonStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-indigo-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-indigo-300">🧘 Alltags-Ritual:</strong> {gemstones.moonStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.moonStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Ascendant Stone -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-cyan-500/35 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400">3. Aura-Schild (↑ Aszendent)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-cyan-300 bg-cyan-500/20 border-cyan-500/40">
+              {gemstones.ascendantStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.ascendantStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.ascendantStone.name}</h4>
+            </div>
+            <div class="text-xs text-cyan-300/80 font-medium mt-0.5">{gemstones.ascendantStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.ascendantStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 space-y-1">
+            <div class="text-xs font-bold text-cyan-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.ascendantStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.ascendantStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-cyan-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.ascendantStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-cyan-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-cyan-300">🧘 Alltags-Ritual:</strong> {gemstones.ascendantStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.ascendantStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Chiron Stone -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-emerald-500/35 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-400">4. Seelenwunden-Medizin (⚷ Chiron)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-emerald-300 bg-emerald-500/20 border-emerald-500/40">
+              {gemstones.chironStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.chironStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.chironStone.name}</h4>
+            </div>
+            <div class="text-xs text-emerald-300/80 font-medium mt-0.5">{gemstones.chironStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.chironStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
+            <div class="text-xs font-bold text-emerald-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.chironStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.chironStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-emerald-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.chironStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-emerald-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-emerald-300">🧘 Alltags-Ritual:</strong> {gemstones.chironStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.chironStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Element Balance Stone -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-orange-500/35 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-orange-400">5. 4-Elemente-Ausgleich (⚖️ Balance)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-orange-300 bg-orange-500/20 border-orange-500/40">
+              {gemstones.elementBalanceStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.elementBalanceStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.elementBalanceStone.name}</h4>
+            </div>
+            <div class="text-xs text-orange-300/80 font-medium mt-0.5">{gemstones.elementBalanceStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.elementBalanceStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-orange-500/10 border border-orange-500/25 space-y-1">
+            <div class="text-xs font-bold text-orange-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.elementBalanceStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.elementBalanceStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-orange-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.elementBalanceStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-orange-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-orange-300">🧘 Alltags-Ritual:</strong> {gemstones.elementBalanceStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.elementBalanceStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Karmic Evolution Stone -->
+      <div class="cosmic-glass rounded-3xl p-6 border border-purple-500/35 flex flex-col justify-between space-y-5 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase tracking-widest font-extrabold text-purple-400">6. Schicksals-Sprung (☊ Nordknoten)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border text-purple-300 bg-purple-500/20 border-purple-500/40">
+              {gemstones.karmicStone.chakra}
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{gemstones.karmicStone.iconEmoji}</span>
+              <h4 class="text-lg font-black text-white">{gemstones.karmicStone.name}</h4>
+            </div>
+            <div class="text-xs text-purple-300/80 font-medium mt-0.5">{gemstones.karmicStone.role}</div>
+            <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mineral: {gemstones.karmicStone.mineralFamily}</div>
+          </div>
+
+          <!-- Need -->
+          <div class="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/25 space-y-1">
+            <div class="text-xs font-bold text-purple-300 flex items-center gap-1">
+              <span>🎯</span> Seelisches Bedürfnis:
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">{gemstones.karmicStone.primaryNeed}</p>
+          </div>
+
+          <!-- Why & Reason -->
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="font-bold text-white flex items-center gap-1">
+              <span>🔍</span> Warum & Wieso (Kosmische Resonanz):
+            </div>
+            <p class="leading-relaxed text-slate-300">{gemstones.karmicStone.whyAndReason}</p>
+          </div>
+
+          <!-- Effects -->
+          <div class="space-y-1 text-xs">
+            <div class="font-bold text-purple-300">✨ Was er konkret unterstützt:</div>
+            <ul class="space-y-1 text-slate-300 text-[11px]">
+              {gemstones.karmicStone.supportEffects.map(eff => (
+                <li class="flex items-start gap-1.5">
+                  <span class="text-purple-400">✓</span>
+                  <span>{eff}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+          <div class="text-slate-300">
+            <strong class="text-purple-300">🧘 Alltags-Ritual:</strong> {gemstones.karmicStone.practicalApplication}
+          </div>
+          <div class="text-slate-400 italic">
+            <strong class="text-slate-300">🌊 Pflege:</strong> {gemstones.karmicStone.cleansingMethod}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Interactive Kristall-Hausapotheke (By Everyday Need) -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 space-y-6 shadow-2xl">
+    <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+      <span class="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+        🌿
+      </span>
+      <div>
+        <h3 class="text-xl font-bold text-white">Die Kristall-Hausapotheke nach Lebensbedürfnissen</h3>
+        <p class="text-xs text-slate-400">Schnelle Auswahl des richtigen Heilsteins bei akuten Alltagsthemen</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {gemstones.needCategories.map(cat => (
+        <div class={`p-5 rounded-2xl border ${cat.color} space-y-4 flex flex-col justify-between`}>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{cat.icon}</span>
+              <h4 class="text-base font-extrabold text-white">{cat.name}</h4>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              {cat.description}
+            </p>
+          </div>
+
+          <div class="space-y-3 pt-2 border-t border-white/10">
+            {cat.stones.map(st => (
+              <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1 text-xs">
+                <div class="font-bold text-amber-300 flex items-center justify-between">
+                  <span>✦ {st.stoneName}</span>
+                </div>
+                <div class="text-slate-200 text-[11px] leading-snug">{st.briefEffect}</div>
+                <div class="text-[10px] text-slate-400 pt-0.5">
+                  <strong class="text-slate-300">Ideal bei:</strong> {st.idealFor}
+                </div>
+                <div class="text-[10px] text-emerald-300/90 italic">
+                  💡 {st.applicationTip}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

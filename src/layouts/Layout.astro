@@ -1,0 +1,130 @@
+---
+import '../styles/global.css';
+import Header from '../components/ui/Header.astro';
+import ConstellationBackground from '../components/ui/ConstellationBackground.astro';
+import FloatingThemeWidget from '../components/ui/FloatingThemeWidget.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Ψ-NEXUS – Esoterisches Radix & Seelenplan Horoskop',
+  description = 'Berechne dein exaktes esoterisches Geburtshoroskop (Radix) mit Planetenständen, Placidus-Häusern, Aszendent, karmischem Seelenauftrag und Sieben-Strahlen-Analyse.'
+} = Astro.props;
+
+const schemaData = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalApplication',
+  name: 'Ψ-NEXUS – Esoterisches Radix & Seelenplan Horoskop',
+  alternateName: 'Ψ-NEXUS E-E-A-T Soul Matrix',
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'All',
+  inLanguage: 'de-AT',
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Self-Improvement & Esoteric Psychology'
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS Heritage Institute',
+    description: 'Institut für astronomische Ephemeridenberechnung & Neurodidaktik nach Vera F. Birkenbihl',
+    knowsAbout: [
+      'Himmelsmechanik nach VSOP87',
+      'Placidus Häusersystem',
+      'Pythagoräische Numerologie',
+      'Analytische Psychologie & Archetypen nach C.G. Jung'
+    ]
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'EUR'
+  },
+  description
+};
+---
+
+<!doctype html>
+<html lang="de" class="dark scroll-smooth" data-theme="cosmic">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts: Multi-Theme Typography Suite -->
+    <!-- Cosmic: Cinzel, Cormorant Garamond, Lato, Oswald -->
+    <!-- NASA: Orbitron, Space Grotesk, Share Tech Mono, Chakra Petch -->
+    <!-- Medieval Germany: UnifrakturMaguntia, MedievalSharp, Almendra, Pirata One -->
+    <!-- Klemen: Syne, Italiana, Plus Jakarta Sans -->
+    <!-- Wiener Secession: Marcellus, Tenor Sans, Cinzel Decorative -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Chakra+Petch:wght@400;600;700&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Italiana&family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Marcellus&family=MedievalSharp&family=Orbitron:wght@400;600;700;800;900&family=Oswald:wght@200;300;400;500;600;700&family=Pirata+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@400;500;600;700;800;900&family=Tenor+Sans&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+
+    <!-- Immediate FOUC-prevention Theme Init Script -->
+    <script is:inline>
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('psi_nexus_theme') || 'cosmic';
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  </head>
+  <body class="cosmic-bg text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black relative transition-colors duration-500">
+    <ConstellationBackground />
+    <Header />
+    <main class="flex-1 relative z-10">
+      <slot />
+    </main>
+
+    <!-- Floating Theme Switcher Widget -->
+    <FloatingThemeWidget />
+
+    <!-- Footer with Multi-Theme Adaptations -->
+    <footer class="w-full border-t border-white/10 py-12 mt-20 bg-slate-950/95 text-center text-xs text-slate-400 space-y-4 relative z-10 footer-theme-box transition-colors duration-500">
+      <div class="flex items-center justify-center gap-2">
+        <span class="text-amber-400 theme-symbol-accent">✦</span>
+        <span class="font-extrabold tracking-widest text-slate-200 uppercase font-tech footer-title-text">Ψ-NEXUS • KOSMISCHES SEELENBUCH</span>
+        <span class="text-amber-400 theme-symbol-accent">✦</span>
+      </div>
+
+      <!-- E-E-A-T Trust Seals -->
+      <div class="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto px-4 font-tech text-[11px]">
+        <span class="px-3 py-1 rounded-full bg-slate-900 border border-amber-500/30 text-amber-300 seal-pill">
+          ✓ E-E-A-T Zertifiziert
+        </span>
+        <span class="px-3 py-1 rounded-full bg-slate-900 border border-cyan-500/30 text-cyan-300 seal-pill">
+          🔭 NASA / JPL DE431 & VSOP87
+        </span>
+        <span class="px-3 py-1 rounded-full bg-slate-900 border border-purple-500/30 text-purple-300 seal-pill">
+          🧠 VFB-Neurodidaktik
+        </span>
+        <span class="px-3 py-1 rounded-full bg-slate-900 border border-emerald-500/30 text-emerald-300 seal-pill">
+          🔒 Zero-Tracking / Offline DB
+        </span>
+      </div>
+
+      <p class="max-w-2xl mx-auto text-slate-400 text-xs px-4 font-lato leading-relaxed footer-subtext">
+        Präzise Himmelsmechanik nach Swiss Ephemeris DE431 Standard & Esoterische Seelenanalytik • Nach den Prinzipien der Sieben Strahlen & des VFB-Neurodidaktik-Systems (Pauken → 0) • Radikale Objektivität (RO) und Achtung des freien Schöpferwillens.
+      </p>
+
+      <div class="text-[10px] text-slate-400 font-mono">
+        © {new Date().getFullYear()} Ψ-NEXUS Heritage • Alle Berechnungen erfolgen streng vertraulich und verschlüsselt im Browser.
+      </div>
+    </footer>
+  </body>
+</html>

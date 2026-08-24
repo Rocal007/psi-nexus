@@ -1,0 +1,496 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { calculateAstrocartography, type PowerPlaceInfo, type PlanetaryLine } from '../../lib/astrology/astrocartography';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const geoData = calculateAstrocartography(chart);
+const { birthLocation, lines, powerPlaces, domainSummaries } = geoData;
+
+// Conversion helper: Longitude [-180, 180] -> SVG X [0, 1000], Latitude [90, -90] -> SVG Y [0, 500]
+function lngToX(lng: number): number {
+  return ((lng + 180) / 360) * 1000;
+}
+
+function latToY(lat: number): number {
+  return ((90 - lat) / 180) * 500;
+}
+---
+
+<div class="space-y-10">
+  
+  <!-- Section Title Header -->
+  <div class="text-center space-y-3 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-cyan-300 text-xs font-semibold uppercase tracking-wider">
+      <span>🌍</span> Tor X: Kosmische Astro-Kartographie & Geo-Chart <span>🌍</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+      Deine Globale Seelen-Landkarte & Kraftorte
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Die Position der Gestirne zum Zeitpunkt deiner Geburt projiziert energetische <strong>Meridian- & Zenit-Linien</strong> über den gesamten Globus. Entdecke, wo auf der Erde deine Potenziale für <strong>Beruf, Liebe, Seelenruhe und Heilsames</strong> am stärksten schwingen.
+    </p>
+  </div>
+
+  <!-- Main Geo-Chart World Map Container -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-6 relative overflow-hidden cosmic-corner-accent">
+    
+    <!-- Top Controls: Domain Filters & Legend -->
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+      <div class="flex flex-wrap items-center gap-2" id="geoDomainFilters">
+        <button
+          type="button"
+          class="geo-filter-btn active px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer shadow-[0_0_10px_rgba(234,179,8,0.2)]"
+          data-filter="all"
+        >
+          ✦ Alle Kraftorte & Linien
+        </button>
+        <button
+          type="button"
+          class="geo-filter-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all cursor-pointer"
+          data-filter="career"
+        >
+          💼 Beruf & Erfolg (Sonne & Jupiter)
+        </button>
+        <button
+          type="button"
+          class="geo-filter-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all cursor-pointer"
+          data-filter="love"
+        >
+          💖 Liebe & Begegnung (Venus & Mond)
+        </button>
+        <button
+          type="button"
+          class="geo-filter-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all cursor-pointer"
+          data-filter="home"
+        >
+          🏡 Seelenheimat & Ruhe (Mond-IC)
+        </button>
+        <button
+          type="button"
+          class="geo-filter-btn px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition-all cursor-pointer"
+          data-filter="spirit"
+        >
+          ✨ Spiritualität & Heilung (Chiron & Neptun)
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 text-[11px] text-slate-400 font-mono">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(234,179,8,0.8)]"></span>
+        <span>📍 Geburtsort: <strong id="geoBirthCityText">{birthLocation.cityName}</strong></span>
+      </div>
+    </div>
+
+    <!-- The SVG World Map Canvas -->
+    <div class="relative w-full aspect-[2/1] rounded-2xl bg-slate-950/90 border border-white/10 overflow-hidden shadow-2xl">
+      <svg
+        viewBox="0 0 1000 500"
+        class="w-full h-full select-none"
+        id="geoWorldSvg"
+      >
+        <defs>
+          <!-- Grid pattern -->
+          <pattern id="geoGrid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="0.5" />
+          </pattern>
+          <filter id="geoGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Ocean & Grid Background -->
+        <rect width="1000" height="500" fill="#030712" />
+        <rect width="1000" height="500" fill="url(#geoGrid)" />
+
+        <!-- Equator and Prime Meridian Reference Lines -->
+        <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 4" stroke-width="1" />
+        <line x1="500" y1="0" x2="500" y2="500" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 4" stroke-width="1" />
+
+        <!-- Simplified Vector Continents Outlines -->
+        <g fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1" stroke-linejoin="round">
+          <!-- Europe & Asia (Eurasia) -->
+          <path d="M 460 120 L 480 110 L 520 115 L 560 95 L 630 100 L 730 110 L 800 130 L 850 160 L 870 210 L 820 230 L 770 200 L 730 250 L 670 260 L 610 240 L 580 200 L 540 210 L 490 220 L 460 170 Z" />
+          <!-- Africa -->
+          <path d="M 470 220 L 540 220 L 580 270 L 580 340 L 540 420 L 500 400 L 460 300 L 450 250 Z" />
+          <!-- North America -->
+          <path d="M 120 90 L 220 80 L 300 100 L 320 160 L 270 210 L 220 230 L 190 280 L 160 250 L 120 180 Z" />
+          <!-- South America -->
+          <path d="M 230 280 L 300 290 L 340 340 L 310 420 L 260 460 L 240 380 L 210 320 Z" />
+          <!-- Australia -->
+          <path d="M 780 340 L 860 330 L 890 380 L 850 430 L 790 410 Z" />
+          <!-- Great Britain / Japan / Islands -->
+          <circle cx="465" cy="140" r="10" />
+          <circle cx="875" cy="190" r="14" />
+          <circle cx="800" cy="460" r="8" />
+        </g>
+
+        <!-- Planetary Meridian Lines (MC & IC Vertical Lines) -->
+        <g id="geoPlanetaryLines">
+          {lines.map(line => {
+            const x = lngToX(line.longitudeDegree);
+            return (
+              <g class={`geo-line-group geo-domain-${line.lifeDomain}`} data-domain={line.lifeDomain}>
+                <line
+                  x1={x}
+                  y1={0}
+                  x2={x}
+                  y2={500}
+                  stroke={line.colorHex}
+                  stroke-width={line.lineType === 'MC' ? '1.8' : '1.2'}
+                  stroke-dasharray={line.lineType === 'IC' ? '6 4' : 'none'}
+                  stroke-opacity="0.65"
+                  class="transition-all hover:stroke-opacity-100 hover:stroke-width-3 cursor-pointer"
+                >
+                  <title>{`${line.planetName} (${line.planetSymbol}) - ${line.description} @ ${Math.round(line.longitudeDegree)}°`}</title>
+                </line>
+                <!-- Line Symbol Header -->
+                <text
+                  x={x}
+                  y={20}
+                  fill={line.colorHex}
+                  font-size="12"
+                  font-weight="bold"
+                  text-anchor="middle"
+                  filter="url(#geoGlow)"
+                >
+                  {line.planetSymbol}
+                </text>
+                <text
+                  x={x}
+                  y={490}
+                  fill={line.colorHex}
+                  font-size="9"
+                  font-family="monospace"
+                  text-anchor="middle"
+                  opacity="0.8"
+                >
+                  {line.lineType}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
+        <!-- Power Place City Markers -->
+        <g id="geoPowerPlaces">
+          {powerPlaces.map(place => {
+            const cx = lngToX(place.longitude);
+            const cy = latToY(place.latitude);
+            return (
+              <g
+                class={`geo-place-marker geo-domain-${place.lifeDomain} cursor-pointer group`}
+                data-domain={place.lifeDomain}
+                data-id={place.id}
+                data-city={place.cityName}
+                data-country={place.country}
+                data-planet={place.planetName}
+                data-symbol={place.planetSymbol}
+                data-line={place.lineTypeName}
+                data-headline={place.headline}
+                data-effect={place.coreEffect}
+                data-rec={place.recommendation}
+                data-color={place.colorHex}
+              >
+                <!-- Pulse outer ring -->
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r="7"
+                  fill="none"
+                  stroke={place.colorHex}
+                  stroke-width="1.2"
+                  stroke-opacity="0.6"
+                  class="group-hover:scale-150 transition-transform"
+                />
+                <!-- Inner Dot -->
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r="3.5"
+                  fill={place.colorHex}
+                  filter="url(#geoGlow)"
+                />
+                <!-- City Label (Hidden by default, shows on hover) -->
+                <text
+                  x={cx}
+                  y={cy - 10}
+                  fill="#ffffff"
+                  font-size="10"
+                  font-weight="bold"
+                  text-anchor="middle"
+                  class="opacity-75 group-hover:opacity-100 transition-opacity drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                >
+                  {place.cityName}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
+        <!-- Birth Location Golden Marker -->
+        <g class="cursor-pointer" id="geoBirthPin">
+          <circle
+            cx={lngToX(birthLocation.longitude)}
+            cy={latToY(birthLocation.latitude)}
+            r="12"
+            fill="none"
+            stroke="#eab308"
+            stroke-width="2"
+            class="animate-ping"
+          />
+          <circle
+            cx={lngToX(birthLocation.longitude)}
+            cy={latToY(birthLocation.latitude)}
+            r="5"
+            fill="#eab308"
+            filter="url(#geoGlow)"
+          />
+          <text
+            x={lngToX(birthLocation.longitude)}
+            y={latToY(birthLocation.latitude) - 14}
+            fill="#fde047"
+            font-size="11"
+            font-weight="900"
+            text-anchor="middle"
+            filter="url(#geoGlow)"
+          >
+            ★ {birthLocation.cityName}
+          </text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 4 Grand Life Domain Summary Cards -->
+    <div id="geoDomainSummariesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+      
+      <!-- 1. Career & Wealth -->
+      <div class="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2.5 flex flex-col justify-between shadow-xl">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <span>💼</span> Beruf & Erfolg
+            </span>
+            <span class="text-base text-amber-400">☉ ♃</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-relaxed">
+            {domainSummaries.career.summary}
+          </p>
+        </div>
+        <div class="pt-2 border-t border-white/10 text-xs">
+          <span class="text-slate-400 text-[10px] uppercase font-mono block">Top-Kraftorte:</span>
+          <div class="font-bold text-amber-300 flex flex-wrap gap-1 mt-0.5">
+            {domainSummaries.career.bestPlaces.map(p => (
+              <span class="px-2 py-0.5 rounded bg-black/40 border border-amber-500/30">{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Love & Relationships -->
+      <div class="p-5 rounded-2xl bg-pink-500/10 border border-pink-500/30 space-y-2.5 flex flex-col justify-between shadow-xl">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-pink-300 flex items-center gap-1.5">
+              <span>💖</span> Liebe & Partnerschaft
+            </span>
+            <span class="text-base text-pink-400">♀ ☽</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-relaxed">
+            {domainSummaries.love.summary}
+          </p>
+        </div>
+        <div class="pt-2 border-t border-white/10 text-xs">
+          <span class="text-slate-400 text-[10px] uppercase font-mono block">Top-Kraftorte:</span>
+          <div class="font-bold text-pink-300 flex flex-wrap gap-1 mt-0.5">
+            {domainSummaries.love.bestPlaces.map(p => (
+              <span class="px-2 py-0.5 rounded bg-black/40 border border-pink-500/30">{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Soul Home & Retreat -->
+      <div class="p-5 rounded-2xl bg-slate-500/15 border border-slate-400/30 space-y-2.5 flex flex-col justify-between shadow-xl">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+              <span>🏡</span> Seelenheimat & Ruhe
+            </span>
+            <span class="text-base text-slate-300">☽-IC</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-relaxed">
+            {domainSummaries.home.summary}
+          </p>
+        </div>
+        <div class="pt-2 border-t border-white/10 text-xs">
+          <span class="text-slate-400 text-[10px] uppercase font-mono block">Top-Kraftorte:</span>
+          <div class="font-bold text-slate-200 flex flex-wrap gap-1 mt-0.5">
+            {domainSummaries.home.bestPlaces.map(p => (
+              <span class="px-2 py-0.5 rounded bg-black/40 border border-slate-400/30">{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Spirituality & Transformation -->
+      <div class="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-2.5 flex flex-col justify-between shadow-xl">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+              <span>✨</span> Spiritualität & Heilung
+            </span>
+            <span class="text-base text-emerald-400">⚷ ♆ ♅</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-relaxed">
+            {domainSummaries.spirit.summary}
+          </p>
+        </div>
+        <div class="pt-2 border-t border-white/10 text-xs">
+          <span class="text-slate-400 text-[10px] uppercase font-mono block">Top-Kraftorte:</span>
+          <div class="font-bold text-emerald-300 flex flex-wrap gap-1 mt-0.5">
+            {domainSummaries.spirit.bestPlaces.map(p => (
+              <span class="px-2 py-0.5 rounded bg-black/40 border border-emerald-500/30">{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Interactive Place Inspector Modal / Detail Box -->
+  <div
+    id="geoPlaceDetailCard"
+    class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/40 shadow-2xl space-y-4 relative overflow-hidden hidden"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+      <div class="flex items-center gap-3">
+        <div id="inspectorSymbol" class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40">
+          ☉
+        </div>
+        <div>
+          <div class="text-[10px] uppercase tracking-widest font-mono text-amber-400" id="inspectorLineType">
+            Sonne-MC Meridian
+          </div>
+          <h3 class="text-xl font-black text-white" id="inspectorCityTitle">
+            Wien, Österreich
+          </h3>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span id="inspectorBadge" class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
+          Karriere & Business
+        </span>
+        <button
+          type="button"
+          id="closeInspectorBtn"
+          class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white flex items-center justify-center text-sm cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <h4 class="text-base font-bold text-white" id="inspectorHeadline">
+        Sonnen-Zenit: Dein Kraftort für maximale Sichtbarkeit
+      </h4>
+      <p class="text-xs md:text-sm text-slate-200 leading-relaxed" id="inspectorEffect">
+        Hier steht deine Sonne im Zenit. Dein schöpferisches Charisma strahlt mühelos.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function initGeoChartInteractions() {
+    const filterButtons = document.querySelectorAll('.geo-filter-btn');
+    const lineGroups = document.querySelectorAll('.geo-line-group');
+    const placeMarkers = document.querySelectorAll('.geo-place-marker');
+
+    const detailCard = document.getElementById('geoPlaceDetailCard');
+    const closeBtn = document.getElementById('closeInspectorBtn');
+    const symbolEl = document.getElementById('inspectorSymbol');
+    const lineTypeEl = document.getElementById('inspectorLineType');
+    const cityTitleEl = document.getElementById('inspectorCityTitle');
+    const badgeEl = document.getElementById('inspectorBadge');
+    const headlineEl = document.getElementById('inspectorHeadline');
+    const effectEl = document.getElementById('inspectorEffect');
+
+    // Filter Buttons logic
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter') || 'all';
+
+        filterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+          b.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+        });
+        btn.classList.add('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+        btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+
+        lineGroups.forEach(line => {
+          const d = line.getAttribute('data-domain');
+          if (filter === 'all' || d === filter) {
+            (line as HTMLElement).style.display = '';
+          } else {
+            (line as HTMLElement).style.display = 'none';
+          }
+        });
+
+        placeMarkers.forEach(p => {
+          const d = p.getAttribute('data-domain');
+          if (filter === 'all' || d === filter) {
+            (p as HTMLElement).style.display = '';
+          } else {
+            (p as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Place Marker click inspector
+    placeMarkers.forEach(marker => {
+      marker.addEventListener('click', () => {
+        const city = marker.getAttribute('data-city') || '';
+        const country = marker.getAttribute('data-country') || '';
+        const symbol = marker.getAttribute('data-symbol') || '✦';
+        const line = marker.getAttribute('data-line') || '';
+        const headline = marker.getAttribute('data-headline') || '';
+        const effect = marker.getAttribute('data-effect') || '';
+        const rec = marker.getAttribute('data-rec') || '';
+
+        if (detailCard) {
+          if (symbolEl) symbolEl.textContent = symbol;
+          if (lineTypeEl) lineTypeEl.textContent = line;
+          if (cityTitleEl) cityTitleEl.textContent = `${city}, ${country}`;
+          if (badgeEl) badgeEl.textContent = rec;
+          if (headlineEl) headlineEl.textContent = headline;
+          if (effectEl) effectEl.textContent = effect;
+
+          detailCard.classList.remove('hidden');
+          detailCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      detailCard?.classList.add('hidden');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGeoChartInteractions);
+  } else {
+    initGeoChartInteractions();
+  }
+</script>

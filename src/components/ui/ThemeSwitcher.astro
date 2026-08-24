@@ -1,0 +1,127 @@
+---
+// Theme Switcher Component for Ψ-NEXUS
+// Modes: 'cosmic' (default), 'nasa' (Aerospace Flight Control HUD), 'medieval' (Alchemistisches Deutsches Manuskript 1500)
+interface Props {
+  variant?: 'header' | 'floating' | 'drawer';
+}
+
+const { variant = 'header' } = Astro.props;
+---
+
+<div class={`theme-switcher-wrapper flex items-center ${variant === 'drawer' ? 'w-full' : ''}`} data-variant={variant}>
+  <div class={`inline-flex p-1 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-lg ${variant === 'drawer' ? 'w-full justify-between' : 'gap-1'}`}>
+    
+    <!-- 1. Kosmisch Button -->
+    <button
+      type="button"
+      class="theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-300 hover:text-white"
+      data-set-theme="cosmic"
+      title="Ψ-NEXUS Kosmisch (Klassisches Seelenbuch)"
+    >
+      <span class="text-sm">🌌</span>
+      <span class="text-[11px] font-tech tracking-wide hidden sm:inline group-hover:text-amber-300">Kosmos</span>
+      <span class="sr-only">Kosmisch</span>
+    </button>
+
+    <!-- 2. NASA Design Button -->
+    <button
+      type="button"
+      class="theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-300 hover:text-white"
+      data-set-theme="nasa"
+      title="NASA Mission Control & Telemetrie HUD"
+    >
+      <span class="text-sm">🚀</span>
+      <span class="text-[11px] font-mono tracking-wider text-cyan-400 hidden sm:inline">NASA</span>
+      <span class="sr-only">NASA</span>
+    </button>
+
+    <!-- 3. Mittelalter Deutschland Button -->
+    <button
+      type="button"
+      class="theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-300 hover:text-white"
+      data-set-theme="medieval"
+      title="Mittelalter Deutschland (Alchemistischer Sternen-Codex Anno 1500)"
+    >
+      <span class="text-sm">📜</span>
+      <span class="text-[11px] font-serif tracking-wide text-amber-200 hidden sm:inline">Mittelalter</span>
+      <span class="sr-only">Mittelalter</span>
+    </button>
+
+    <!-- 4. Klemen: Architektonische Perfektion, Kunst & Seele -->
+    <button
+      type="button"
+      class="theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-300 hover:text-white"
+      data-set-theme="klemen"
+      title="Klemen: Architektonische Perfektion, Baukunst, Emotion & Seele"
+    >
+      <span class="text-sm">🏛️</span>
+      <span class="text-[11px] font-medium tracking-wide text-rose-300 hidden sm:inline" style="font-family: 'Syne', sans-serif;">Klemen</span>
+      <span class="sr-only">Klemen</span>
+    </button>
+
+    <!-- 5. Wiener Jugendstil & Secession (Klimt, Hoffmann, Otto Wagner) -->
+    <button
+      type="button"
+      class="theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-300 hover:text-white"
+      data-set-theme="vienna"
+      title="Wiener Jugendstil & Secession 1897 (Gustav Klimt, Josef Hoffmann, Otto Wagner)"
+    >
+      <span class="text-sm">⚜️</span>
+      <span class="text-[11px] font-medium tracking-wider text-amber-200 hidden sm:inline" style="font-family: 'Marcellus', serif;">Wien</span>
+      <span class="sr-only">Wien (Secession)</span>
+    </button>
+
+  </div>
+</div>
+
+<script>
+  function setupThemeSwitchers() {
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    
+    function applyTheme(themeName: string) {
+      document.documentElement.setAttribute('data-theme', themeName);
+      localStorage.setItem('psi_nexus_theme', themeName);
+
+      // Update active state on all switcher buttons across the page
+      themeButtons.forEach(btn => {
+        const btnTheme = btn.getAttribute('data-set-theme');
+        if (btnTheme === themeName) {
+          btn.classList.remove('text-slate-300');
+          if (themeName === 'cosmic') {
+            btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative bg-gradient-to-r from-amber-500/30 to-purple-600/30 border border-amber-400/60 text-amber-300 shadow-[0_0_15px_rgba(234,179,8,0.3)]';
+          } else if (themeName === 'nasa') {
+            btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative bg-cyan-950/80 border border-cyan-400 text-cyan-300 shadow-[0_0_18px_rgba(6,182,212,0.45)] ring-1 ring-cyan-400/40';
+          } else if (themeName === 'medieval') {
+            btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative bg-amber-950/90 border border-amber-600/80 text-amber-200 shadow-[0_0_15px_rgba(217,119,6,0.35)] ring-1 ring-amber-500/30';
+          } else if (themeName === 'klemen') {
+            btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative bg-gradient-to-r from-rose-950/90 via-amber-950/80 to-stone-900 border border-rose-400/80 text-rose-200 shadow-[0_0_18px_rgba(244,63,94,0.4)] ring-1 ring-amber-400/40';
+          } else if (themeName === 'vienna') {
+            btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative bg-gradient-to-r from-amber-950/95 via-stone-900 to-emerald-950/80 border border-amber-300 text-amber-200 shadow-[0_0_18px_rgba(212,175,55,0.45)] ring-1 ring-amber-300/50';
+          }
+        } else {
+          btn.className = 'theme-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer relative group text-slate-400 hover:text-white hover:bg-white/5 border border-transparent';
+        }
+      });
+
+      // Dispatch custom event for dynamic components (charts, SVG backgrounds, etc.)
+      window.dispatchEvent(new CustomEvent('psi_theme_changed', { detail: { theme: themeName } }));
+    }
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selectedTheme = btn.getAttribute('data-set-theme') || 'cosmic';
+        applyTheme(selectedTheme);
+      });
+    });
+
+    // Initialize from current attribute or storage
+    const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('psi_nexus_theme') || 'cosmic';
+    applyTheme(currentTheme);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupThemeSwitchers);
+  } else {
+    setupThemeSwitchers();
+  }
+</script>

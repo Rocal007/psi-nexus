@@ -1,0 +1,231 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const { lifePillars } = chart;
+---
+
+<div class="space-y-10">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-2xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-pink-300 text-xs font-semibold uppercase tracking-wider">
+      <span>❖</span> Tor II: Die 3 Seelen-Säulen der Erdenerfahrung <span>❖</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+      Liebe, Berufung & Innere Erfüllung
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Wie manifestiert deine Seele ihre Talente im irdischen Alltag? Hier verbinden sich Planetenkräfte und Häuserstellungen zu greifbaren Lebensstrategien.
+    </p>
+  </div>
+
+  <!-- Special Configurations (Stelliums & Aspect Patterns) -->
+  {lifePillars.specialConfigurations.stelliums.length > 0 && (
+    <div class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/40 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+      <div class="flex items-center gap-3.5 mb-6">
+        <span class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+          ⚡
+        </span>
+        <div>
+          <div class="text-xs uppercase tracking-wider font-bold text-amber-400">Besonderes kosmisches Kraftwerk erkannt</div>
+          <h3 class="text-xl font-bold text-white">Geballte Energiebündelung (Stellium)</h3>
+        </div>
+      </div>
+
+      <div id="stelliumsContainer" class="space-y-6">
+        {lifePillars.specialConfigurations.stelliums.map(st => (
+          <div class="p-5 rounded-2xl bg-slate-900/70 border border-amber-500/25 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-xl bg-amber-500/20 text-amber-300 font-bold text-xs border border-amber-500/40">
+                  Stellium in {st.targetName}
+                </span>
+                <span class="text-xs text-slate-300 font-medium">
+                  ({st.planets.length} Gestirne vereint)
+                </span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs font-mono text-amber-200">
+                {st.planets.map(p => (
+                  <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10" style={`color: ${p.color}`}>
+                    {p.symbol} {p.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <p class="text-sm text-slate-200 leading-relaxed italic">
+              "{st.esotericMeaning}"
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs">
+              <div class="p-3.5 rounded-xl bg-pink-950/25 border border-pink-500/30 space-y-1">
+                <div class="font-bold text-pink-300 flex items-center gap-1.5">
+                  <span>💖</span> Auswirkung auf Beziehung:
+                </div>
+                <div class="text-slate-300 leading-relaxed">{st.relationshipImpact}</div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-amber-950/25 border border-amber-500/30 space-y-1">
+                <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                  <span>💼</span> Auswirkung auf Beruf:
+                </div>
+                <div class="text-slate-300 leading-relaxed">{st.careerImpact}</div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-cyan-950/25 border border-cyan-500/30 space-y-1">
+                <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+                  <span>✨</span> Persönliche Erfüllung:
+                </div>
+                <div class="text-slate-300 leading-relaxed">{st.fulfillmentImpact}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- The 3 Pillars Cards Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- Säule 1: Liebe & Beziehung -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-pink-500/30 shadow-xl flex flex-col justify-between space-y-5 relative overflow-hidden cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-pink-500/20 text-pink-300 flex items-center justify-center font-bold text-2xl border border-pink-500/40 shadow-[0_0_15px_rgba(236,72,153,0.25)]">
+            💖
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest font-bold text-pink-400">1. Seelen-Säule</div>
+            <h3 class="text-lg font-bold text-white">Herz, Liebe & Partnerschaft</h3>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/25 text-xs md:text-sm text-slate-200 leading-relaxed">
+          <p id="relHeadline" class="font-bold text-pink-200 mb-1">{lifePillars.relationships.headline}</p>
+          <p id="relCoreTheme">{lifePillars.relationships.coreTheme}</p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-pink-300">Deine magnetischen Herzensstärken:</div>
+          <ul id="relStrengths" class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            {lifePillars.relationships.strengths.map(s => (
+              <li class="leading-relaxed">{s}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div class="space-y-3 mt-4">
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-pink-500/30 text-xs space-y-1">
+          <div class="font-bold text-pink-300 flex items-center gap-1.5">
+            <span>✧</span> Seelenpartner-Aktivator:
+          </div>
+          <p id="relTrigger" class="text-slate-300 italic">{lifePillars.relationships.soulPartnerTrigger}</p>
+        </div>
+
+        <!-- Birkenbihl Reflexions-Impuls -->
+        <div class="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400">
+          <span class="text-pink-300 font-semibold">💡 Birkenbihl-Denkanstoß:</span> 
+          <span>Welcher Glaubenssatz über Partnerschaft darf jetzt heilen, damit du diese Stärken frei lebst?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Säule 2: Beruf & Berufung -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-amber-500/30 shadow-xl flex flex-col justify-between space-y-5 relative overflow-hidden cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.25)]">
+            💼
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest font-bold text-amber-400">2. Seelen-Säule</div>
+            <h3 class="text-lg font-bold text-white">Beruf, Erfolg & Berufung</h3>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs md:text-sm text-slate-200 leading-relaxed">
+          <p id="carHeadline" class="font-bold text-amber-200 mb-1">{lifePillars.career.headline}</p>
+          <p id="carVocation">{lifePillars.career.vocationType}</p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-300">Deine Kernkompetenzen im Beruf:</div>
+          <ul id="carStrengths" class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            {lifePillars.career.coreStrengths.map(s => (
+              <li class="leading-relaxed">{s}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div class="space-y-3 mt-4">
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 text-xs space-y-1">
+          <div class="font-bold text-amber-300 flex items-center gap-1.5">
+            <span>✧</span> Wachstums- & Erfolgsstrategie:
+          </div>
+          <p id="carStrategy" class="text-slate-300 italic">{lifePillars.career.growthStrategy}</p>
+        </div>
+
+        <!-- Birkenbihl Reflexions-Impuls -->
+        <div class="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400">
+          <span class="text-amber-300 font-semibold">💡 Birkenbihl-Denkanstoß:</span> 
+          <span>In welchen 20% deiner täglichen Arbeit erlebst du den intensivsten Zustand von Flow?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Säule 3: Persönliche Erfüllung & Seelenplan -->
+    <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-cyan-500/30 shadow-xl flex flex-col justify-between space-y-5 relative overflow-hidden cosmic-corner-accent">
+      <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-2xl border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+            ✨
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest font-bold text-cyan-400">3. Seelen-Säule</div>
+            <h3 class="text-lg font-bold text-white">Innere Erfüllung & Frieden</h3>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 text-xs md:text-sm text-slate-200 leading-relaxed">
+          <p id="fulHeadline" class="font-bold text-cyan-200 mb-1">{lifePillars.personalFulfillment.headline}</p>
+          <p id="fulSoulDrive">{lifePillars.personalFulfillment.soulDrive}</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-xs space-y-1">
+          <div class="font-bold text-cyan-300">Schlüssel zu innerem Frieden:</div>
+          <p id="fulPeaceKey" class="text-slate-300">{lifePillars.personalFulfillment.innerPeaceKey}</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 mt-4">
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 text-xs space-y-1">
+          <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+            <span>✧</span> Täglicher Seelen-Mikroschritt:
+          </div>
+          <p id="fulDailyStep" class="text-slate-300 italic">{lifePillars.personalFulfillment.dailyActionStep}</p>
+        </div>
+
+        <!-- Birkenbihl Reflexions-Impuls -->
+        <div class="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400">
+          <span class="text-cyan-300 font-semibold">💡 Birkenbihl-Denkanstoß:</span> 
+          <span>Welche kleine Handlung heute bringt dich diesem Seelenfrieden einen Schritt näher?</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

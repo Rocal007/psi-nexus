@@ -1,0 +1,372 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const { numerology } = chart;
+const { nameNumbers } = numerology;
+const fullName = chart.input.name || 'Edle Seele';
+---
+
+<div class="space-y-10">
+  <!-- Section Title -->
+  <div class="text-center space-y-3 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-yellow-300 text-xs font-semibold uppercase tracking-wider">
+      <span>🔢</span> Tor IV: Der Heilige Seelen-Schwingungscode <span>🔢</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+      Pythagoräische Numerologie & Namens-Analyse
+    </h2>
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Alles im Universum ist Frequenz und Zahl. Erfahre, wie dein <strong>Geburtsdatum</strong> (dein unverrückbarer Lebensweg) mit deinem <strong>vollständigen Namen</strong> (dem Schwingungs-Kleid deiner Seele) in Resonanz steht.
+    </p>
+  </div>
+
+  <!-- Primary Life Path Card (Hero of Birth Date Numerology) -->
+  <div class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/40 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+    <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <!-- Left: Big Number Emblem (4 Cols) -->
+      <div class="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-black/50 border border-amber-500/40 shadow-inner">
+        <div class="text-[10px] uppercase tracking-widest font-extrabold text-amber-400 mb-1">
+          Aus Geburtsdatum ({chart.input.birthDate})
+        </div>
+        <div class="text-xs uppercase tracking-wider font-extrabold text-slate-300">
+          Deine Lebenswegzahl
+        </div>
+        <div id="numLifePathNumber" class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-200 via-amber-400 to-yellow-500 my-2 drop-shadow-[0_0_25px_rgba(234,179,8,0.5)]">
+          {numerology.lifePath.number}
+        </div>
+        <div id="numLifePathArchetype" class="text-base font-extrabold text-white">
+          {numerology.lifePath.archetype}
+        </div>
+        <div id="numLifePathPlanet" class="text-xs text-amber-300/90 mt-1">
+          Herrscher: {numerology.lifePath.rulingPlanet}
+        </div>
+        <div id="numLifePathResonance" class="text-[11px] text-slate-400 mt-0.5">
+          Resonanz: {numerology.lifePath.zodiacResonance}
+        </div>
+      </div>
+
+      <!-- Right: Deep Description (8 Cols) -->
+      <div class="lg:col-span-8 space-y-4">
+        <div>
+          <div class="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-bold">
+            Übergeordneter Seelenlehrplan
+          </div>
+          <h3 id="numLifePathName" class="text-xl md:text-2xl font-extrabold text-white">
+            {numerology.lifePath.name}
+          </h3>
+          <p id="numLifePathMeaning" class="text-sm text-slate-200 mt-1.5 leading-relaxed">
+            {numerology.lifePath.meaning}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs pt-2">
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-1">
+            <div class="font-bold text-amber-300 flex items-center gap-1">
+              <span>✦</span> Inkarnations-Mission:
+            </div>
+            <div id="numLifePathMission" class="text-slate-300 leading-relaxed">{numerology.lifePath.soulMission}</div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 space-y-1">
+            <div class="font-bold text-cyan-300 flex items-center gap-1">
+              <span>✦</span> Deine Alltags-Superkraft:
+            </div>
+            <div id="numLifePathGift" class="text-slate-300 leading-relaxed">{numerology.lifePath.dailyGift}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEELEN-NAMENS-DOSSIER (Full Name & Soul Name Vibration Deep Dive) -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-8 relative overflow-hidden cosmic-corner-accent">
+    
+    <!-- Header with Name Context -->
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/20 text-pink-300 flex items-center justify-center font-bold text-2xl border border-pink-500/40 shadow-[0_0_20px_rgba(236,72,153,0.2)]">
+          ✦
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-pink-400">Seelen-Namens-Schwingung</span>
+            <span class="text-[10px] text-slate-400">• Pythagoräische Tonleiter</span>
+          </div>
+          <h3 class="text-xl md:text-2xl font-black text-white">
+            Analyse für: <span id="numFullNameSpan" class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-pink-300 to-purple-300">{fullName}</span>
+          </h3>
+          <p class="text-xs text-slate-300">
+            Jeder Buchstabe deines Namens trägt eine uralte mathematische Frequenz.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300">
+        <span class="text-pink-400">🌸</span>
+        <span>Vokale = Herzzahl</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-cyan-400">🌊</span>
+        <span>Konsonanten = Aura</span>
+      </div>
+    </div>
+
+    <!-- Letter by Letter Pythagorean Tiles -->
+    <div id="numLetterTilesWrapper" class="space-y-2">
+      {nameNumbers.letters.length > 0 && (
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <span>Buchstaben-Schwingungs-Muster ({nameNumbers.letters.length} Buchstaben)</span>
+            <span class="text-amber-300">Pythagoräisches System (1–9)</span>
+          </div>
+
+          <div class="flex flex-wrap gap-2" id="numLetterTiles">
+            {nameNumbers.letters.map((lv) => (
+              <div
+                class={`p-2.5 rounded-2xl border text-center transition-all hover:scale-110 flex flex-col items-center justify-center min-w-[44px] ${
+                  lv.isVowel
+                    ? 'bg-pink-500/15 border-pink-500/40 text-pink-200 shadow-[0_0_10px_rgba(236,72,153,0.15)]'
+                    : 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.15)]'
+                }`}
+                title={`${lv.char} = Zahl ${lv.value} (${lv.typeLabel})`}
+              >
+                <span class="text-base font-black leading-none">{lv.char}</span>
+                <span class="text-[10px] font-mono font-bold mt-1 text-amber-300">{lv.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- The 4 Cardinal Name Dimensions (Expression, Heart, Personality, Maturity) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      
+      <!-- 1. Ausdruckszahl / Namenszahl (All letters) -->
+      <div class="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3 flex flex-col justify-between hover:border-amber-400/60 transition-all shadow-xl">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-amber-300">1. Ausdruckszahl</span>
+            <span id="numExprNum" class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-black text-sm border border-amber-500/40 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+              {nameNumbers.expression.number}
+            </span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-medium">Aus allen Buchstaben</div>
+          <h4 id="numExprArchetype" class="text-sm font-bold text-white">
+            {nameNumbers.expression.archetype}
+          </h4>
+          <p id="numExprMeaning" class="text-xs text-slate-300 leading-relaxed">
+            {nameNumbers.expression.meaning}
+          </p>
+        </div>
+        <div class="text-[11px] text-amber-300/80 pt-2 border-t border-white/10">
+          <strong>Wirkung:</strong> Deine konkreten Werkzeuge & Talente in der Welt.
+        </div>
+      </div>
+
+      <!-- 2. Herzzahl / Seelendrang (Vowels) -->
+      <div class="p-5 rounded-2xl bg-pink-500/10 border border-pink-500/30 space-y-3 flex flex-col justify-between hover:border-pink-400/60 transition-all shadow-xl">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-pink-300">2. Herzzahl (Seele)</span>
+            <span id="numSoulNum" class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-300 flex items-center justify-center font-black text-sm border border-pink-500/40 shadow-[0_0_10px_rgba(236,72,153,0.2)]">
+              {nameNumbers.soulUrge.number}
+            </span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-medium">Aus allen Vokalen</div>
+          <h4 id="numSoulArchetype" class="text-sm font-bold text-white">
+            {nameNumbers.soulUrge.archetype}
+          </h4>
+          <p id="numSoulMeaning" class="text-xs text-slate-300 leading-relaxed">
+            {nameNumbers.soulUrge.meaning}
+          </p>
+        </div>
+        <div class="text-[11px] text-pink-300/80 pt-2 border-t border-white/10">
+          <strong>Wirkung:</strong> Was deine Seele im tiefsten Inneren wahrhaft ersehnt.
+        </div>
+      </div>
+
+      <!-- 3. Persönlichkeitszahl (Consonants) -->
+      <div class="p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 space-y-3 flex flex-col justify-between hover:border-cyan-400/60 transition-all shadow-xl">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-cyan-300">3. Aura & Charisma</span>
+            <span id="numPersNum" class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-black text-sm border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+              {nameNumbers.personality.number}
+            </span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-medium">Aus allen Konsonanten</div>
+          <h4 id="numPersArchetype" class="text-sm font-bold text-white">
+            {nameNumbers.personality.archetype}
+          </h4>
+          <p id="numPersMeaning" class="text-xs text-slate-300 leading-relaxed">
+            {nameNumbers.personality.meaning}
+          </p>
+        </div>
+        <div class="text-[11px] text-cyan-300/80 pt-2 border-t border-white/10">
+          <strong>Wirkung:</strong> Wie andere deine Ausstrahlung im Raum wahrnehmen.
+        </div>
+      </div>
+
+      <!-- 4. Reifezahl (Life Path + Name) -->
+      <div class="p-5 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-3 flex flex-col justify-between hover:border-purple-400/60 transition-all shadow-xl">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-purple-300">4. Reifezahl</span>
+            <span id="numMatNum" class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center font-black text-sm border border-purple-500/40 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+              {nameNumbers.maturity.number}
+            </span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-medium">Lebensweg + Name</div>
+          <h4 id="numMatArchetype" class="text-sm font-bold text-white">
+            {nameNumbers.maturity.archetype}
+          </h4>
+          <p id="numMatMeaning" class="text-xs text-slate-300 leading-relaxed">
+            {nameNumbers.maturity.meaning}
+          </p>
+        </div>
+        <div class="text-[11px] text-purple-300/80 pt-2 border-t border-white/10">
+          <strong>Wirkung:</strong> Das vollendete Meisterwerk in der 2. Lebenshälfte.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Karmic Lessons & Dominant Gifts in Name -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+      
+      <!-- Dominant Gifts -->
+      <div class="p-5 rounded-2xl bg-slate-950/70 border border-emerald-500/30 space-y-3">
+        <div class="flex items-center gap-2 border-b border-white/10 pb-2.5">
+          <span class="text-emerald-400 text-base">🎁</span>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-300">
+              Verstärkte Seelengaben im Namen
+            </h4>
+            <p class="text-[10px] text-slate-400">Besonders häufig auftretende Schwingungszahlen</p>
+          </div>
+        </div>
+
+        <div id="numDominantGiftsList" class="space-y-2">
+          {nameNumbers.dominantGifts.length > 0 ? (
+            nameNumbers.dominantGifts.map((gift) => (
+              <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold flex items-center justify-center text-xs">
+                    {gift.digit}
+                  </span>
+                  <span class="text-slate-200">{gift.meaning}</span>
+                </div>
+                <span class="text-[10px] font-mono text-emerald-300/80 shrink-0">({gift.count}x im Namen)</span>
+              </div>
+            ))
+          ) : (
+            <p class="text-xs text-slate-400">Ausgeglichene Frequenzverteilung über alle Schwingungen.</p>
+          )}
+        </div>
+      </div>
+
+      <!-- Karmic Lessons -->
+      <div class="p-5 rounded-2xl bg-slate-950/70 border border-amber-500/30 space-y-3">
+        <div class="flex items-center gap-2 border-b border-white/10 pb-2.5">
+          <span class="text-amber-400 text-base">🧭</span>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300">
+              Karmische Entwicklungsfelder im Namen
+            </h4>
+            <p class="text-[10px] text-slate-400">Im Namen fehlende Zahlen (Bereiche für bewusstes Seelenwachstum)</p>
+          </div>
+        </div>
+
+        <div id="numKarmicLessonsList" class="space-y-2">
+          {nameNumbers.karmicLessons.length > 0 ? (
+            nameNumbers.karmicLessons.map((les) => (
+              <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-0.5">
+                <div class="flex items-center justify-between font-bold text-amber-300">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] flex items-center justify-center">
+                      {les.digit}
+                    </span>
+                    {les.name}
+                  </span>
+                </div>
+                <p class="text-slate-300 text-[11px] leading-snug">{les.advice}</p>
+              </div>
+            ))
+          ) : (
+            <p class="text-xs text-emerald-400 font-semibold">
+              ✦ Vollständiges Schwingungsspektrum: Keine fehlenden Zahlen im Namen!
+            </p>
+          )}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Name ↔ Life Path Synergy Check -->
+    <div class="p-5 md:p-6 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900 to-indigo-950/50 border border-purple-500/40 space-y-3 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl text-amber-400">⚖️</span>
+          <div>
+            <h4 class="text-sm font-extrabold text-white" id="numSynergyTitle">
+              Seelen-Harmonie: Name ({nameNumbers.expression.number}) ↔ Lebensweg ({numerology.lifePath.number})
+            </h4>
+            <div class="text-[11px] text-purple-300/80 font-medium" id="numSynergyRelation">
+              {nameNumbers.nameSynergy.relationType}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="text-right">
+            <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Resonanz-Score</div>
+            <div class="text-lg font-black text-amber-300 font-mono" id="numSynergyScore">{nameNumbers.nameSynergy.harmonyScore}%</div>
+          </div>
+          <div class="w-16 h-2 bg-slate-900 rounded-full overflow-hidden border border-white/10">
+            <div id="numSynergyBar" class="bg-gradient-to-r from-amber-400 to-purple-400 h-full" style={`width: ${nameNumbers.nameSynergy.harmonyScore}%`}></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-xs md:text-sm text-slate-200 leading-relaxed" id="numSynergyExplanation">
+        {nameNumbers.nameSynergy.explanation}
+      </p>
+
+      <div class="p-3 rounded-xl bg-black/40 border border-purple-500/30 text-xs text-purple-200 italic" id="numSynergyAffirmation">
+        {nameNumbers.nameSynergy.affirmation}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Astro-Numerology Synergy Box -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 space-y-4 shadow-2xl">
+    <div class="flex items-center gap-3 border-b border-white/10 pb-3">
+      <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/30">
+        ✧
+      </span>
+      <div>
+        <h3 id="numSynHeadline" class="text-lg font-bold text-white">{numerology.astroSynergy.headline}</h3>
+        <p class="text-xs text-slate-400">Wie Zahlen & Gestirne als harmonische Einheit wirken</p>
+      </div>
+    </div>
+
+    <p id="numSynDescription" class="text-xs md:text-sm text-slate-200 leading-relaxed">
+      {numerology.astroSynergy.description}
+    </p>
+
+    <div class="p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 text-xs space-y-1">
+      <div class="font-bold text-amber-300 flex items-center gap-1">
+        <span>✦</span> Kosmische Synthese-Leitlinie:
+      </div>
+      <p id="numSynGuidance" class="text-slate-300 italic">{numerology.astroSynergy.coreGuidance}</p>
+    </div>
+  </div>
+</div>

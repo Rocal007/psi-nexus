@@ -1,0 +1,186 @@
+---
+// Neurodidactic Birkenbihl Category Hub & Cosmic Folder Navigation
+// Groups the 11 gates into 4 Cognitive Dimension Spheres for effortless decoding and high Lupos factor.
+import { SOUL_SPHERES, type SoulSphere, type SoulGate } from '../../lib/astrology/spheres';
+
+interface Props {
+  activeTab?: string;
+}
+
+const { activeTab = 'radix' } = Astro.props;
+
+// Determine initial active sphere
+const initialSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === activeTab)) || SOUL_SPHERES[0];
+---
+
+<div id="folderTabsContainer" class="w-full sticky top-16 z-30 py-3 bg-slate-950/90 backdrop-blur-2xl border-b border-white/10 no-print shadow-2xl space-y-2.5">
+  <div class="max-w-7xl mx-auto px-2 sm:px-4 space-y-2.5">
+    
+    <!-- LEVEL 1: Master Thematic Spheres (Birkenbihl Kategoriensystem) -->
+    <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div class="flex items-center gap-1.5 sm:gap-2 min-w-max mx-auto" id="sphereFilterContainer">
+        
+        {SOUL_SPHERES.map((sphere) => (
+          <button
+            type="button"
+            class={`sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${sphere.id === initialSphere.id ? sphere.borderActive : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
+            data-sphere-id={sphere.id}
+          >
+            <span class="text-base">{sphere.icon}</span>
+            <div class="text-left">
+              <span class="text-[9px] uppercase tracking-widest text-slate-400 block font-tech">{sphere.num}</span>
+              <span class="font-extrabold">{sphere.name}</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-black/40 text-slate-400 font-mono hidden md:inline">
+              {sphere.gates.length}
+            </span>
+          </button>
+        ))}
+
+        <!-- View All Button -->
+        <button
+          type="button"
+          class={`sphere-filter-btn tab-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${activeTab === 'all' ? 'border-amber-400 bg-amber-500/20 text-amber-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white'}`}
+          data-sphere-id="sphere_all"
+          data-tab-target="all"
+        >
+          <span class="text-base">📜</span>
+          <div class="text-left">
+            <span class="text-[9px] uppercase tracking-widest text-slate-400 block font-tech">Synthese</span>
+            <span class="font-extrabold">Alle 11 Tore</span>
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- LEVEL 2: Birkenbihl Neurodidactic Anchor Pill & Gate Sub-Tabs -->
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-3 pt-1 border-t border-white/5">
+      <!-- Birkenbihl Question / Anchor -->
+      <div class="flex items-center gap-2 text-xs text-slate-300 shrink-0 w-full lg:w-auto justify-center lg:justify-start" id="activeSphereAnchor">
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech bg-amber-500/15 text-amber-300 border border-amber-500/30" id="sphereBadge">
+          {initialSphere.num}: {initialSphere.shortQuestion}
+        </span>
+        <span class="text-slate-400 hidden sm:inline text-[11px] font-lato" id="sphereExplanation">
+          {initialSphere.birkenbihlAnchor}
+        </span>
+      </div>
+
+      <!-- LEVEL 3: Gate Sub-Tabs (Dynamically filterable or switchable) -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none w-full lg:w-auto justify-center lg:justify-end" id="gateTabsRow">
+        {SOUL_SPHERES.map(sphere => (
+          sphere.gates.map(tab => (
+            <button
+              type="button"
+              class={`cosmic-folder-tab tab-btn px-3 py-1.5 rounded-xl border flex items-center gap-2 cursor-pointer text-left transition-all ${activeTab === tab.id ? 'active' : ''}`}
+              data-tab-target={tab.id}
+              data-belonging-sphere={sphere.id}
+            >
+              <span class="text-sm flex-shrink-0">{tab.icon}</span>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-1">
+                  <span class="text-[9px] uppercase tracking-widest font-mono text-amber-400/90 font-bold">{tab.gate}</span>
+                </div>
+                <span class="text-xs font-bold text-slate-100 whitespace-nowrap">
+                  {tab.label}
+                </span>
+              </div>
+            </button>
+          ))
+        ))}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { SOUL_SPHERES } from '../../lib/astrology/spheres';
+
+  function initSphereCategorySystem() {
+    const sphereButtons = document.querySelectorAll('.sphere-filter-btn');
+    const gateButtons = document.querySelectorAll('.cosmic-folder-tab');
+    const sphereBadge = document.getElementById('sphereBadge');
+    const sphereExplanation = document.getElementById('sphereExplanation');
+
+    function setActiveSphere(sphereId: string) {
+      const selectedSphere = SOUL_SPHERES.find(s => s.id === sphereId);
+
+      // Update Sphere Filter Buttons
+      sphereButtons.forEach(btn => {
+        const btnSphereId = btn.getAttribute('data-sphere-id');
+        if (btnSphereId === sphereId) {
+          btn.className = `sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${selectedSphere ? selectedSphere.borderActive : 'border-amber-400 bg-amber-500/20 text-amber-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]'}`;
+        } else {
+          btn.className = 'sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white';
+        }
+      });
+
+      // Update Birkenbihl Anchor text
+      if (selectedSphere && sphereBadge && sphereExplanation) {
+        sphereBadge.textContent = `${selectedSphere.num}: ${selectedSphere.shortQuestion}`;
+        sphereBadge.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech ${selectedSphere.badgeBg}`;
+        sphereExplanation.textContent = selectedSphere.birkenbihlAnchor;
+      } else if (sphereId === 'sphere_all' && sphereBadge && sphereExplanation) {
+        sphereBadge.textContent = 'Synthese: Das Ganze Seelenbuch';
+        sphereBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech bg-purple-500/15 text-purple-300 border border-purple-500/30';
+        sphereExplanation.textContent = 'Alle 11 Seelentore in vollständiger Übersicht geöffnet.';
+      }
+
+      // Filter Gate Buttons
+      gateButtons.forEach(btn => {
+        const belongingSphere = btn.getAttribute('data-belonging-sphere');
+        if (sphereId === 'sphere_all' || belongingSphere === sphereId) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    }
+
+    sphereButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sphereId = btn.getAttribute('data-sphere-id') || 'sphere_identity';
+        setActiveSphere(sphereId);
+
+        // If clicking a sphere that isn't 'sphere_all', automatically open the first gate of that sphere
+        if (sphereId !== 'sphere_all') {
+          const sphereObj = SOUL_SPHERES.find(s => s.id === sphereId);
+          if (sphereObj && sphereObj.gates.length > 0) {
+            const firstGateBtn = document.querySelector(`.cosmic-folder-tab[data-tab-target="${sphereObj.gates[0].id}"]`) as HTMLButtonElement;
+            if (firstGateBtn) {
+              firstGateBtn.click();
+            }
+          }
+        }
+      });
+    });
+
+    // Listen to tab clicks to keep sphere filter active
+    gateButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetGateId = btn.getAttribute('data-tab-target');
+        const foundSphere = SOUL_SPHERES.find(s => s.gates.some(g => g.id === targetGateId));
+        if (foundSphere) {
+          sphereButtons.forEach(sBtn => {
+            const sId = sBtn.getAttribute('data-sphere-id');
+            if (sId === foundSphere.id) {
+              sBtn.className = `sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer ${foundSphere.borderActive}`;
+            } else {
+              sBtn.className = 'sphere-filter-btn px-3.5 sm:px-4 py-2 rounded-2xl border text-xs font-black transition-all duration-300 flex items-center gap-2 cursor-pointer border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/25 hover:text-white';
+            }
+          });
+          if (sphereBadge && sphereExplanation) {
+            sphereBadge.textContent = `${foundSphere.num}: ${foundSphere.shortQuestion}`;
+            sphereBadge.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech ${foundSphere.badgeBg}`;
+            sphereExplanation.textContent = foundSphere.birkenbihlAnchor;
+          }
+        }
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initSphereCategorySystem();
+  });
+</script>

@@ -1,0 +1,1203 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-cosmos-bg: #03050d;
+    --color-cosmos-card: rgba(11, 15, 34, 0.75);
+    --color-cosmos-border: rgba(234, 179, 8, 0.25);
+    --color-gold: #f59e0b;
+    --color-gold-light: #fef08a;
+    --color-gold-metallic: #d4af37;
+    --color-nebula-purple: #7c3aed;
+    --color-nebula-blue: #1e40af;
+    --color-nebula-cyan: #06b6d4;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cosmos-bg);
+    color: #e2e8f0;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: 0.015em;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Universal Scroll-Margin Offset for Sticky Header (64px) + Tabs (~110px) + Safety Margin */
+  section,
+  .tab-content-panel,
+  #folderTabsContainer,
+  #personalitySummarySection,
+  #birkenbihlDecoderWidget,
+  #form-section,
+  #cardAC,
+  #cardMC,
+  #cardDC,
+  #cardIC,
+  [id^="panel-"] {
+    scroll-margin-top: 195px;
+  }
+
+  /* Robust Overflow & Readability Safeguards */
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Regal Titles (Default / Cosmic) */
+  h1 {
+    font-family: 'Cinzel', 'Lato', serif;
+    letter-spacing: 0.04em;
+    font-weight: 900;
+  }
+
+  h2 {
+    font-family: 'Cinzel', 'Lato', serif;
+    letter-spacing: 0.03em;
+    font-weight: 800;
+  }
+
+  h3, h4, h5, h6 {
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  button, input, select, .font-tech, .cosmic-folder-tab, .birkenbihl-badge {
+    font-family: 'Oswald', system-ui, -apple-system, sans-serif;
+    letter-spacing: 0.035em;
+  }
+}
+
+/* Typography Utility Classes */
+.font-cinzel {
+  font-family: 'Cinzel', serif !important;
+}
+.font-cinzel-deco {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif !important;
+}
+.font-cormorant {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+}
+.font-lato {
+  font-family: 'Lato', sans-serif !important;
+}
+.font-oswald {
+  font-family: 'Oswald', sans-serif !important;
+}
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif !important;
+}
+.font-space {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+.font-tech-mono {
+  font-family: 'Share Tech Mono', monospace !important;
+}
+.font-chakra {
+  font-family: 'Chakra Petch', sans-serif !important;
+}
+.font-medieval {
+  font-family: 'MedievalSharp', serif !important;
+}
+.font-fraktur {
+  font-family: 'UnifrakturMaguntia', serif !important;
+}
+.font-almendra {
+  font-family: 'Almendra', serif !important;
+}
+
+/* =========================================================================
+   1. DEFAULT COSMIC THEME STYLES (Ψ-NEXUS Kosmisches Seelenbuch)
+   ========================================================================= */
+.cosmic-bg {
+  background-color: #03050d;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 25px 35px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 65px 105px, rgba(255,255,255,0.95), rgba(0,0,0,0)),
+    radial-gradient(2.5px 2.5px at 135px 55px, #fde047, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 215px 175px, #c084fc, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 305px 255px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 405px 85px, #67e8f9, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 485px 335px, #fef08a, rgba(0,0,0,0)),
+    radial-gradient(2.5px 2.5px at 580px 220px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 670px 140px, #fde047, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 750px 380px, #a5b4fc, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 840px 95px, #67e8f9, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 930px 290px, #fef08a, rgba(0,0,0,0)),
+    radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse at 15% 45%, rgba(168, 85, 247, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 65%, rgba(234, 179, 8, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 95%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, #060918 0%, #03050d 100%);
+  background-size: 550px 550px, 420px 420px, 480px 480px, 680px 680px, 520px 520px, 620px 620px, 380px 380px, 700px 700px, 600px 600px, 450px 450px, 800px 800px, 500px 500px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+/* Noble Glassmorphism Cards */
+.cosmic-glass {
+  background: rgba(10, 14, 32, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.05);
+  position: relative;
+}
+
+.cosmic-glass-gold {
+  background: linear-gradient(145deg, rgba(26, 21, 58, 0.7) 0%, rgba(12, 10, 32, 0.85) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  box-shadow: 0 20px 55px -10px rgba(0, 0, 0, 0.7), 0 0 35px rgba(234, 179, 8, 0.15);
+  position: relative;
+}
+
+.cosmic-glass-royal {
+  background: linear-gradient(145deg, rgba(20, 16, 50, 0.75) 0%, rgba(8, 12, 28, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(168, 85, 247, 0.12);
+  position: relative;
+}
+
+/* Ornate Celestial Corner Highlights */
+.cosmic-corner-accent::before,
+.cosmic-corner-accent::after {
+  content: '✦';
+  position: absolute;
+  font-size: 10px;
+  color: rgba(234, 179, 8, 0.6);
+  pointer-events: none;
+}
+.cosmic-corner-accent::before {
+  top: 10px;
+  left: 10px;
+}
+.cosmic-corner-accent::after {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* Birkenbihl Neurodidactic Decoder Boxes */
+.birkenbihl-box {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(99, 102, 241, 0.06) 100%);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+  border-left: 4px solid #f59e0b;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.birkenbihl-badge {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
+}
+
+/* Folder Navigation & Tabs */
+.cosmic-folder-tab {
+  background: rgba(13, 19, 39, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cosmic-folder-tab:hover {
+  background: rgba(26, 35, 66, 0.85);
+  border-color: rgba(234, 179, 8, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0,0,0,0.5), 0 0 15px rgba(234, 179, 8, 0.15);
+}
+
+.cosmic-folder-tab.active {
+  background: linear-gradient(180deg, rgba(234, 179, 8, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: #f59e0b;
+  box-shadow: 0 0 30px rgba(234, 179, 8, 0.25), inset 0 1px 0 rgba(254, 240, 138, 0.4);
+  color: #ffffff;
+}
+
+/* Glowing Metallic Gradients */
+.cosmic-gold-gradient {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde047 30%, #f59e0b 70%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cosmic-cyan-gradient {
+  background: linear-gradient(135deg, #ecfeff 0%, #67e8f9 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cosmic-purple-gradient {
+  background: linear-gradient(135deg, #faf5ff 0%, #c084fc 50%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glow Dropshadows */
+.glow-gold {
+  filter: drop-shadow(0 0 12px rgba(234, 179, 8, 0.5));
+}
+.glow-cyan {
+  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));
+}
+.glow-purple {
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
+}
+
+/* =========================================================================
+   2. NASA THEME STYLES (Mission Control / Aerospace Telemetry HUD)
+   ========================================================================= */
+[data-theme="nasa"] {
+  --color-cosmos-bg: #030712;
+  --color-cosmos-card: rgba(5, 11, 24, 0.88);
+  --color-cosmos-border: rgba(0, 229, 255, 0.4);
+  --color-gold: #00e5ff;
+  --color-gold-light: #67e8f9;
+  --color-gold-metallic: #0284c7;
+  --color-nebula-purple: #ff5500;
+  --color-nebula-blue: #0284c7;
+  --color-nebula-cyan: #00ff66;
+}
+
+[data-theme="nasa"] body {
+  background-color: #030712;
+  color: #e0f2fe;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="nasa"] h1 {
+  font-family: 'Orbitron', 'Space Grotesk', sans-serif !important;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+[data-theme="nasa"] h2 {
+  font-family: 'Orbitron', 'Space Grotesk', sans-serif !important;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+[data-theme="nasa"] h3, 
+[data-theme="nasa"] h4 {
+  font-family: 'Orbitron', 'Space Grotesk', sans-serif !important;
+  letter-spacing: 0.03em;
+}
+
+[data-theme="nasa"] button,
+[data-theme="nasa"] input,
+[data-theme="nasa"] select,
+[data-theme="nasa"] .font-tech,
+[data-theme="nasa"] .cosmic-folder-tab,
+[data-theme="nasa"] .birkenbihl-badge {
+  font-family: 'Share Tech Mono', monospace !important;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="nasa"] .cosmic-bg {
+  background-color: #030712;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 70%),
+    linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 90% 70%, rgba(255, 85, 0, 0.12) 0%, transparent 55%),
+    linear-gradient(180deg, #040918 0%, #030712 100%);
+  background-size: 100% 100%, 36px 36px, 36px 36px, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+[data-theme="nasa"] .cosmic-glass {
+  background: rgba(5, 11, 24, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.08), inset 0 0 15px rgba(0, 229, 255, 0.03);
+}
+
+[data-theme="nasa"] .cosmic-glass-gold {
+  background: linear-gradient(145deg, rgba(8, 18, 36, 0.9) 0%, rgba(3, 8, 18, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 85, 0, 0.45);
+  box-shadow: 0 0 35px rgba(255, 85, 0, 0.15), inset 0 0 20px rgba(255, 85, 0, 0.04);
+}
+
+[data-theme="nasa"] .cosmic-glass-royal {
+  background: linear-gradient(145deg, rgba(6, 15, 32, 0.9) 0%, rgba(4, 10, 22, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 35px rgba(0, 229, 255, 0.16), inset 0 0 20px rgba(0, 229, 255, 0.05);
+}
+
+[data-theme="nasa"] .cosmic-corner-accent::before {
+  content: '+ TLM';
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: #00e5ff;
+  letter-spacing: 1px;
+}
+
+[data-theme="nasa"] .cosmic-corner-accent::after {
+  content: '+ SYNC';
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: #00ff66;
+  letter-spacing: 1px;
+}
+
+[data-theme="nasa"] .birkenbihl-box {
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left: 4px solid #00e5ff;
+  border-radius: 0.75rem;
+}
+
+[data-theme="nasa"] .birkenbihl-badge {
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid #00e5ff;
+  color: #67e8f9;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+}
+
+[data-theme="nasa"] .cosmic-folder-tab {
+  background: rgba(6, 14, 28, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 0.6rem;
+}
+
+[data-theme="nasa"] .cosmic-folder-tab:hover {
+  background: rgba(10, 25, 50, 0.95);
+  border-color: #00e5ff;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+[data-theme="nasa"] .cosmic-folder-tab.active {
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.25) 0%, rgba(4, 9, 20, 0.95) 100%);
+  border-color: #00e5ff;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.35), inset 0 1px 0 rgba(103, 232, 249, 0.5);
+  color: #ffffff;
+}
+
+[data-theme="nasa"] .cosmic-gold-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #67e8f9 35%, #00e5ff 70%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="nasa"] .cosmic-cyan-gradient {
+  background: linear-gradient(135deg, #f0fdf4 0%, #6ee7b7 40%, #00ff66 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="nasa"] .cosmic-purple-gradient {
+  background: linear-gradient(135deg, #fff7ed 0%, #fdba74 40%, #ff5500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="nasa"] .glow-gold {
+  filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.7));
+}
+[data-theme="nasa"] .glow-cyan {
+  filter: drop-shadow(0 0 12px rgba(0, 255, 102, 0.7));
+}
+[data-theme="nasa"] .glow-purple {
+  filter: drop-shadow(0 0 12px rgba(255, 85, 0, 0.7));
+}
+
+/* =========================================================================
+   3. MEDIEVAL GERMANY THEME STYLES (Alchemistischer Sternen-Codex Anno 1500)
+   ========================================================================= */
+[data-theme="medieval"] {
+  --color-cosmos-bg: #140c06;
+  --color-cosmos-card: rgba(32, 22, 13, 0.92);
+  --color-cosmos-border: rgba(197, 155, 39, 0.45);
+  --color-gold: #c59b27;
+  --color-gold-light: #fef08a;
+  --color-gold-metallic: #d4af37;
+  --color-nebula-purple: #8b1e0f;
+  --color-nebula-blue: #2a3a5e;
+  --color-nebula-cyan: #3d7a64;
+}
+
+[data-theme="medieval"] body {
+  background-color: #140c06;
+  color: #ede0cb;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.015em;
+}
+
+[data-theme="medieval"] h1 {
+  font-family: 'UnifrakturMaguntia', 'MedievalSharp', serif !important;
+  letter-spacing: 0.04em;
+  font-weight: normal;
+  color: #fcf4e4;
+  text-shadow: 0 0 20px rgba(197, 155, 39, 0.4);
+}
+
+[data-theme="medieval"] h2 {
+  font-family: 'MedievalSharp', 'Almendra', serif !important;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  color: #f7eed8;
+}
+
+[data-theme="medieval"] h3, 
+[data-theme="medieval"] h4,
+[data-theme="medieval"] h5,
+[data-theme="medieval"] h6 {
+  font-family: 'MedievalSharp', 'Almendra', Georgia, serif !important;
+  letter-spacing: 0.01em;
+  color: #f4ebd0;
+}
+
+[data-theme="medieval"] button,
+[data-theme="medieval"] input,
+[data-theme="medieval"] select,
+[data-theme="medieval"] .font-tech,
+[data-theme="medieval"] .cosmic-folder-tab,
+[data-theme="medieval"] .birkenbihl-badge {
+  font-family: 'Almendra', 'Cinzel', serif !important;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}
+
+[data-theme="medieval"] .cosmic-bg {
+  background-color: #140c06;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(197, 155, 39, 0.06) 0%, transparent 65%),
+    repeating-linear-gradient(45deg, rgba(197, 155, 39, 0.015) 0px, rgba(197, 155, 39, 0.015) 2px, transparent 2px, transparent 10px),
+    radial-gradient(ellipse at 50% 0%, rgba(139, 30, 15, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 65%, rgba(197, 155, 39, 0.16) 0%, transparent 55%),
+    linear-gradient(180deg, #1c1109 0%, #120a04 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+[data-theme="medieval"] .cosmic-glass {
+  background: linear-gradient(145deg, rgba(32, 22, 13, 0.92) 0%, rgba(18, 12, 7, 0.96) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid #c59b27;
+  outline: 1px dashed rgba(197, 155, 39, 0.35);
+  outline-offset: -5px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(197, 155, 39, 0.08);
+}
+
+[data-theme="medieval"] .cosmic-glass-gold {
+  background: linear-gradient(145deg, rgba(42, 28, 16, 0.92) 0%, rgba(24, 15, 8, 0.97) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid #dfb13f;
+  outline: 1px dashed rgba(223, 177, 63, 0.45);
+  outline-offset: -5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 35px rgba(197, 155, 39, 0.15);
+}
+
+[data-theme="medieval"] .cosmic-glass-royal {
+  background: linear-gradient(145deg, rgba(38, 18, 18, 0.92) 0%, rgba(20, 10, 10, 0.97) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid #8b1e0f;
+  outline: 1px dashed rgba(139, 30, 15, 0.45);
+  outline-offset: -5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 35px rgba(139, 30, 15, 0.15);
+}
+
+[data-theme="medieval"] .cosmic-corner-accent::before {
+  content: '⚜';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 13px;
+  color: #c59b27;
+}
+
+[data-theme="medieval"] .cosmic-corner-accent::after {
+  content: '✠';
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 13px;
+  color: #c59b27;
+}
+
+[data-theme="medieval"] .birkenbihl-box {
+  background: linear-gradient(135deg, rgba(197, 155, 39, 0.12) 0%, rgba(139, 30, 15, 0.08) 100%);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  border-left: 5px solid #c59b27;
+  border-radius: 0.5rem;
+}
+
+[data-theme="medieval"] .birkenbihl-badge {
+  background: linear-gradient(135deg, rgba(139, 30, 15, 0.35) 0%, rgba(197, 155, 39, 0.25) 100%);
+  border: 1.5px solid #c59b27;
+  color: #fef08a;
+  box-shadow: 0 0 15px rgba(197, 155, 39, 0.25);
+}
+
+[data-theme="medieval"] .cosmic-folder-tab {
+  background: rgba(26, 17, 10, 0.85);
+  border: 1.5px solid rgba(197, 155, 39, 0.3);
+  border-radius: 0.5rem;
+}
+
+[data-theme="medieval"] .cosmic-folder-tab:hover {
+  background: rgba(45, 30, 18, 0.95);
+  border-color: #dfb13f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(197, 155, 39, 0.25);
+}
+
+[data-theme="medieval"] .cosmic-folder-tab.active {
+  background: linear-gradient(180deg, rgba(197, 155, 39, 0.3) 0%, rgba(20, 13, 7, 0.98) 100%);
+  border-color: #c59b27;
+  box-shadow: 0 0 25px rgba(197, 155, 39, 0.35), inset 0 1px 0 rgba(254, 240, 138, 0.5);
+  color: #fff9ea;
+}
+
+[data-theme="medieval"] .cosmic-gold-gradient {
+  background: linear-gradient(135deg, #fff7d6 0%, #fcd34d 30%, #c59b27 70%, #78350f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="medieval"] .cosmic-cyan-gradient {
+  background: linear-gradient(135deg, #e0e7ff 0%, #818cf8 50%, #4338ca 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="medieval"] .cosmic-purple-gradient {
+  background: linear-gradient(135deg, #ffe4e6 0%, #fb7185 50%, #8b1e0f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="medieval"] .glow-gold {
+  filter: drop-shadow(0 0 10px rgba(197, 155, 39, 0.6));
+}
+[data-theme="medieval"] .glow-cyan {
+  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.6));
+}
+[data-theme="medieval"] .glow-purple {
+  filter: drop-shadow(0 0 10px rgba(139, 30, 15, 0.6));
+}
+
+/* =========================================================================
+   4. KLEMEN THEME STYLES (Architektonische Perfektion, Baukunst, Emotion & Seele)
+   ========================================================================= */
+[data-theme="klemen"] {
+  --color-cosmos-bg: #0d080c;
+  --color-cosmos-card: rgba(26, 17, 24, 0.88);
+  --color-cosmos-border: rgba(244, 114, 182, 0.35);
+  --color-gold: #e0a96d;
+  --color-gold-light: #ffe4e6;
+  --color-gold-metallic: #d4af37;
+  --color-nebula-purple: #f43f5e;
+  --color-nebula-blue: #8b5cf6;
+  --color-nebula-cyan: #fb7185;
+}
+
+[data-theme="klemen"] body {
+  background-color: #0d080c;
+  color: #fff1f2;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.012em;
+}
+
+[data-theme="klemen"] h1 {
+  font-family: 'Italiana', 'Syne', serif !important;
+  letter-spacing: 0.03em;
+  font-weight: normal;
+  color: #fff1f2;
+  text-shadow: 0 0 30px rgba(244, 63, 94, 0.35);
+}
+
+[data-theme="klemen"] h2 {
+  font-family: 'Syne', 'Italiana', sans-serif !important;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+  color: #ffe4e6;
+}
+
+[data-theme="klemen"] h3, 
+[data-theme="klemen"] h4,
+[data-theme="klemen"] h5,
+[data-theme="klemen"] h6 {
+  font-family: 'Syne', 'Plus Jakarta Sans', sans-serif !important;
+  letter-spacing: 0.01em;
+  font-weight: 700;
+  color: #fecdd3;
+}
+
+[data-theme="klemen"] button,
+[data-theme="klemen"] input,
+[data-theme="klemen"] select,
+[data-theme="klemen"] .font-tech,
+[data-theme="klemen"] .cosmic-folder-tab,
+[data-theme="klemen"] .birkenbihl-badge {
+  font-family: 'Syne', sans-serif !important;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}
+
+[data-theme="klemen"] .cosmic-bg {
+  background-color: #0d080c;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(244, 114, 182, 0.06) 0%, transparent 65%),
+    linear-gradient(to right, rgba(224, 169, 109, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(224, 169, 109, 0.035) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, rgba(244, 63, 94, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 65%, rgba(224, 169, 109, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 75%, rgba(139, 92, 246, 0.12) 0%, transparent 55%),
+    linear-gradient(180deg, #150c14 0%, #0d080c 100%);
+  background-size: 100% 100%, 38px 38px, 38px 38px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+[data-theme="klemen"] .cosmic-glass {
+  background: linear-gradient(145deg, rgba(28, 18, 26, 0.88) 0%, rgba(16, 10, 15, 0.94) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 114, 182, 0.35);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), 0 0 30px rgba(244, 63, 94, 0.1);
+  border-radius: 1.25rem;
+}
+
+[data-theme="klemen"] .cosmic-glass-gold {
+  background: linear-gradient(145deg, rgba(38, 22, 30, 0.9) 0%, rgba(20, 12, 18, 0.96) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(224, 169, 109, 0.45);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.8), 0 0 35px rgba(224, 169, 109, 0.15);
+  border-radius: 1.25rem;
+}
+
+[data-theme="klemen"] .cosmic-glass-royal {
+  background: linear-gradient(145deg, rgba(34, 16, 32, 0.9) 0%, rgba(18, 9, 20, 0.96) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.8), 0 0 35px rgba(244, 63, 94, 0.18);
+  border-radius: 1.25rem;
+}
+
+[data-theme="klemen"] .cosmic-corner-accent::before {
+  content: '⌖ 1.618';
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #e0a96d;
+  letter-spacing: 1px;
+}
+
+[data-theme="klemen"] .cosmic-corner-accent::after {
+  content: '✦ SOUL';
+  position: absolute;
+  bottom: 7px;
+  right: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #fb7185;
+  letter-spacing: 1px;
+}
+
+[data-theme="klemen"] .birkenbihl-box {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.09) 0%, rgba(224, 169, 109, 0.08) 100%);
+  border: 1px solid rgba(244, 114, 182, 0.3);
+  border-left: 4px solid #fb7185;
+  border-radius: 1rem;
+}
+
+[data-theme="klemen"] .birkenbihl-badge {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.25) 0%, rgba(224, 169, 109, 0.2) 100%);
+  border: 1px solid rgba(244, 114, 182, 0.5);
+  color: #ffe4e6;
+  box-shadow: 0 0 18px rgba(244, 63, 94, 0.25);
+  border-radius: 9999px;
+}
+
+[data-theme="klemen"] .cosmic-folder-tab {
+  background: rgba(26, 16, 24, 0.85);
+  border: 1px solid rgba(244, 114, 182, 0.2);
+  border-radius: 0.85rem;
+}
+
+[data-theme="klemen"] .cosmic-folder-tab:hover {
+  background: rgba(42, 24, 38, 0.95);
+  border-color: rgba(224, 169, 109, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 18px rgba(244, 63, 94, 0.25);
+}
+
+[data-theme="klemen"] .cosmic-folder-tab.active {
+  background: linear-gradient(180deg, rgba(244, 63, 94, 0.3) 0%, rgba(20, 12, 18, 0.98) 100%);
+  border-color: #fb7185;
+  box-shadow: 0 0 25px rgba(244, 63, 94, 0.35), inset 0 1px 0 rgba(254, 205, 211, 0.5);
+  color: #ffffff;
+}
+
+[data-theme="klemen"] .cosmic-gold-gradient {
+  background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 30%, #fb7185 60%, #e0a96d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="klemen"] .cosmic-cyan-gradient {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde68a 40%, #e0a96d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="klemen"] .cosmic-purple-gradient {
+  background: linear-gradient(135deg, #fdf2f8 0%, #f472b6 40%, #e11d48 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="klemen"] .glow-gold {
+  filter: drop-shadow(0 0 10px rgba(224, 169, 109, 0.6));
+}
+[data-theme="klemen"] .glow-cyan {
+  filter: drop-shadow(0 0 10px rgba(251, 113, 133, 0.6));
+}
+[data-theme="klemen"] .glow-purple {
+  filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.6));
+}
+
+/* =========================================================================
+   5. WIENER JUGENDSTIL & SECESSION (Wiener Werkstätte, Klimt, Hoffmann, Wagner)
+   ========================================================================= */
+[data-theme="vienna"] {
+  --color-cosmos-bg: #12100e;
+  --color-cosmos-card: rgba(28, 24, 20, 0.92);
+  --color-cosmos-border: rgba(212, 175, 55, 0.45);
+  --color-gold: #d4af37;
+  --color-gold-light: #fef9c3;
+  --color-gold-metallic: #c59b27;
+  --color-nebula-purple: #2d5a43;
+  --color-nebula-blue: #1a365d;
+  --color-nebula-cyan: #e5c158;
+}
+
+[data-theme="vienna"] body {
+  background-color: #12100e;
+  color: #fefbf3;
+  font-family: 'Tenor Sans', 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="vienna"] h1 {
+  font-family: 'Marcellus', 'Cinzel Decorative', serif !important;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+  color: #fffdf5;
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+}
+
+[data-theme="vienna"] h2 {
+  font-family: 'Marcellus', serif !important;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+[data-theme="vienna"] h3, 
+[data-theme="vienna"] h4,
+[data-theme="vienna"] h5,
+[data-theme="vienna"] h6 {
+  font-family: 'Marcellus', 'Tenor Sans', serif !important;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  color: #fdf6b2;
+}
+
+[data-theme="vienna"] button,
+[data-theme="vienna"] input,
+[data-theme="vienna"] select,
+[data-theme="vienna"] .font-tech,
+[data-theme="vienna"] .cosmic-folder-tab,
+[data-theme="vienna"] .birkenbihl-badge {
+  font-family: 'Tenor Sans', 'Marcellus', sans-serif !important;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+[data-theme="vienna"] .cosmic-bg {
+  background-color: #12100e;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, rgba(212, 175, 55, 0.02) 0px, rgba(212, 175, 55, 0.02) 1px, transparent 1px, transparent 24px),
+    repeating-linear-gradient(90deg, rgba(212, 175, 55, 0.02) 0px, rgba(212, 175, 55, 0.02) 1px, transparent 1px, transparent 24px),
+    radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 65%, rgba(45, 90, 67, 0.18) 0%, transparent 55%),
+    linear-gradient(180deg, #181512 0%, #0e0c0a 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+}
+
+[data-theme="vienna"] .cosmic-glass {
+  background: linear-gradient(145deg, rgba(30, 25, 21, 0.92) 0%, rgba(18, 15, 12, 0.97) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid #d4af37;
+  outline: 1px solid rgba(212, 175, 55, 0.25);
+  outline-offset: -5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.12);
+  border-radius: 0.75rem;
+}
+
+[data-theme="vienna"] .cosmic-glass-gold {
+  background: linear-gradient(145deg, rgba(40, 32, 24, 0.94) 0%, rgba(22, 18, 14, 0.98) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 2px solid #e5c158;
+  outline: 1px solid rgba(229, 193, 88, 0.35);
+  outline-offset: -5px;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 175, 55, 0.2);
+  border-radius: 0.75rem;
+}
+
+[data-theme="vienna"] .cosmic-glass-royal {
+  background: linear-gradient(145deg, rgba(25, 38, 30, 0.92) 0%, rgba(14, 22, 17, 0.97) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid #2d5a43;
+  outline: 1px solid rgba(45, 90, 67, 0.35);
+  outline-offset: -5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(45, 90, 67, 0.15);
+  border-radius: 0.75rem;
+}
+
+[data-theme="vienna"] .cosmic-corner-accent::before {
+  content: '⚜ SECESSION';
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 1.5px;
+}
+
+[data-theme="vienna"] .cosmic-corner-accent::after {
+  content: '◈ 1897';
+  position: absolute;
+  bottom: 7px;
+  right: 8px;
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 1.5px;
+}
+
+[data-theme="vienna"] .birkenbihl-box {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(45, 90, 67, 0.08) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-left: 4px solid #d4af37;
+  border-radius: 0.5rem;
+}
+
+[data-theme="vienna"] .birkenbihl-badge {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(45, 90, 67, 0.25) 100%);
+  border: 1.5px solid #d4af37;
+  color: #fffbeb;
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.3);
+}
+
+[data-theme="vienna"] .cosmic-folder-tab {
+  background: rgba(26, 22, 18, 0.88);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  border-radius: 0.5rem;
+}
+
+[data-theme="vienna"] .cosmic-folder-tab:hover {
+  background: rgba(42, 35, 28, 0.95);
+  border-color: #e5c158;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.25);
+}
+
+[data-theme="vienna"] .cosmic-folder-tab.active {
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.32) 0%, rgba(20, 16, 13, 0.98) 100%);
+  border-color: #d4af37;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(254, 240, 138, 0.6);
+  color: #ffffff;
+}
+
+[data-theme="vienna"] .cosmic-gold-gradient {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef08a 30%, #d4af37 70%, #854d0e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="vienna"] .cosmic-cyan-gradient {
+  background: linear-gradient(135deg, #f0fdf4 0%, #86efac 40%, #2d5a43 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="vienna"] .cosmic-purple-gradient {
+  background: linear-gradient(135deg, #fef9c3 0%, #fde047 40%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="vienna"] .glow-gold {
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.7));
+}
+[data-theme="vienna"] .glow-cyan {
+  filter: drop-shadow(0 0 12px rgba(45, 90, 67, 0.7));
+}
+[data-theme="vienna"] .glow-purple {
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.7));
+}
+
+/* Specific Component Overrides for Wiener Secession Theme */
+[data-theme="vienna"] #pillSun {
+  background: rgba(212, 175, 55, 0.15) !important;
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  color: #fef08a !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25) !important;
+}
+[data-theme="vienna"] #pillMoon {
+  background: rgba(254, 251, 243, 0.1) !important;
+  border-color: rgba(254, 251, 243, 0.35) !important;
+  color: #fefbf3 !important;
+  box-shadow: 0 0 15px rgba(254, 251, 243, 0.15) !important;
+}
+[data-theme="vienna"] #pillAsc {
+  background: rgba(45, 90, 67, 0.25) !important;
+  border-color: rgba(45, 90, 67, 0.6) !important;
+  color: #86efac !important;
+  box-shadow: 0 0 20px rgba(45, 90, 67, 0.25) !important;
+}
+[data-theme="vienna"] #pillMc {
+  background: rgba(229, 193, 88, 0.18) !important;
+  border-color: rgba(229, 193, 88, 0.55) !important;
+  color: #fef08a !important;
+  box-shadow: 0 0 20px rgba(229, 193, 88, 0.25) !important;
+}
+[data-theme="vienna"] #pillLifePath {
+  background: rgba(212, 175, 55, 0.2) !important;
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  color: #fef08a !important;
+}
+
+[data-theme="vienna"] #cardAC {
+  border-color: rgba(45, 90, 67, 0.6) !important;
+  background: rgba(45, 90, 67, 0.08) !important;
+}
+[data-theme="vienna"] #cardAC .text-cyan-300 {
+  color: #86efac !important;
+}
+[data-theme="vienna"] #cardMC {
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  background: rgba(212, 175, 55, 0.08) !important;
+}
+[data-theme="vienna"] #cardDC {
+  border-color: rgba(124, 45, 55, 0.6) !important;
+  background: rgba(124, 45, 55, 0.08) !important;
+}
+[data-theme="vienna"] #cardDC .text-rose-300 {
+  color: #fda4af !important;
+}
+[data-theme="vienna"] #cardIC {
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  background: rgba(212, 175, 55, 0.05) !important;
+}
+
+[data-theme="vienna"] .tab-nav-btn {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%) !important;
+  color: #12100e !important;
+  font-family: 'Tenor Sans', sans-serif !important;
+  font-weight: 800 !important;
+  border: 1px solid #fef08a !important;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4) !important;
+}
+
+[data-theme="vienna"] .header-bar {
+  background: rgba(18, 16, 14, 0.92) !important;
+  border-bottom-color: rgba(212, 175, 55, 0.3) !important;
+}
+[data-theme="vienna"] .brand-icon-box {
+  background: linear-gradient(135deg, #d4af37 0%, #2d5a43 50%, #e5c158 100%) !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5) !important;
+}
+[data-theme="vienna"] #headerActivePersonBadge {
+  background: rgba(212, 175, 55, 0.12) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+}
+[data-theme="vienna"] #headerActivePersonBadge .text-amber-300 {
+  color: #fef08a !important;
+}
+[data-theme="vienna"] .chart-btn {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(45, 90, 67, 0.2) 100%) !important;
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  color: #fef08a !important;
+}
+[data-theme="vienna"] .footer-theme-box {
+  background: #0e0c0a !important;
+  border-top-color: rgba(212, 175, 55, 0.25) !important;
+}
+[data-theme="vienna"] .seal-pill {
+  background: rgba(26, 22, 18, 0.9) !important;
+  border-color: rgba(212, 175, 55, 0.35) !important;
+}
+
+/* =========================================================================
+   6. SHARED ANIMATIONS & UTILITIES
+   ========================================================================= */
+@keyframes celestial-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+.animate-celestial-pulse {
+  animation: celestial-pulse 4s ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+.animate-star-twinkle {
+  animation: star-twinkle 3s ease-in-out infinite;
+}
+
+/* Tab Panels */
+.tab-content-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.tab-content-panel.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #03050d;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(234, 179, 8, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 179, 8, 0.6);
+}
+
+[data-theme="nasa"] ::-webkit-scrollbar-track {
+  background: #030712;
+}
+[data-theme="nasa"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 2px;
+}
+[data-theme="nasa"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.8);
+}
+
+[data-theme="medieval"] ::-webkit-scrollbar-track {
+  background: #140c06;
+}
+[data-theme="medieval"] ::-webkit-scrollbar-thumb {
+  background: rgba(197, 155, 39, 0.35);
+  border-radius: 4px;
+}
+[data-theme="medieval"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(197, 155, 39, 0.75);
+}
+
+[data-theme="klemen"] ::-webkit-scrollbar-track {
+  background: #0d080c;
+}
+[data-theme="klemen"] ::-webkit-scrollbar-thumb {
+  background: rgba(244, 114, 182, 0.35);
+  border-radius: 4px;
+}
+[data-theme="klemen"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(244, 114, 182, 0.8);
+}
+
+[data-theme="vienna"] ::-webkit-scrollbar-track {
+  background: #12100e;
+}
+[data-theme="vienna"] ::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.4);
+  border-radius: 2px;
+}
+[data-theme="vienna"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.85);
+}
+
+/* Print styling */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print, #folderTabsContainer, .tab-nav-btn, .constellation-bg-svg, #floatingThemeWidget {
+    display: none !important;
+  }
+  .tab-content-panel {
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+    break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+  .cosmic-glass, .cosmic-glass-gold, .cosmic-glass-royal {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+}

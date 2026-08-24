@@ -1,0 +1,278 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { generatePersonalGemstones } from '../../lib/astrology/gemstones';
+import { calculatePersonalAngelResonance } from '../../lib/numerology/angelNumbers';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const gemstones = generatePersonalGemstones(chart);
+const angelResonance = calculatePersonalAngelResonance(
+  chart.numerology.lifePath.number,
+  chart.synthesis.sun.planet.sign.name
+);
+
+const sun = chart.synthesis.sun.planet;
+const moon = chart.synthesis.moon.planet;
+const asc = chart.housesResult.angles.ascendant;
+const mc = chart.housesResult.angles.midheaven;
+const chiron = chart.synthesis.chiron.planet;
+const node = chart.synthesis.northNode.planet;
+
+const SEMANTIC_CHAPTERS = [
+  {
+    title: 'I. Kosmisches Fundament',
+    icon: '🌌',
+    color: 'text-amber-400',
+    gates: [
+      { id: 'radix', num: 'Tor I', name: 'Radix-Rad & 4 Achsen', icon: '🌌' },
+      { id: 'pillars', num: 'Tor II', name: 'Die 3 Lebens-Säulen', icon: '💖' },
+      { id: 'karmic', num: 'Tor III', name: 'Karmische Tore & Vertex', icon: '☊' }
+    ]
+  },
+  {
+    title: 'II. Zahlen & Seelenschwingung',
+    icon: '🔢',
+    color: 'text-purple-400',
+    gates: [
+      { id: 'numerology', num: 'Tor IV', name: 'Pythagoräische Zahlen', icon: '🔢' },
+      { id: 'angel_numbers', num: 'Tor V', name: 'Engelszahlen & Uhren', icon: '🕊️' },
+      { id: 'dossier', num: 'Tor VI', name: 'Hohes Seelen-Dossier', icon: '✦' }
+    ]
+  },
+  {
+    title: 'III. Praxis & Himmelsführer',
+    icon: '🌿',
+    color: 'text-emerald-400',
+    gates: [
+      { id: 'gemstones', num: 'Tor VII', name: 'Heilstein-Apotheke', icon: '💎' },
+      { id: 'moon_wisdom', num: 'Tor VIII', name: 'Mondkalender & Leitspruch', icon: '🌙' },
+      { id: 'constellations', num: 'Tor IX', name: 'Sternbilder-Atlas', icon: '✨' },
+      { id: 'geochart', num: 'Tor X', name: 'Astro-Kartographie (Weltkarte)', icon: '🌍' },
+      { id: 'synastry', num: 'Tor XI', name: 'Partner & Familienmatrix', icon: '💞' }
+    ]
+  }
+];
+---
+
+<aside class="w-full space-y-6 lg:sticky lg:top-20">
+  
+  <!-- Person Card Identity Box -->
+  <div class="cosmic-glass-gold rounded-3xl p-5 md:p-6 border border-amber-500/40 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+    <!-- Subtle Golden Glow -->
+    <div class="absolute -right-8 -top-8 w-28 h-28 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+    <div class="space-y-4">
+      <!-- Person Header -->
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-purple-600 p-[1.5px] shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+          <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-xl font-bold text-amber-300" id="sidebarInitials">
+            {chart.input.name ? chart.input.name.charAt(0).toUpperCase() : '✦'}
+          </div>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-extrabold">
+            Persönliches Seelen-Profil
+          </div>
+          <h2 class="text-lg font-black text-white truncate" id="sidebarPersonName">
+            {chart.input.name || 'Edle Seele'}
+          </h2>
+          <div class="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
+            <span id="sidebarCity">📍 {chart.input.cityName}</span>
+            <span>•</span>
+            <span class="text-slate-400" id="sidebarDate">{chart.input.birthDate}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Trinity Badges (Sun, Moon, Ascendant, MC) -->
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 text-xs">
+        <div class="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
+          <span class="text-base text-amber-400">☉</span>
+          <div>
+            <div class="text-[9px] uppercase font-bold text-slate-400">Sonne</div>
+            <div class="font-bold text-white leading-tight" id="sidebarSun">{sun.sign.name}</div>
+          </div>
+        </div>
+
+        <div class="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-2">
+          <span class="text-base text-indigo-300">☽</span>
+          <div>
+            <div class="text-[9px] uppercase font-bold text-slate-400">Mond</div>
+            <div class="font-bold text-white leading-tight" id="sidebarMoon">{moon.sign.name}</div>
+          </div>
+        </div>
+
+        <div class="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center gap-2">
+          <span class="text-base text-cyan-300">↑</span>
+          <div>
+            <div class="text-[9px] uppercase font-bold text-slate-400">Aszendent</div>
+            <div class="font-bold text-white leading-tight" id="sidebarAsc">{asc.sign.name}</div>
+          </div>
+        </div>
+
+        <div class="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center gap-2">
+          <span class="text-base text-purple-300">❖</span>
+          <div>
+            <div class="text-[9px] uppercase font-bold text-slate-400">MC (Beruf)</div>
+            <div class="font-bold text-white leading-tight" id="sidebarMc">{mc.sign.name}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Numerology & Key Resonance -->
+      <div class="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-2 text-xs">
+        <div class="flex items-center justify-between text-slate-300">
+          <span class="flex items-center gap-1">🔢 <strong>Lebensweg:</strong></span>
+          <span class="font-bold text-amber-300 font-mono" id="sidebarLifePath">Zahl {chart.numerology.lifePath.number} ({chart.numerology.lifePath.archetype})</span>
+        </div>
+        <div class="flex items-center justify-between text-slate-300">
+          <span class="flex items-center gap-1">💎 <strong>Haupt-Kristall:</strong></span>
+          <span class="font-bold text-emerald-300" id="sidebarGemstone">{gemstones.sunStone.name.split('&')[0]}</span>
+        </div>
+        <div class="flex items-center justify-between text-slate-300">
+          <span class="flex items-center gap-1">🕊️ <strong>Engelszahl:</strong></span>
+          <span class="font-bold text-yellow-300 font-mono" id="sidebarAngel">{angelResonance.primaryAngelNumber.number.split(' ')[0]}</span>
+        </div>
+      </div>
+
+      <!-- 4 Elements Mini Balance -->
+      <div class="space-y-1.5 pt-1">
+        <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <span>Elemente-Verteilung</span>
+          <span class="text-amber-300" id="sidebarDomElement">Dominant: {chart.balance.dominantElement}</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1 h-1.5 rounded-full overflow-hidden bg-slate-900" id="sidebarElementBars">
+          <div id="sidebarBar_fire" class="bg-red-500 h-full" style={`width: ${chart.balance.elements.fire.percentage}%`} title={`Feuer: ${chart.balance.elements.fire.percentage}%`}></div>
+          <div id="sidebarBar_earth" class="bg-emerald-500 h-full" style={`width: ${chart.balance.elements.earth.percentage}%`} title={`Erde: ${chart.balance.elements.earth.percentage}%`}></div>
+          <div id="sidebarBar_air" class="bg-cyan-400 h-full" style={`width: ${chart.balance.elements.air.percentage}%`} title={`Luft: ${chart.balance.elements.air.percentage}%`}></div>
+          <div id="sidebarBar_water" class="bg-blue-500 h-full" style={`width: ${chart.balance.elements.water.percentage}%`} title={`Wasser: ${chart.balance.elements.water.percentage}%`}></div>
+        </div>
+      </div>
+
+      <!-- Quick Actions (Edit / New Profile) -->
+      <div class="pt-2 border-t border-white/10 flex items-center justify-between gap-2 text-xs">
+        <a
+          href="#form-section"
+          id="sidebarEditBtn"
+          class="flex-1 py-1.5 px-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
+        >
+          <span>✏️</span>
+          <span>Daten anpassen</span>
+        </a>
+        <a
+          href="#form-section"
+          id="sidebarNewBtn"
+          class="py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold transition-all flex items-center gap-1 cursor-pointer"
+        >
+          <span>✧</span>
+          <span>Neu</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semantic Gates Navigation Sidebar Menu -->
+  <div class="cosmic-glass rounded-3xl p-5 border border-white/10 shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 text-sm">📜</span>
+        <h3 class="text-xs font-black uppercase tracking-widest text-slate-200">
+          Seelentore dieser Person
+        </h3>
+      </div>
+      <span class="text-[10px] text-amber-300/80 font-mono">10 Tore</span>
+    </div>
+
+    <!-- 3 Semantic Clusters -->
+    <div class="space-y-4">
+      {SEMANTIC_CHAPTERS.map(ch => (
+        <div class="space-y-2">
+          <div class={`text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 ${ch.color}`}>
+            <span>{ch.icon}</span>
+            <span>{ch.title}</span>
+          </div>
+
+          <div class="space-y-1">
+            {ch.gates.map(g => (
+              <button
+                type="button"
+                class="sidebar-gate-btn w-full px-3 py-2 rounded-xl text-left text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center justify-between group cursor-pointer border border-transparent hover:border-white/10"
+                data-gate-target={g.id}
+              >
+                <div class="flex items-center gap-2">
+                  <span class="text-sm">{g.icon}</span>
+                  <span class="truncate">{g.name}</span>
+                </div>
+                <span class="text-[9px] font-mono text-slate-400 group-hover:text-amber-300">{g.num}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <!-- All Mappen Toggle -->
+      <div class="pt-2 border-t border-white/10">
+        <button
+          type="button"
+          class="sidebar-gate-btn w-full px-3 py-2.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-xs font-bold transition-all flex items-center justify-between cursor-pointer"
+          data-gate-target="all"
+        >
+          <div class="flex items-center gap-2">
+            <span>📜</span>
+            <span>Gesamt-Seelenbuch</span>
+          </div>
+          <span class="text-[10px] uppercase font-mono">Alle 9</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<script>
+  function initSidebarNavigation() {
+    const sidebarButtons = document.querySelectorAll('.sidebar-gate-btn');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+
+    sidebarButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-gate-target') || 'radix';
+        
+        // Find matching tab button to trigger standard switchTab logic
+        const matchingTab = document.querySelector(`.tab-btn[data-tab-target="${targetId}"]`) as HTMLElement;
+        if (matchingTab) {
+          matchingTab.click();
+        }
+
+        // Highlight active in sidebar
+        sidebarButtons.forEach(b => b.classList.remove('bg-amber-500/20', 'border-amber-500/40', 'text-white'));
+        btn.classList.add('bg-amber-500/20', 'border-amber-500/40', 'text-white');
+      });
+    });
+
+    const editBtn = document.getElementById('sidebarEditBtn');
+    const newBtn = document.getElementById('sidebarNewBtn');
+    const formContainer = document.getElementById('formContainer');
+
+    editBtn?.addEventListener('click', () => {
+      formContainer?.classList.remove('hidden');
+      formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    newBtn?.addEventListener('click', () => {
+      const nameEl = document.getElementById('userName') as HTMLInputElement;
+      if (nameEl) nameEl.value = '';
+      formContainer?.classList.remove('hidden');
+      formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSidebarNavigation);
+  } else {
+    initSidebarNavigation();
+  }
+</script>

@@ -1,0 +1,190 @@
+---
+// Psychosomatic Shadow Analysis & Positive Dialectic Transformation Section
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import { analyzeShadowHealthDialectic } from '../../lib/astrology/shadowHealthDialectic';
+
+interface Props {
+  chart: CompleteNatalChart;
+}
+
+const { chart } = Astro.props;
+const analysis = analyzeShadowHealthDialectic(chart);
+const personName = chart.input.name || 'Edle Seele';
+---
+
+<section id="shadowHealthSection" class="cosmic-glass rounded-3xl p-6 md:p-8 border border-rose-500/30 shadow-2xl space-y-8 relative overflow-hidden cosmic-corner-accent">
+  <!-- Glowing Background Accent -->
+  <div class="absolute -right-20 -top-20 w-72 h-72 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -left-20 -bottom-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header Banner -->
+  <div class="space-y-3 relative z-10 border-b border-white/10 pb-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-amber-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-[0_0_20px_rgba(244,63,94,0.4)]">
+          ⚡
+        </span>
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-rose-400 font-tech block">Psychosomatik & Schattenintegration</span>
+          <h2 class="text-xl md:text-2xl font-black text-white font-cinzel">
+            Problematische Konstellationen & Positive Dialektik
+          </h2>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="px-3.5 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-1.5 font-tech" id="healthVulnerabilityBadge">
+          <span>🩺</span>
+          <span>Fokus: {analysis.primaryVulnerability}</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Birkenbihl Neurodidactic Anchor Note -->
+    <div class="p-4 rounded-2xl bg-slate-950/70 border border-rose-500/25 space-y-2">
+      <div class="text-xs uppercase font-bold tracking-wider text-rose-400 flex items-center gap-1.5 font-tech">
+        <span>🔄</span>
+        <span>Das Prinzip der Positiven Dialektik (C.G. Jung & Vera F. Birkenbihl):</span>
+      </div>
+      <p class="text-xs md:text-sm text-slate-200 leading-relaxed font-lato" id="healthGuidanceText">
+        {analysis.overallDialecticGuidance}
+      </p>
+      <div class="text-[11px] text-amber-200/90 font-medium">
+        💡 <strong>Grundsatz:</strong> Kein Aspekt ist „schlecht“. Jeder Schatten (Sucht, Angst, Essen, Stress) ist der unbewusste Hilferuf einer gigantischen Seelenkraft, die nach bewusster Integration verlangt.
+      </div>
+    </div>
+  </div>
+
+  <!-- Identified Shadow Challenges & Transformation Cards -->
+  <div class="space-y-4 relative z-10">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2 font-tech">
+        <span>⚖️</span>
+        <span>Identifizierte Schattenmuster & Lösungsoptionen von {personName}</span>
+      </h3>
+      <span class="text-[10px] text-slate-400 font-mono" id="healthChallengesCount">{analysis.challenges.length} Kern-Herausforderungen</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="healthChallengesContainer">
+      {analysis.challenges.map(item => (
+        <div class="p-5 rounded-2xl bg-slate-950/70 border border-white/10 space-y-4 hover:border-rose-500/40 transition-all shadow-lg flex flex-col justify-between">
+          
+          <!-- Top Category Header -->
+          <div class="space-y-2 border-b border-white/10 pb-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class={`px-2.5 py-1 rounded-xl bg-white/5 border text-xs font-bold font-tech flex items-center gap-1.5 ${item.categoryColor}`}>
+                <span>{item.categoryIcon}</span>
+                <span>{item.categoryLabel}</span>
+              </span>
+              <span class="text-[10px] font-mono text-slate-400 bg-black/40 px-2 py-0.5 rounded border border-white/5">
+                {item.aspectTrigger}
+              </span>
+            </div>
+            <h4 class="text-base font-bold text-white leading-snug font-cinzel">
+              {item.title}
+            </h4>
+          </div>
+
+          <!-- The Shadow / Challenge (The "Problem") -->
+          <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1 text-xs leading-relaxed">
+            <div class="font-bold text-rose-300 flex items-center gap-1.5">
+              <span>⚠️</span>
+              <span>Schattenmuster / Unbewusste Reaktion:</span>
+            </div>
+            <p class="text-slate-200 font-lato">
+              {item.shadowDescription}
+            </p>
+            <div class="text-[11px] text-rose-300/80 pt-0.5">
+              <strong>Betroffene Organe / Rhythmen:</strong> {item.psychosomaticOrgan}
+            </div>
+          </div>
+
+          <!-- The Positive Dialectic (The "Hidden Superpower") -->
+          <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-2 text-xs leading-relaxed">
+            <div class="font-bold text-emerald-300 flex items-center gap-1.5">
+              <span>✨</span>
+              <span>Positive Dialektik & Verborgene Gabe:</span>
+            </div>
+            <p class="text-emerald-100 font-medium font-lato">
+              {item.positiveDialectic.hiddenGift}
+            </p>
+            <div class="text-slate-300 text-[11px] font-lato pt-0.5">
+              ➔ <strong>Transformations-Schlüssel:</strong> {item.positiveDialectic.transformationPrinciple}
+            </div>
+          </div>
+
+          <!-- Action Protocol (3 concrete levers) -->
+          <div class="space-y-1.5 text-xs pt-1">
+            <div class="font-bold text-amber-300 text-[11px] uppercase tracking-wider font-tech flex items-center gap-1">
+              <span>🛠️</span>
+              <span>Konkrete Lösungs- & Verhaltenshebel:</span>
+            </div>
+            <ul class="space-y-1 text-slate-300 font-lato list-disc pl-4 text-[11px]">
+              {item.positiveDialectic.actionProtocol.map(step => (
+                <li>{step}</li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Transformation Mantra & Remedy -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-white/5 space-y-1 text-xs">
+            <div class="text-[10px] uppercase font-bold text-purple-300 font-tech">Transformations-Mantra:</div>
+            <blockquote class="font-cormorant italic text-sm text-purple-100 font-medium">
+              {item.positiveDialectic.neurodidacticMantra}
+            </blockquote>
+            <div class="text-[10px] text-cyan-300/80 font-mono pt-1">
+              💎 <strong>Heilstein-Unterstützung:</strong> {item.positiveDialectic.healingElement}
+            </div>
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Astrological Anatomy & Organ Strengthening Map -->
+  <div class="space-y-4 relative z-10 pt-4 border-t border-white/10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-cyan-400 text-lg">🫀</span>
+        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 font-tech">
+          Astromedizinische Organ-Resonanz & Konstitution
+        </h3>
+      </div>
+      <span class="text-[10px] text-slate-400 font-tech">Sonne • Mond • Aszendent</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="healthOrganMapContainer">
+      {analysis.organAnatomy.map(organ => (
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-cyan-500/20 space-y-2.5 hover:border-cyan-500/40 transition-all text-xs">
+          <div class="flex items-center justify-between border-b border-white/10 pb-2">
+            <span class="font-bold text-cyan-300 font-tech">{organ.zodiacSign}</span>
+          </div>
+          <div>
+            <span class="text-slate-400 text-[10px] uppercase font-tech block">Körperregion:</span>
+            <span class="text-white font-medium">{organ.bodyRegion}</span>
+          </div>
+          <div>
+            <span class="text-rose-400 text-[10px] uppercase font-tech block">Mögliche Schwachstelle:</span>
+            <span class="text-slate-300 font-lato">{organ.potentialWeakness}</span>
+          </div>
+          <div>
+            <span class="text-emerald-400 text-[10px] uppercase font-tech block">Ganzheitliche Stärkung:</span>
+            <span class="text-slate-300 font-lato">{organ.holisticStrengthening}</span>
+          </div>
+          <div class="pt-1 text-[11px] text-amber-200/80 italic font-cormorant border-t border-white/5">
+            »{organ.symbolicMeaning}«
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Medical & Psychological Disclaimer -->
+  <div class="p-3.5 rounded-2xl bg-slate-950/90 border border-white/10 text-[11px] text-slate-400 font-lato leading-relaxed flex items-start gap-2.5 relative z-10">
+    <span class="text-amber-400 text-base shrink-0">ℹ️</span>
+    <div>
+      <strong class="text-slate-300">E-E-A-T Hinweis zur psychosomatischen Selbsterkenntnis:</strong> Die hier dargestellten Zusammenhänge basieren auf der traditionellen hermetischen Astromedizin, der Analytischen Psychologie nach C.G. Jung sowie der modernen Psychosomatik. Sie dienen ausschließlich der philosophischen Selbsterfahrung, Bewusstwerdung und ganzheitlichen Prävention und stellen ausdrücklich keine medizinische Diagnose, Therapie oder Heilversprechen dar. Bei akuten Beschwerden wende dich bitte an einen Arzt oder Therapeuten.
+    </div>
+  </div>
+</section>

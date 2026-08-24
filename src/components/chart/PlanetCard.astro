@@ -1,0 +1,86 @@
+---
+import type { EnrichedPlanet } from '../../lib/astrology/engine';
+
+interface Props {
+  planets: EnrichedPlanet[];
+}
+
+const { planets } = Astro.props;
+---
+
+<div class="cosmic-glass rounded-2xl p-6 border border-white/10 shadow-xl space-y-4">
+  <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <div class="flex items-center gap-2">
+      <span class="text-xl text-amber-400">☉</span>
+      <h3 class="text-lg font-bold text-slate-100">Planetenstände, Häuser & Würden</h3>
+    </div>
+    <span class="text-xs text-slate-400">Tropischer Tierkreis</span>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead>
+        <tr class="text-xs uppercase text-slate-400 border-b border-white/5 pb-2">
+          <th class="py-2.5 px-3">Gestirn</th>
+          <th class="py-2.5 px-3">Zeichen</th>
+          <th class="py-2.5 px-3">Position</th>
+          <th class="py-2.5 px-3">Haus</th>
+          <th class="py-2.5 px-3">Würde</th>
+          <th class="py-2.5 px-3">Status</th>
+        </tr>
+      </thead>
+      <tbody id="planetsTableBody" class="divide-y divide-white/5">
+        {planets.map(p => (
+          <tr class="hover:bg-white/[0.04] transition-colors group">
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-2">
+                <span
+                  class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-base bg-white/5 border border-white/10"
+                  style={`color: ${p.color}`}
+                >
+                  {p.symbol}
+                </span>
+                <span class="font-semibold text-slate-200">{p.name}</span>
+              </div>
+            </td>
+
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-base" style={`color: ${p.sign.color}`}>
+                  {p.sign.symbol}
+                </span>
+                <span class="text-slate-300 font-medium">{p.sign.name}</span>
+              </div>
+            </td>
+
+            <td class="py-3 px-3 font-mono text-xs text-slate-300">
+              {p.degreeString}
+            </td>
+
+            <td class="py-3 px-3">
+              <span class="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                {p.house}. Haus
+              </span>
+            </td>
+
+            <td class="py-3 px-3">
+              <span class={`inline-block text-[11px] font-medium px-2 py-0.5 rounded-full border ${p.dignity.badgeColor}`}>
+                {p.dignity.label}
+              </span>
+            </td>
+
+            <td class="py-3 px-3">
+              {p.isRetrograde ? (
+                <span class="inline-flex items-center gap-1 text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded">
+                  <span>℞</span> Rückläufig
+                </span>
+              ) : (
+                <span class="text-xs text-slate-500">Direkt</span>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
