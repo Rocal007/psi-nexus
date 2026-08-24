@@ -257,16 +257,15 @@ const SEMANTIC_CHAPTERS = [
     const newBtn = document.getElementById('sidebarNewBtn');
     const formContainer = document.getElementById('formContainer');
 
-    editBtn?.addEventListener('click', () => {
+    editBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
       formContainer?.classList.remove('hidden');
       formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    newBtn?.addEventListener('click', () => {
-      const nameEl = document.getElementById('userName') as HTMLInputElement;
-      if (nameEl) nameEl.value = '';
-      formContainer?.classList.remove('hidden');
-      formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    newBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('astro_open_profile_creator'));
     });
   }
 

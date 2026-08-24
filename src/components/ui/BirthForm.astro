@@ -3,24 +3,25 @@ import type { ChartInput } from '../../lib/astrology/engine';
 
 interface Props {
   initialValues?: Partial<ChartInput>;
+  hasActiveProfile?: boolean;
 }
 
-const { initialValues } = Astro.props;
+const { initialValues, hasActiveProfile = false } = Astro.props;
 
-const defaultDate = initialValues?.birthDate || '1991-05-05';
-const defaultTime = initialValues?.birthTime || '13:00';
-const defaultCity = initialValues?.cityName || 'Wien';
+const defaultDate = initialValues?.birthDate || '';
+const defaultTime = initialValues?.birthTime || '12:00';
+const defaultCity = initialValues?.cityName || '';
 const defaultLat = initialValues?.latitude ?? 48.2082;
 const defaultLng = initialValues?.longitude ?? 16.3738;
 const defaultTz = initialValues?.timezone || 'Europe/Vienna';
 const defaultSystem = initialValues?.houseSystem || 'placidus';
-const defaultName = initialValues?.name || 'Denise Christin';
+const defaultName = initialValues?.name || '';
 ---
 
-<!-- Active Profile Summary Card (Visible when form is collapsed) -->
+<!-- Active Profile Summary Card (Visible when form is collapsed & profile is active) -->
 <div
   id="activeProfileSummaryCard"
-  class="cosmic-glass-gold rounded-3xl p-4 sm:p-5 border border-amber-500/40 shadow-xl flex flex-wrap items-center justify-between gap-4 relative overflow-visible transition-all duration-300 z-40"
+  class={`cosmic-glass-gold rounded-3xl p-4 sm:p-5 border border-amber-500/40 shadow-xl flex flex-wrap items-center justify-between gap-4 relative overflow-visible transition-all duration-300 z-40 ${hasActiveProfile ? '' : 'hidden'}`}
 >
   <div class="flex items-center gap-3.5 min-w-0">
     <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-purple-600 p-[1.5px] shadow-[0_0_15px_rgba(234,179,8,0.3)] shrink-0">
@@ -37,9 +38,9 @@ const defaultName = initialValues?.name || 'Denise Christin';
         {defaultName || 'Edle Seele'}
       </h3>
       <div class="text-xs text-slate-300 flex flex-wrap items-center gap-1.5 mt-0.5" id="summaryDetails">
-        <span>🗓️ {defaultDate}, {defaultTime} Uhr</span>
+        <span>🗓️ {defaultDate || 'Datum'}, {defaultTime} Uhr</span>
         <span>•</span>
-        <span>📍 {defaultCity}</span>
+        <span>📍 {defaultCity || 'Ort'}</span>
         <span>•</span>
         <span class="text-amber-300 font-mono">({defaultSystem})</span>
       </div>
@@ -55,7 +56,7 @@ const defaultName = initialValues?.name || 'Denise Christin';
         class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-md hover:border-amber-500/40"
       >
         <span>👥</span>
-        <span>Profile (<span id="profileCountBadge">1</span>)</span>
+        <span>Profile (<span id="profileCountBadge">0</span>)</span>
         <span class="text-[10px] text-slate-400">▼</span>
       </button>
 
@@ -82,13 +83,24 @@ const defaultName = initialValues?.name || 'Denise Christin';
       <span>✏️</span>
       <span>Daten anpassen</span>
     </button>
+
+    <!-- New Profile Button -->
+    <button
+      type="button"
+      id="newProfileBtn"
+      class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 hover:text-white text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer hover:border-amber-500/40 shadow-md"
+      title="Neues Seelen-Profil anlegen"
+    >
+      <span>✧</span>
+      <span>Neu</span>
+    </button>
   </div>
 </div>
 
-<!-- Collapsible Form Container (Starts hidden if initial values exist, or toggled) -->
+<!-- Collapsible Form Container (Starts visible if no active profile, or toggled) -->
 <div
   id="formContainer"
-  class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/35 shadow-2xl relative cosmic-corner-accent transition-all duration-300 hidden mt-4"
+  class={`cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/35 shadow-2xl relative cosmic-corner-accent transition-all duration-300 ${hasActiveProfile ? 'hidden' : ''} mt-4`}
 >
   <!-- Glowing header banner -->
   <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
@@ -98,26 +110,38 @@ const defaultName = initialValues?.name || 'Denise Christin';
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-[10px] uppercase font-bold tracking-widest text-amber-400">Geburtsdaten-Eingabe</span>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-amber-400">1. Schritt: Seelen-Profil anlegen</span>
           <span class="text-[10px] text-slate-400">• SQLite Persistenz</span>
         </div>
         <h2 class="text-xl md:text-2xl font-extrabold text-white">
           Initialisiere deine Seelen-Matrix
         </h2>
-        <p class="text-xs text-slate-300">Gib deine Geburtsdaten ein. Nach der Berechnung schließt sich dieses Formular automatisch.</p>
+        <p class="text-xs text-slate-300">Gib deine Geburtsdaten ein oder wähle ein bestehendes Profil, um dein persönliches Kosmisches Seelenbuch in Echtzeit zu generieren.</p>
       </div>
     </div>
 
-    <!-- Close / Collapse Button -->
+    <!-- Close / Collapse Button (Only shown when an active profile already exists) -->
     <button
       type="button"
       id="closeFormBtn"
-      class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer"
+      class={`px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer ${hasActiveProfile ? '' : 'hidden'}`}
     >
       <span>✕</span>
       <span>Schließen</span>
     </button>
   </div>
+
+  <!-- Form Quick Saved Profiles Banner (if profiles exist in storage) -->
+  <div id="formSavedProfilesBanner" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 mb-5 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-2 text-amber-300 font-semibold">
+      <span>👥</span>
+      <span>Gespeicherte Profile vorhanden:</span>
+    </div>
+    <div id="formQuickProfilesList" class="flex flex-wrap gap-1.5">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+
 
   <form id="astroForm" class="space-y-5">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -344,7 +368,7 @@ const defaultName = initialValues?.name || 'Denise Christin';
 
 <script>
   import { geocodeCity } from '../../lib/geo/geocode';
-  import { saveClientProfile, getClientProfiles } from '../../lib/db/profileStore';
+  import { saveClientProfile, getClientProfiles, getActiveProfile, clearActiveProfile } from '../../lib/db/profileStore';
 
   function initBirthFormController() {
     const cityInput = document.getElementById('citySearch') as HTMLInputElement;
@@ -354,6 +378,7 @@ const defaultName = initialValues?.name || 'Denise Christin';
     const tzInput = document.getElementById('timezone') as HTMLInputElement;
 
     const toggleFormBtn = document.getElementById('toggleFormBtn');
+    const newProfileBtn = document.getElementById('newProfileBtn');
     const closeFormBtn = document.getElementById('closeFormBtn');
     const formContainer = document.getElementById('formContainer');
     const activeProfileSummaryCard = document.getElementById('activeProfileSummaryCard');
@@ -369,8 +394,42 @@ const defaultName = initialValues?.name || 'Denise Christin';
     const savedProfilesMenu = document.getElementById('savedProfilesMenu');
     const savedProfilesList = document.getElementById('savedProfilesList');
     const profileCountBadge = document.getElementById('profileCountBadge');
+    const formSavedProfilesBanner = document.getElementById('formSavedProfilesBanner');
+    const formProfileCountText = document.getElementById('formProfileCountText');
+    const formQuickProfilesList = document.getElementById('formQuickProfilesList');
 
     let debounceTimer: any = null;
+
+    // Open creation mode (resets form and reveals creation prompt)
+    function openCreationMode() {
+      const nameEl = document.getElementById('userName') as HTMLInputElement;
+      if (nameEl) nameEl.value = '';
+      const dateEl = document.getElementById('birthDate') as HTMLInputElement;
+      if (dateEl) dateEl.value = '';
+      const cityEl = document.getElementById('citySearch') as HTMLInputElement;
+      if (cityEl) cityEl.value = '';
+
+      activeProfileSummaryCard?.classList.add('hidden');
+      formContainer?.classList.remove('hidden');
+      closeFormBtn?.classList.add('hidden');
+
+      // Update hero prompt
+      const heroWelcomePrompt = document.getElementById('heroWelcomePrompt');
+      if (heroWelcomePrompt) heroWelcomePrompt.classList.remove('hidden');
+      const heroActiveDetails = document.getElementById('heroActiveProfileDetails');
+      if (heroActiveDetails) heroActiveDetails.classList.add('hidden');
+      const heroPills = document.getElementById('heroIdentityPillsBar');
+      if (heroPills) heroPills.classList.add('hidden');
+      const heroDetails = document.getElementById('heroDetails');
+      if (heroDetails) heroDetails.classList.add('hidden');
+      const matrixPending = document.getElementById('matrixPendingBanner');
+      if (matrixPending) matrixPending.classList.remove('hidden');
+      const heroName = document.getElementById('heroName');
+      if (heroName) heroName.innerHTML = '<span>Entschlüssle dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>';
+
+      formContainer?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      nameEl?.focus();
+    }
 
     // Toggle Form visibility
     function openForm() {
@@ -379,7 +438,10 @@ const defaultName = initialValues?.name || 'Denise Christin';
     }
 
     function closeForm() {
-      formContainer?.classList.add('hidden');
+      // Only close if an active profile exists
+      if (activeProfileSummaryCard && !activeProfileSummaryCard.classList.contains('hidden')) {
+        formContainer?.classList.add('hidden');
+      }
     }
 
     toggleFormBtn?.addEventListener('click', () => {
@@ -390,7 +452,11 @@ const defaultName = initialValues?.name || 'Denise Christin';
       }
     });
 
+    newProfileBtn?.addEventListener('click', openCreationMode);
     closeFormBtn?.addEventListener('click', closeForm);
+
+    window.addEventListener('astro_open_profile_creator', openCreationMode);
+    window.addEventListener('astro_active_profile_cleared', openCreationMode);
 
     const unknownTimeCheckbox = document.getElementById('unknownTimeCheckbox') as HTMLInputElement;
     const unknownTimeNotice = document.getElementById('unknownTimeNotice');
@@ -438,6 +504,38 @@ const defaultName = initialValues?.name || 'Denise Christin';
       const profiles = getClientProfiles();
       if (profileCountBadge) {
         profileCountBadge.textContent = profiles.length.toString();
+      }
+      if (formProfileCountText) {
+        formProfileCountText.textContent = profiles.length.toString();
+      }
+
+      if (formSavedProfilesBanner && formQuickProfilesList) {
+        if (profiles.length > 0) {
+          formSavedProfilesBanner.classList.remove('hidden');
+          formQuickProfilesList.innerHTML = profiles.slice(0, 4).map(p => `
+            <button
+              type="button"
+              class="quick-saved-profile-btn px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/35 text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer"
+              data-id="${p.id}"
+            >
+              <span>👤</span>
+              <span>${p.name || 'Profil'} (${p.birthDate.slice(0, 4)})</span>
+            </button>
+          `).join('');
+
+          formQuickProfilesList.querySelectorAll('.quick-saved-profile-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const target = e.currentTarget as HTMLElement;
+              const pid = target.dataset.id;
+              const found = profiles.find(x => x.id === pid);
+              if (found) {
+                applyProfileValues(found);
+              }
+            });
+          });
+        } else {
+          formSavedProfilesBanner.classList.add('hidden');
+        }
       }
 
       if (savedProfilesList) {
@@ -579,7 +677,9 @@ const defaultName = initialValues?.name || 'Denise Christin';
           loader.classList.remove('opacity-100');
           loader.classList.add('opacity-0', 'pointer-events-none');
         }
-        closeForm();
+        activeProfileSummaryCard?.classList.remove('hidden');
+        closeFormBtn?.classList.remove('hidden');
+        formContainer?.classList.add('hidden');
         activeProfileSummaryCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 450);
 
@@ -703,3 +803,4 @@ const defaultName = initialValues?.name || 'Denise Christin';
     initBirthFormController();
   }
 </script>
+

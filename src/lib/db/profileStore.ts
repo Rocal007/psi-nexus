@@ -75,11 +75,29 @@ export function getCurrentProfileId(): string | null {
   return localStorage.getItem(CURRENT_ID_KEY);
 }
 
+export function getActiveProfile(): SavedProfile | null {
+  if (typeof window === 'undefined') return null;
+  const currentId = getCurrentProfileId();
+  const profiles = getClientProfiles();
+  if (!currentId) return null;
+  return profiles.find(p => p.id === currentId) || null;
+}
+
+export function clearActiveProfile(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(CURRENT_ID_KEY);
+  window.dispatchEvent(new CustomEvent('astro_active_profile_cleared'));
+}
+
 export function deleteClientProfile(id: string): boolean {
   if (typeof window === 'undefined') return false;
   let profiles = getClientProfiles();
   profiles = profiles.filter(p => p.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
+  if (getCurrentProfileId() === id) {
+    clearActiveProfile();
+  }
   window.dispatchEvent(new CustomEvent('astro_profiles_updated', { detail: { id, deleted: true } }));
   return true;
 }
+

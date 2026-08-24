@@ -79,11 +79,11 @@ const SEMANTIC_MENU_CHAPTERS = [
     >
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
       <span class="font-bold text-white group-hover:text-amber-300 transition-colors font-tech" id="headerPersonName">
-        Denise Christin
+        Edle Seele
       </span>
       <span class="text-slate-400">|</span>
       <span class="text-amber-300 font-mono text-[11px]" id="headerPersonSigns">
-        ☉ Stier • ☽ Krebs • ↑ Löwe
+        ☉ Sonne • ☽ Mond • ↑ AC
       </span>
     </a>
 
@@ -111,13 +111,14 @@ const SEMANTIC_MENU_CHAPTERS = [
         <span>PDF</span>
       </button>
 
-      <a
-        href="#form-section"
+      <button
+        type="button"
+        id="headerNewChartBtn"
         class="hidden sm:flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all shadow-[0_0_15px_rgba(234,179,8,0.2)] cursor-pointer items-center gap-1.5 chart-btn"
       >
         <span>✧</span>
-        <span>Neues Chart</span>
-      </a>
+        <span>Neues Profil</span>
+      </button>
 
       <!-- Hamburger Toggle Button (Top Right) -->
       <button
@@ -239,12 +240,13 @@ const SEMANTIC_MENU_CHAPTERS = [
         >
           🧠 Birkenbihl-Decoder
         </a>
-        <a
-          href="#form-section"
-          class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link"
+        <button
+          type="button"
+          id="drawerNewChartBtn"
+          class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1 font-semibold"
         >
-          ✧ Neues Chart
-        </a>
+          ✧ Neues Profil
+        </button>
       </div>
     </div>
   </div>
@@ -259,6 +261,8 @@ const SEMANTIC_MENU_CHAPTERS = [
     const backdrop = document.getElementById('drawerBackdrop');
     const gateButtons = document.querySelectorAll('.drawer-gate-btn');
     const closeLinks = document.querySelectorAll('.close-drawer-link');
+    const headerNewChartBtn = document.getElementById('headerNewChartBtn');
+    const drawerNewChartBtn = document.getElementById('drawerNewChartBtn');
 
     function openDrawer() {
       if (!drawer || !panel) return;
@@ -301,6 +305,17 @@ const SEMANTIC_MENU_CHAPTERS = [
 
     closeLinks.forEach(link => {
       link.addEventListener('click', closeDrawer);
+    });
+
+    headerNewChartBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('astro_open_profile_creator'));
+    });
+
+    drawerNewChartBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeDrawer();
+      window.dispatchEvent(new CustomEvent('astro_open_profile_creator'));
     });
   }
 

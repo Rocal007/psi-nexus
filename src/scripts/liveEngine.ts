@@ -56,6 +56,22 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
       : '<span>Dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>';
   }
 
+  // Toggle Welcome Onboarding vs Active Profile Hero Sections
+  const heroWelcomePrompt = document.getElementById('heroWelcomePrompt');
+  if (heroWelcomePrompt) heroWelcomePrompt.classList.add('hidden');
+
+  const heroActiveDetails = document.getElementById('heroActiveProfileDetails');
+  if (heroActiveDetails) heroActiveDetails.classList.remove('hidden');
+
+  const heroPills = document.getElementById('heroIdentityPillsBar');
+  if (heroPills) heroPills.classList.remove('hidden');
+
+  const heroDetails = document.getElementById('heroDetails');
+  if (heroDetails) heroDetails.classList.remove('hidden');
+
+  const matrixPending = document.getElementById('matrixPendingBanner');
+  if (matrixPending) matrixPending.classList.add('hidden');
+
   // Update Individual Personality Summary in Header / Hero
   const pSummary = generatePersonalitySummary(chart);
   const heroArchetypeTitle = document.getElementById('heroArchetypeTitle');
@@ -68,6 +84,9 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
   if (heroPersonalityMantra) heroPersonalityMantra.textContent = pSummary.personalityMantra;
 
   // Header Active Person Badge
+  const headerPersonBadge = document.getElementById('headerActivePersonBadge');
+  if (headerPersonBadge) headerPersonBadge.classList.remove('hidden');
+
   const headerPersonName = document.getElementById('headerPersonName');
   if (headerPersonName) headerPersonName.textContent = input.name || 'Edle Seele';
 
@@ -76,7 +95,6 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
     headerPersonSigns.textContent = `☉ ${synthesis.sun.planet.sign.name} • ☽ ${synthesis.moon.planet.sign.name} • ↑ ${synthesis.ascendant.sign.name}`;
   }
 
-  const heroDetails = document.getElementById('heroDetails');
   if (heroDetails) {
     heroDetails.innerHTML = `
       <span>📍 ${input.cityName}</span>

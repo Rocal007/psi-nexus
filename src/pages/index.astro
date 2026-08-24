@@ -27,6 +27,7 @@ import { generatePersonalitySummary } from '../lib/astrology/personalitySynthesi
 
 // Extract query parameters or use defaults
 const searchParams = Astro.url.searchParams;
+const hasExplicitQuery = searchParams.has('birthDate') || searchParams.has('name');
 
 const birthDate = searchParams.get('birthDate') || '1991-05-05';
 const birthTime = searchParams.get('birthTime') || '13:00';
@@ -34,7 +35,7 @@ const cityName = searchParams.get('cityName') || 'Wien';
 const latitude = parseFloat(searchParams.get('latitude') || '48.2082');
 const longitude = parseFloat(searchParams.get('longitude') || '16.3738');
 const timezone = searchParams.get('timezone') || 'Europe/Vienna';
-const userName = searchParams.get('name') || 'Denise Christin';
+const userName = searchParams.get('name') || '';
 const houseSystem = (searchParams.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as 'placidus' | 'equal';
 
 const chartInput: ChartInput = {
@@ -69,15 +70,26 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       </div>
 
       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight" id="heroName">
-        {userName ? (
+        {hasExplicitQuery && userName ? (
           <span><span class="cosmic-gold-gradient">{userName}s</span> Kosmisches Seelenbuch</span>
         ) : (
-          <span>Dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>
+          <span>Entschlüssle dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>
         )}
       </h1>
 
-      <!-- Individuelle Zusammenfassung der Person im Header -->
-      <div class="space-y-2.5 max-w-3xl mx-auto">
+      <!-- Welcome Onboarding Prompt (Visible when no profile is active) -->
+      <div id="heroWelcomePrompt" class={`space-y-2.5 max-w-2xl mx-auto pt-1 ${hasExplicitQuery ? 'hidden' : ''}`}>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold font-tech">
+          <span>✨</span>
+          <span>Erstelle dein Seelen-Profil</span>
+        </div>
+        <p class="text-slate-200 text-sm md:text-base leading-relaxed font-lato">
+          Trage unten deine Geburtsdaten ein oder wähle ein bestehendes Profil, um dein persönliches Kosmisches Seelenbuch, dein Radix-Horoskop und deine Lebenszahlen in Echtzeit zu generieren.
+        </p>
+      </div>
+
+      <!-- Individuelle Zusammenfassung der Person im Header (Visible when profile is active) -->
+      <div id="heroActiveProfileDetails" class={`space-y-2.5 max-w-3xl mx-auto ${hasExplicitQuery ? '' : 'hidden'}`}>
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold font-tech">
           <span>🌟</span>
           <span id="heroArchetypeTitle">{personalitySummary.archetypeName}</span>
@@ -91,7 +103,7 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       </div>
 
       <!-- Key Identity Highlights Pill Bar (System 1 Ergonomics) -->
-      <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-2">
+      <div id="heroIdentityPillsBar" class={`flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-2 ${hasExplicitQuery ? '' : 'hidden'}`}>
         <button type="button" id="pillSun" data-pill-gate="radix" class="hero-identity-pill flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-xs font-bold shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:scale-105 active:scale-95 transition-all cursor-pointer group" title="Klicke hier: Direkt zum Sonnen-Stand in Tor I springen">
           <span class="text-amber-400 text-sm group-hover:rotate-12 transition-transform">☉ Sonne:</span>
           <span class="text-white font-black">{chart.synthesis.sun.planet.sign.name}</span>
@@ -127,7 +139,7 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
         </button>
       </div>
 
-      <div id="heroDetails" class="text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
+      <div id="heroDetails" class={`text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 ${hasExplicitQuery ? '' : 'hidden'}`}>
         <span>📍 {cityName}</span>
         <span>•</span>
         <span>🗓️ {formattedBirthDate}, {birthTime} Uhr</span>
@@ -143,7 +155,23 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- Input Form Section -->
     <div id="form-section" class="relative z-40 overflow-visible">
-      <BirthForm initialValues={chartInput} />
+      <BirthForm initialValues={chartInput} hasActiveProfile={hasExplicitQuery} />
+    </div>
+
+    <!-- Matrix Status Banner (shows when in profile creation state) -->
+    <div id="matrixPendingBanner" class={`cosmic-glass rounded-3xl p-5 border border-amber-500/30 text-amber-200 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl ${hasExplicitQuery ? 'hidden' : ''}`}>
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0 font-serif border border-amber-500/30">
+          Ψ
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm sm:text-base">Dein Seelenbuch wartet auf deine Daten</div>
+          <p class="text-slate-300 text-xs mt-0.5">Trage oben deine Geburtsdaten ein oder wähle einen Demo-Archetypen, um deine Seelen-Matrix & alle 11 Tore zu berechnen.</p>
+        </div>
+      </div>
+      <a href="#form-section" class="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs shrink-0 transition-all">
+        Zum Eingabeformular ➔
+      </a>
     </div>
 
     <!-- 5-Step Soul Journey Stepper (Gamified Progression) -->
@@ -163,6 +191,7 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       <!-- Right Column: Active Gate Content Panels -->
       <div class="lg:col-span-8 xl:col-span-9 space-y-8 min-w-0">
         <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
+
         <div id="panel-radix" class="tab-content-panel active space-y-8">
           
           <!-- Hauptpunkt: Kompakte Persönlichkeits-Zusammenfassung -->
@@ -574,6 +603,7 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
   <script>
     import { generateNatalChart, type ChartInput } from '../lib/astrology/engine';
     import { updateDomWithChart } from '../scripts/liveEngine';
+    import { getActiveProfile } from '../lib/db/profileStore';
 
     function initTabNavigation() {
       const tabButtons = document.querySelectorAll('.tab-btn');
@@ -767,8 +797,10 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
     document.addEventListener('DOMContentLoaded', () => {
       initTabNavigation();
 
-      // Check if URL parameters exist and immediately calculate live chart
+      // Check if URL parameters exist or if an active profile is stored in DB/localStorage
       const params = new URLSearchParams(window.location.search);
+      const activeProfile = getActiveProfile();
+
       if (params.has('birthDate') || params.has('name')) {
         const initialInput: ChartInput = {
           birthDate: params.get('birthDate') || '1991-05-05',
@@ -782,6 +814,24 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
         };
         const chart = generateNatalChart(initialInput);
         updateDomWithChart(chart);
+      } else if (activeProfile) {
+        const chart = generateNatalChart({
+          birthDate: activeProfile.birthDate,
+          birthTime: activeProfile.birthTime,
+          cityName: activeProfile.cityName,
+          latitude: activeProfile.latitude,
+          longitude: activeProfile.longitude,
+          timezone: activeProfile.timezone,
+          name: activeProfile.name,
+          houseSystem: activeProfile.houseSystem
+        });
+        updateDomWithChart(chart);
+      } else {
+        // App is opened fresh without a profile: ensure creation form is open and prompt is displayed
+        const formContainer = document.getElementById('formContainer');
+        if (formContainer) formContainer.classList.remove('hidden');
+        const summaryCard = document.getElementById('activeProfileSummaryCard');
+        if (summaryCard) summaryCard.classList.add('hidden');
       }
 
       window.addEventListener('astro_recalculate_chart', (e: any) => {
