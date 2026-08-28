@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import BirthForm from '../components/ui/BirthForm.astro';
 import FolderTabs from '../components/ui/FolderTabs.astro';
 import SoulJourneyProgress from '../components/ui/SoulJourneyProgress.astro';
+import SoulWizardNavigator from '../components/ui/SoulWizardNavigator.astro';
+import WizardEssenceCard from '../components/ui/WizardEssenceCard.astro';
 import BirkenbihlDecoder from '../components/ui/BirkenbihlDecoder.astro';
 import RadixWheel from '../components/chart/RadixWheel.astro';
 import AspectMatrix from '../components/chart/AspectMatrix.astro';
@@ -187,15 +189,27 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
     <!-- 5-Step Soul Journey Stepper (Gamified Progression) -->
     <SoulJourneyProgress activeStep="radix" />
 
+    <!-- Guided Soul Wizard Navigator Bar (Step-by-Step Assistant) -->
+    <SoulWizardNavigator activeGate="radix" />
+
     <!-- Cosmic Dossier Folders Navigation Bar -->
     <FolderTabs activeTab="radix" />
 
     <!-- Full-Width Main Dossier Content Panels -->
     <div class="space-y-8 min-w-0 w-full">
       <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
-
       <div id="panel-radix" class="tab-content-panel active space-y-8">
           
+          <!-- Wizard Sofort-Erkenntnis Chunk (Bite-Sized) -->
+          <WizardEssenceCard
+            gateNum="Tor I"
+            gateTitle="Kosmisches Fundament & Gestirnskräfte"
+            icon="🌌"
+            coreEssence={`Sonne in ${chart.synthesis.sun.planet.sign.name} (${chart.synthesis.sun.planet.degreeString}) und Aszendent in ${chart.housesResult.angles.ascendant.sign.name} bilden deinen unverwechselbaren kosmischen Wesenskern.`}
+            actionLever="Verbinde die bewusste Schöpferkraft deiner Sonne mit dem spontanen Seelentor deines Aszendenten für maximale Authentizität."
+            dailyImpulse="Achte heute bei deiner ersten Begegnung auf deinen spontanen Impuls – das ist die lebendige Kraft deines Aszendenten."
+          />
+
           <!-- Hauptpunkt: Kompakte Persönlichkeits-Zusammenfassung -->
           <PersonalitySummarySection chart={chart} />
       
@@ -309,6 +323,17 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 2: Die 3 Lebens-Säulen Panel (Tor II) -->
     <div id="panel-pillars" class="tab-content-panel space-y-8">
+      
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor II"
+        gateTitle="Die 3 Lebens-Säulen (Liebe, Beruf & Erfüllung)"
+        icon="💖"
+        coreEssence="Deine kosmischen Energien manifestieren sich auf 3 irdischen Lebensbühnen: Herzensbeziehungen, Berufung/MC und Seelenruhe."
+        actionLever="Richte deine berufliche Ausrichtung und Partnerschaftsmuster synchron an deinen tieferen Werten aus."
+        dailyImpulse="Triff heute eine praktische Berufs- oder Beziehungsentscheidung im vollen Einklang mit deinem Herzen."
+      />
+
       <LifePillarsSection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -338,6 +363,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 3: Karmische Knoten & Tore Panel (Tor III) -->
     <div id="panel-karmic" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor III"
+        gateTitle="Karmische Tore & Schicksalsachsen"
+        icon="☊"
+        coreEssence="Die Mondknoten-Achse führt dich vom gewohnten Südknoten-Komfort zur Reifung deines Nordknotens."
+        actionLever="Löse alte karmische Reaktionsschleifen auf und folge mutig dem Wachstumsimpuls deines Nordknotens."
+        dailyImpulse="Verlasse heute eine bequeme Gewohnheit und wage einen mutigen Schritt in Richtung deines Seelenziels."
+      />
+
       <KarmicNodesSection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -367,6 +402,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 4: Seelen-Numerologie Panel (Tor IV) -->
     <div id="panel-numerology" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor IV"
+        gateTitle="Pythagoräische Seelen-Numerologie"
+        icon="🔢"
+        coreEssence={`Deine Lebenszahl ${chart.numerology.lifePath.number} (${chart.numerology.lifePath.archetype}) trägt deinen unverwechselbaren mathematischen Schwingungscode.`}
+        actionLever="Nutze deinen Namenscode und deine Herzzahl als intuitiven Prüfkompass für stimmige Entscheidungen."
+        dailyImpulse="Beobachte heute, welche Zahlensynchronizitäten dir im Tagesverlauf intuitiv begegnen."
+      />
+
       <NumerologySection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -396,6 +441,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 5: Engelszahlen & Spiegeluhrzeiten Panel (Tor V) -->
     <div id="panel-angel_numbers" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor V"
+        gateTitle="Engelszahlen & Spiegeluhrzeiten"
+        icon="🕊️"
+        coreEssence="Wiederkehrende Zahlenreihen (11:11, 222, 777) und Spiegeluhrzeiten sind Synchronizitäten deines Höheren Selbst."
+        actionLever="Bewerte Doppel-Uhrzeiten als kosmischen Moment der Zentrierung, Bestätigung und inneren Ausrichtung."
+        dailyImpulse="Halte beim nächsten Bemerken einer Doppel-Uhrzeit für einen tiefen Atemzug inne und spüre nach."
+      />
+
       <AngelNumbersSection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -425,6 +480,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 6: Esoterisches Seelen-Dossier Panel (Tor VI) -->
     <div id="panel-dossier" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor VI"
+        gateTitle="Das Hohe Esoterische Seelen-Dossier (Die 7 Strahlen)"
+        icon="✦"
+        coreEssence="Die 7 Kosmischen Strahlen und Seelenalchemie enthüllen den höheren Sinn und Auftrag deiner Existenz."
+        actionLever="Harmonisiere deinen Seelenstrahl mit deinem Persönlichkeitsstrahl für mühelose Schöpferkraft."
+        dailyImpulse="Nimm dir 2 Minuten in der Stille, um die Qualität deines primären Seelenstrahls bewusst zu spüren."
+      />
+
       <EsotericDossier chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -454,6 +519,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 7: Heilsteine & Kristall-Resonanz Panel (Tor VII) -->
     <div id="panel-gemstones" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor VII"
+        gateTitle="Heilsteine & Kristall-Resonanz"
+        icon="💎"
+        coreEssence="Silizium-Kristalle und Naturminerale dienen als bio-energetische Stimmgabeln für deine Elemente & Chakren."
+        actionLever="Gleiche Schwächen deiner Elemente gezielt mit resonanten Kristall- und Mineralschwingungen sanft aus."
+        dailyImpulse="Trage heute deinen Resonanz-Kristall oder stelle einen Heilstein auf deinen Schreibtisch."
+      />
+
       <GemstoneSection chart={chart} />
 
       <!-- Psychosomatische Schatten-Analyse, Organe & Positive Dialektik -->
@@ -486,6 +561,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 8: Mondkalender & Ewiger Seelen-Leitspruch Panel (Tor VIII) -->
     <div id="panel-moon_wisdom" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor VIII"
+        gateTitle="Mondkalender & Seelen-Leitspruch"
+        icon="🌙"
+        coreEssence="Der Mond steuert die Gezeiten in Zellen, Haaren, Pflanzen und deinem Biorhythmus."
+        actionLever="Nutze zunehmenden Mond zum Aufbauen & Schöpfen, abnehmenden Mond zum Klären & Loslassen."
+        dailyImpulse="Lies morgens deinen persönlichen Seelen-Leitspruch als erste energetische Zentrierung des Tages."
+      />
+
       <MoonAndWisdomSection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -515,6 +600,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 9: Sternbilder-Atlas & Mythologie Panel (Tor IX) -->
     <div id="panel-constellations" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor IX"
+        gateTitle="Sternbilder-Atlas & Mythologie"
+        icon="✨"
+        coreEssence="Die 12 Tierkreis-Konstellationen und Fixsterne bilden das mythologische Gewölbe deiner Seele."
+        actionLever="Erkenne die mythologische Heldenreise deines Sternzeichens als dein persönliches Meisterungsfeld."
+        dailyImpulse="Blicke heute in den Nachthimmel und verbinde dich mit der Konstellation deines Sonnenzeichens."
+      />
+
       <ConstellationExplorer chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -544,6 +639,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 10: Astro-Kartographie & Globale Kraftorte Panel (Tor X) -->
     <div id="panel-geochart" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor X"
+        gateTitle="Astro-Kartographie & Globale Kraftorte"
+        icon="🌍"
+        coreEssence="Globale Planetenlinien zeigen exakt, an welchen Orten der Erde deine Talente am stärksten schwingen."
+        actionLever="Nutze persönliche Planetenlinien für stimmige Reisen, Wohnortwechsel oder geistige Inspiration."
+        dailyImpulse="Erkunde heute auf der Weltkarte einen deiner persönlichen Kraftorte und spüre seine Energie."
+      />
+
       <GeoAstroChart chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -573,6 +678,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 11: Partner-Synastrie & Familien-Karmamatrix Panel (Tor XI) -->
     <div id="panel-synastry" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor XI"
+        gateTitle="Partner-Synastrie & Familien-Karmamatrix"
+        icon="💞"
+        coreEssence="Synastrie und familiäre Karma-Banden spiegeln gemeinsame Lernaufgaben und seelische Bande wider."
+        actionLever="Betrachte Beziehungsdynamiken als heilsame Spiegel für deine persönliche Selbsterkenntnis."
+        dailyImpulse="Schenke heute einem wichtigen Menschen in deinem Leben bedingungslose Wertschätzung."
+      />
+
       <SynastryFamilySection chart={chart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
@@ -602,6 +717,16 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
 
     <!-- TAB 12: Human Design & Seelen-Matrix Panel (Tor XII) -->
     <div id="panel-humandesign" class="tab-content-panel space-y-8">
+      <!-- Wizard Sofort-Erkenntnis Chunk -->
+      <WizardEssenceCard
+        gateNum="Tor XII"
+        gateTitle="Human Design Bodygraph & Energetische Matrix"
+        icon="🧬"
+        coreEssence="Dein genetischer Bodygraph offenbart Typ, Strategie & Autorität – dein praktisches energetisches Betriebssystem."
+        actionLever="Triff Entscheidungen nie aus mentalem Druck, sondern aus deiner angeborenen inneren Autorität."
+        dailyImpulse="Achte bei der nächsten Entscheidung heute auf dein spontanes Körpergefühl."
+      />
+
       <HumanDesignSection chart={hdChart} />
 
       <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">

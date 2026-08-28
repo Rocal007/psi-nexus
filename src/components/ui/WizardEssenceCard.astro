@@ -1,0 +1,88 @@
+---
+// Wizard Essence Card Component (Bite-Sized Birkenbihl Sofort-Erkenntnis)
+// Provides an instant 1-sentence takeaway & practical anchor before deep dossier tables.
+
+interface Props {
+  gateNum: string;
+  gateTitle: string;
+  coreEssence: string;
+  actionLever: string;
+  dailyImpulse: string;
+  icon?: string;
+  detailTargetId?: string;
+}
+
+const {
+  gateNum,
+  gateTitle,
+  coreEssence,
+  actionLever,
+  dailyImpulse,
+  icon = '🌟',
+  detailTargetId
+} = Astro.props;
+---
+
+<div class="wizard-essence-card p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900/95 to-slate-950/95 border border-amber-500/30 shadow-xl space-y-4 relative overflow-hidden">
+  <!-- Subtle noble ambient glow -->
+  <div class="absolute -right-8 -top-8 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+  <!-- Header -->
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+    <div class="flex items-center gap-2.5">
+      <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-base border border-amber-500/30">
+        {icon}
+      </span>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 font-tech">{gateNum}</span>
+          <span class="text-xs text-slate-400">• Sofort-Erkenntnis</span>
+        </div>
+        <h3 class="text-base font-bold text-white tracking-wide">{gateTitle}</h3>
+      </div>
+    </div>
+
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-[11px] font-bold text-amber-300 font-tech">
+      <span>⚡</span>
+      <span>Pauken → 0</span>
+    </div>
+  </div>
+
+  <!-- 3 Bite-Sized Neurodidactic Chunks -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1 text-xs">
+    
+    <!-- 1. Kernaussage in 1 Satz -->
+    <div class="p-3.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1">
+      <div class="font-bold text-amber-300 flex items-center gap-1.5 font-tech">
+        <span>🎯</span>
+        <span>Auf den Punkt</span>
+      </div>
+      <p class="text-slate-200 leading-relaxed font-lato text-xs">
+        {coreEssence}
+      </p>
+    </div>
+
+    <!-- 2. Größter Seelen-Hebel -->
+    <div class="p-3.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1">
+      <div class="font-bold text-amber-300 flex items-center gap-1.5 font-tech">
+        <span>⚡</span>
+        <span>Dein Kraft-Hebel</span>
+      </div>
+      <p class="text-slate-200 leading-relaxed font-lato text-xs">
+        {actionLever}
+      </p>
+    </div>
+
+    <!-- 3. Alltags-Impuls -->
+    <div class="p-3.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1">
+      <div class="font-bold text-amber-300 flex items-center gap-1.5 font-tech">
+        <span>💡</span>
+        <span>Alltags-Impuls</span>
+      </div>
+      <p class="text-slate-200 leading-relaxed font-lato text-xs">
+        {dailyImpulse}
+      </p>
+    </div>
+
+  </div>
+</div>
