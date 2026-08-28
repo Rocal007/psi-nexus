@@ -1,0 +1,501 @@
+---
+// Human Design Complete Module & Neurodidactic Coach Section (Ψ-NEXUS Gate XII)
+import type { HDChartData } from '../../lib/humandesign/types';
+import { HD_CENTERS, ALL_CENTER_IDS } from '../../lib/humandesign/centers';
+import { HumanDesignAgent } from '../../lib/humandesign/agent';
+import BodygraphSvg from '../chart/BodygraphSvg.astro';
+
+interface Props {
+  chart: HDChartData;
+}
+
+const { chart } = Astro.props;
+const {
+  energyType,
+  authority,
+  profile,
+  definition,
+  incarnationCross,
+  variables,
+  personalityActivations,
+  designActivations,
+  definedCenters,
+  undefinedCenters,
+  definedChannels,
+  synthesis,
+  daysDifference,
+  utcDesignDate,
+  input
+} = chart;
+
+const agentAudit = HumanDesignAgent.runDiagnosticAudit(chart);
+const defaultAgentResponse = HumanDesignAgent.answerInquiry(chart, 'decision');
+---
+
+<section id="gate-humandesign" class="space-y-10">
+  
+  <!-- Header / Badge Intro -->
+  <div class="text-center space-y-3 max-w-4xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest font-tech shadow-lg">
+      <span>🧬</span>
+      <span>Tor XII • Human Design & Seelen-Architektur</span>
+      <span>🧬</span>
+    </div>
+    
+    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
+      Dein Human Design <span class="cosmic-gold-gradient">Bodygraph & Seelenplan</span>
+    </h2>
+
+    <p class="text-slate-300 text-xs sm:text-sm max-w-3xl mx-auto leading-relaxed font-lato" id="hdHeaderDesc">
+      Die Synthese aus I-Ging (64 Hexagramme), Chakren-System (9 Zentren), Kabbala und astronomischer Ephemeridenmechanik. Berechnet für deine bewusste Persönlichkeit (Schwarz) und dein unbewusstes Design (Rot, exakt 88° Sonnenbogen vor Geburt).
+    </p>
+  </div>
+
+  <!-- Master Key Badges (Type, Strategy, Authority, Profile, Cross, Definition) -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    
+    <!-- 1. Type -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-amber-500/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-amber-400 font-tech">Energietyp</span>
+      <div class="text-sm font-black text-white" id="hdBadgeType">{energyType.title}</div>
+      <span class="text-[10px] text-slate-400 font-mono">{energyType.percentage}</span>
+    </div>
+
+    <!-- 2. Strategy -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-emerald-500/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-emerald-400 font-tech">Strategie</span>
+      <div class="text-xs font-bold text-emerald-200" id="hdBadgeStrategy">{energyType.strategy}</div>
+      <span class="text-[10px] text-emerald-400/80 font-mono">Signatur: {energyType.signature.split('&')[0]}</span>
+    </div>
+
+    <!-- 3. Authority -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-cyan-500/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-cyan-400 font-tech">Innere Autorität</span>
+      <div class="text-xs font-bold text-cyan-200" id="hdBadgeAuthority">{authority.germanName.split('(')[0]}</div>
+      <span class="text-[10px] text-cyan-400/80 font-mono">Körperkompass</span>
+    </div>
+
+    <!-- 4. Profile -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-purple-500/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-purple-400 font-tech">Profil</span>
+      <div class="text-sm font-black text-purple-200" id="hdBadgeProfile">Profil {profile.code}</div>
+      <span class="text-[10px] text-purple-300/80 truncate block">{profile.germanName.split('(')[0]}</span>
+    </div>
+
+    <!-- 5. Definition -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-pink-500/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-pink-400 font-tech">Definition</span>
+      <div class="text-xs font-bold text-pink-200" id="hdBadgeDefinition">{definition.label.split('(')[0]}</div>
+      <span class="text-[10px] text-pink-400/80 font-mono">{definedCenters.length}/9 Zentren</span>
+    </div>
+
+    <!-- 6. Cross -->
+    <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-amber-400/30 space-y-1 shadow-lg text-center flex flex-col justify-between">
+      <span class="text-[10px] uppercase font-bold text-amber-300 font-tech">Inkarnationskreuz</span>
+      <div class="text-[11px] font-bold text-amber-200 truncate" id="hdBadgeCross" title={incarnationCross.name}>{incarnationCross.name}</div>
+      <span class="text-[9px] text-slate-400 truncate block">{incarnationCross.typeGerman.split('(')[0]}</span>
+    </div>
+
+  </div>
+
+  <!-- Main Split Layout (Left: Bodygraph + Activations; Right: Agent + Centers + Channels) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN (5 cols): Bodygraph & Planetary Activations -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Bodygraph Vector Visualization -->
+      <div class="cosmic-glass-gold rounded-3xl p-4 sm:p-6 border border-white/10 space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🌌</span>
+            <h3 class="text-base font-bold text-white font-cinzel">Interaktiver Bodygraph</h3>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech bg-amber-500/20 text-amber-300 border border-amber-500/40">
+            {definedCenters.length} Definiert • {undefinedCenters.length} Offen
+          </span>
+        </div>
+
+        <BodygraphSvg chart={chart} />
+
+        <div class="text-[11px] text-slate-400 text-center font-lato italic">
+          Klicke oder fahre mit der Maus über Zentren, Tore und Kanäle für Detailinformationen.
+        </div>
+      </div>
+
+      <!-- 4 PHS Variables (Vier Pfeile) -->
+      <div class="p-5 rounded-3xl bg-slate-950/70 border border-cyan-500/30 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🏹</span>
+            <h4 class="text-sm font-bold text-white font-tech uppercase tracking-wider">Die 4 PHS-Pfeile (Variablen)</h4>
+          </div>
+          <span class="text-[10px] font-mono text-cyan-300">Körper & Geist</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs" id="hdVariablesGrid">
+          
+          <!-- Top Left: Digestion -->
+          <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <div class="flex items-center justify-between font-bold text-amber-300">
+              <span>🧠 Verdauung / Gehirn</span>
+              <span class="font-mono">{variables.digestion.direction === 'left' ? '◀ Links' : '▶ Rechts'}</span>
+            </div>
+            <div class="text-[11px] text-white font-medium">{variables.digestion.label}</div>
+            <p class="text-[10px] text-slate-300 leading-snug">{variables.digestion.description}</p>
+          </div>
+
+          <!-- Bottom Left: Environment -->
+          <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <div class="flex items-center justify-between font-bold text-emerald-300">
+              <span>🏡 Umgebung / Kraftfeld</span>
+              <span class="font-mono">{variables.environment.direction === 'left' ? '◀ Links' : '▶ Rechts'}</span>
+            </div>
+            <div class="text-[11px] text-white font-medium">{variables.environment.label}</div>
+            <p class="text-[10px] text-slate-300 leading-snug">{variables.environment.description}</p>
+          </div>
+
+          <!-- Bottom Right: Perspective -->
+          <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <div class="flex items-center justify-between font-bold text-cyan-300">
+              <span>👁️ Perspektive / Sicht</span>
+              <span class="font-mono">{variables.perspective.direction === 'left' ? '◀ Links' : '▶ Rechts'}</span>
+            </div>
+            <div class="text-[11px] text-white font-medium">{variables.perspective.label}</div>
+            <p class="text-[10px] text-slate-300 leading-snug">{variables.perspective.description}</p>
+          </div>
+
+          <!-- Top Right: Motivation -->
+          <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <div class="flex items-center justify-between font-bold text-purple-300">
+              <span>🎯 Motivation / Geist</span>
+              <span class="font-mono">{variables.motivation.direction === 'left' ? '◀ Links' : '▶ Rechts'}</span>
+            </div>
+            <div class="text-[11px] text-white font-medium">{variables.motivation.label}</div>
+            <p class="text-[10px] text-slate-300 leading-snug">{variables.motivation.description}</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Planetary Activations: Personality (Black) vs Design (Red) -->
+      <div class="p-5 rounded-3xl bg-slate-950/70 border border-white/10 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+          <h4 class="text-sm font-bold text-white font-tech uppercase tracking-wider">Planeten-Aktivierungen (26 Tore)</h4>
+          <span class="text-[10px] font-mono text-slate-400">Design Δ {daysDifference.toFixed(1)} Tage</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          
+          <!-- Design (Unconscious / Red) -->
+          <div class="space-y-2 p-3 rounded-2xl bg-red-950/20 border border-red-500/30">
+            <div class="text-center font-bold text-red-400 border-b border-red-500/20 pb-1.5 flex items-center justify-center gap-1">
+              <span>🔴</span> Unbewusst (Design)
+            </div>
+            <div class="space-y-1.5 font-mono text-[11px]" id="hdDesignActivationsList">
+              {designActivations.map(act => (
+                <div class="flex items-center justify-between py-0.5 border-b border-white/5">
+                  <span class="text-slate-300 flex items-center gap-1">
+                    <span class="text-red-400 font-bold">{act.symbol}</span>
+                    <span class="text-[10px] text-slate-400">{act.planetName}</span>
+                  </span>
+                  <span class="font-bold text-red-300">
+                    Tor {act.gate}.{act.line}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Personality (Conscious / Black-Gold) -->
+          <div class="space-y-2 p-3 rounded-2xl bg-amber-950/20 border border-amber-500/30">
+            <div class="text-center font-bold text-amber-300 border-b border-amber-500/20 pb-1.5 flex items-center justify-center gap-1">
+              <span>🟡</span> Bewusst (Persönlichkeit)
+            </div>
+            <div class="space-y-1.5 font-mono text-[11px]" id="hdPersonalityActivationsList">
+              {personalityActivations.map(act => (
+                <div class="flex items-center justify-between py-0.5 border-b border-white/5">
+                  <span class="text-slate-300 flex items-center gap-1">
+                    <span class="text-amber-400 font-bold">{act.symbol}</span>
+                    <span class="text-[10px] text-slate-400">{act.planetName}</span>
+                  </span>
+                  <span class="font-bold text-amber-300">
+                    Tor {act.gate}.{act.line}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN (7 cols): AI Agent + 9 Centers Audit + Defined Channels -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- 1. Ψ-NEXUS HUMAN DESIGN NEURODIDACTIC AGENT (Interactive Live Coach) -->
+      <div class="p-6 rounded-3xl cosmic-glass-gold border border-amber-500/40 space-y-5 shadow-2xl relative overflow-hidden">
+        
+        <!-- Glowing Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+              🤖
+            </div>
+            <div>
+              <h3 class="text-base font-black text-white">Ψ-NEXUS Human Design Neurodidaktik-Agent</h3>
+              <p class="text-xs text-amber-300/90 font-tech">Echtzeit-Diagnostik & Seelenplan-Coaching</p>
+            </div>
+          </div>
+
+          <!-- Flow Scores -->
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="px-2.5 py-1 rounded-xl bg-black/40 border border-emerald-500/30 text-emerald-300">
+              Flow: {agentAudit.auraScore.energyFlow}%
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-black/40 border border-rose-500/30 text-rose-300">
+              Offenheit: {agentAudit.auraScore.conditioningVulnerability}%
+            </span>
+          </div>
+        </div>
+
+        <!-- Interactive Question Buttons (Schnell-Abfragen) -->
+        <div class="space-y-2">
+          <span class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-tech block">
+            Wähle eine Frage an den Human Design Agenten:
+          </span>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="hdAgentPromptButtons">
+            <button
+              type="button"
+              class="hd-agent-btn text-left p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer active"
+              data-prompt-key="decision"
+            >
+              <span>🧭</span>
+              <span class="truncate">Entscheidungen nach Autorität</span>
+            </button>
+
+            <button
+              type="button"
+              class="hd-agent-btn text-left p-2.5 rounded-xl border border-white/10 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+              data-prompt-key="conditioning"
+            >
+              <span>🛡️</span>
+              <span class="truncate">Offene Zentren & Konditionierung</span>
+            </button>
+
+            <button
+              type="button"
+              class="hd-agent-btn text-left p-2.5 rounded-xl border border-white/10 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+              data-prompt-key="career"
+            >
+              <span>💼</span>
+              <span class="truncate">Beruf & Erfolg als {energyType.title}</span>
+            </button>
+
+            <button
+              type="button"
+              class="hd-agent-btn text-left p-2.5 rounded-xl border border-white/10 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+              data-prompt-key="relationships"
+            >
+              <span>💞</span>
+              <span class="truncate">Beziehungs-Dynamik (Profil {profile.code})</span>
+            </button>
+
+            <button
+              type="button"
+              class="hd-agent-btn text-left p-2.5 rounded-xl border border-white/10 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer sm:col-span-2"
+              data-prompt-key="exhaustion"
+            >
+              <span>⚡</span>
+              <span class="truncate">Notfall-Check: Erschöpfung & Batterie aufladen</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Agent Response Box (Updates on Click) -->
+        <div id="hdAgentResponseBox" class="p-5 rounded-2xl bg-slate-950/90 border border-amber-500/30 space-y-4 text-xs shadow-inner">
+          <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400 font-bold" id="hdAgentRespCategory">🧭 STRATEGIE & ENTSCHEIDUNG</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-400">Radical Objectivity (RO)</span>
+          </div>
+
+          <h4 class="text-base font-black text-white font-cinzel" id="hdAgentRespHeadline">
+            {defaultAgentResponse.headline}
+          </h4>
+
+          <p class="text-slate-200 leading-relaxed font-lato" id="hdAgentRespAnalysis">
+            {defaultAgentResponse.analysis}
+          </p>
+
+          <div class="space-y-1.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <div class="font-bold text-amber-300 text-[11px] uppercase tracking-wider font-tech">
+              Birkenbihl Deconditioning Protokoll:
+            </div>
+            <ul class="space-y-1 text-slate-200 font-lato text-xs" id="hdAgentRespProtocol">
+              {defaultAgentResponse.birkenbihlProtocol.map(step => (
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400">✓</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-white/5 space-y-1">
+            <div class="text-[10px] uppercase font-bold text-purple-300 font-tech">Transformations-Mantra:</div>
+            <blockquote class="font-cormorant italic text-sm text-purple-100 font-medium" id="hdAgentRespMantra">
+              {defaultAgentResponse.mantra}
+            </blockquote>
+            <div class="text-[11px] text-cyan-300 pt-1" id="hdAgentRespPractical">
+              🎯 <strong>Sofort-Aktion:</strong> {defaultAgentResponse.practicalAction}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2. DIE 9 ZENTREN IM DETAIL (Audit: Gaben & Nicht-Selbst Fallen) -->
+      <div class="p-6 rounded-3xl bg-slate-950/70 border border-white/10 space-y-5 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🛡️</span>
+            <h3 class="text-base font-black text-white font-cinzel">Die 9 Zentren im Audit</h3>
+          </div>
+          <span class="text-xs font-mono text-slate-400">{definedCenters.length} von 9 Definiert</span>
+        </div>
+
+        <div class="space-y-3" id="hdCentersDetailedList">
+          {ALL_CENTER_IDS.map(cId => {
+            const isDef = definedCenters.includes(cId);
+            const c = HD_CENTERS[cId];
+            return (
+              <div class={`p-4 rounded-2xl border transition-all ${isDef ? 'bg-amber-950/15 border-amber-500/30' : 'bg-slate-900/40 border-white/10'}`}>
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class={`w-3 h-3 rounded-full ${isDef ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]' : 'bg-slate-700 border border-white/20'}`}></span>
+                    <span class="font-bold text-white text-sm">{c.germanName}</span>
+                  </div>
+                  <span class={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-tech ${isDef ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-slate-800 text-slate-300 border border-white/10'}`}>
+                    {isDef ? 'Definiert (Feste Energie)' : 'Offen / Undefiniert (Empfangend)'}
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-2.5">
+                  <div class="space-y-1">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 font-tech block">
+                      {isDef ? '🌟 Definierte Gabe:' : '💡 Weisheits-Potenzial:'}
+                    </span>
+                    <p class="text-slate-200 leading-relaxed font-lato">
+                      {isDef ? c.definedGift : c.undefinedWisdom}
+                    </p>
+                  </div>
+
+                  <div class="space-y-1">
+                    <span class="text-[10px] uppercase font-bold text-rose-400 font-tech block">
+                      {isDef ? '🔬 Biologische Verankerung:' : '⚠️ Nicht-Selbst Frage:'}
+                    </span>
+                    <p class="text-slate-300 leading-relaxed font-lato">
+                      {isDef ? c.biologicalCorrelations.join(' • ') : c.notSelfQuestion}
+                    </p>
+                  </div>
+                </div>
+
+                {!isDef && (
+                  <div class="mt-2 pt-2 border-t border-white/5 text-[11px] text-emerald-300 flex items-start gap-1.5 font-lato">
+                    <span class="text-emerald-400 font-bold">➔ Entgiftung:</span>
+                    <span>{c.deconditioningKey}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- 3. DEFINIERTE KANÄLE (Quantum Gifting) -->
+      <div class="p-6 rounded-3xl bg-slate-950/70 border border-white/10 space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">⚡</span>
+            <h3 class="text-base font-black text-white font-cinzel">Definierte Lebens-Kanäle ({definedChannels.length})</h3>
+          </div>
+          <span class="text-xs font-mono text-amber-300">Schaltkreise & Gaben</span>
+        </div>
+
+        {definedChannels.length > 0 ? (
+          <div class="space-y-3" id="hdChannelsDetailedList">
+            {definedChannels.map(ch => (
+              <div class="p-4 rounded-2xl bg-white/[0.02] border border-amber-500/20 space-y-2 text-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                      Kanal {ch.id}
+                    </span>
+                    <span class="font-bold text-white text-sm">{ch.germanName}</span>
+                  </div>
+                  <span class="text-[10px] font-tech text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-lg">
+                    {ch.circuitLabel}
+                  </span>
+                </div>
+
+                <div class="space-y-1.5 font-lato text-slate-200">
+                  <div><strong class="text-amber-300">Gabe:</strong> {ch.quantumGifting}</div>
+                  <div><strong class="text-rose-400">Schatten:</strong> {ch.shadowPattern}</div>
+                  <div><strong class="text-emerald-300">Meisterschaft:</strong> {ch.masteryTheme}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/10 text-xs text-slate-400 text-center font-lato">
+            Keine fest definierten Kanäle (Reflektor-Matrix). Du erfährst alle 36 Kanäle flexibel durch Transite und Begegnungen.
+          </div>
+        )}
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  import { HumanDesignAgent } from '../../lib/humandesign/agent';
+
+  function initHdAgentInteractions() {
+    const promptButtons = document.querySelectorAll('.hd-agent-btn');
+    const respCategory = document.getElementById('hdAgentRespCategory');
+    const respHeadline = document.getElementById('hdAgentRespHeadline');
+    const respAnalysis = document.getElementById('hdAgentRespAnalysis');
+    const respProtocol = document.getElementById('hdAgentRespProtocol');
+    const respMantra = document.getElementById('hdAgentRespMantra');
+    const respPractical = document.getElementById('hdAgentRespPractical');
+
+    // Attach click listeners to query buttons
+    promptButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        promptButtons.forEach(b => {
+          b.classList.remove('active', 'border-amber-500/30', 'bg-amber-500/10', 'text-amber-200');
+          b.classList.add('border-white/10', 'bg-slate-900/60', 'text-slate-200');
+        });
+        btn.classList.add('active', 'border-amber-500/30', 'bg-amber-500/10', 'text-amber-200');
+        btn.classList.remove('border-white/10', 'bg-slate-900/60', 'text-slate-200');
+
+        const promptKey = btn.getAttribute('data-prompt-key') || 'decision';
+        
+        // Dispatch custom event or let liveEngine update it if dynamic chart exists
+        const event = new CustomEvent('hd-agent-query', { detail: { promptKey } });
+        window.dispatchEvent(event);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initHdAgentInteractions();
+  });
+</script>

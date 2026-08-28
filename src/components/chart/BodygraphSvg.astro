@@ -1,0 +1,510 @@
+---
+// Interactive SVG Bodygraph Component (Ψ-NEXUS HD Engine)
+// Displays the 9 Centers, 36 Channels, and 64 Gates with Conscious (Black/Gold) & Unconscious (Red) activations.
+import type { HDChartData, HDCenterId } from '../../lib/humandesign/types';
+import { HD_CENTERS } from '../../lib/humandesign/centers';
+import { ALL_HD_CHANNELS } from '../../lib/humandesign/channels';
+import { getGateData } from '../../lib/humandesign/gatesData';
+
+interface Props {
+  chart: HDChartData;
+}
+
+const { chart } = Astro.props;
+const { definedCenters, definedChannels, activeGates, energyType, authority, profile } = chart;
+
+// Gate coordinates in Bodygraph SVG viewBox (0 0 700 800)
+const GATE_COORDS: Record<number, { x: number; y: number }> = {
+  // Head (64, 61, 63)
+  64: { x: 325, y: 78 },
+  61: { x: 350, y: 48 },
+  63: { x: 375, y: 78 },
+
+  // Ajna (47, 24, 4, 17, 43, 11)
+  47: { x: 325, y: 138 },
+  24: { x: 350, y: 138 },
+  4: { x: 375, y: 138 },
+  11: { x: 330, y: 172 },
+  43: { x: 350, y: 185 },
+  17: { x: 370, y: 172 },
+
+  // Throat (62, 23, 56, 35, 12, 45, 33, 8, 31, 20, 16)
+  62: { x: 330, y: 246 },
+  23: { x: 350, y: 246 },
+  56: { x: 370, y: 246 },
+  16: { x: 318, y: 260 },
+  20: { x: 318, y: 275 },
+  31: { x: 330, y: 304 },
+  8: { x: 350, y: 304 },
+  33: { x: 370, y: 304 },
+  45: { x: 382, y: 290 },
+  12: { x: 382, y: 275 },
+  35: { x: 382, y: 260 },
+
+  // G-Center (1, 13, 25, 46, 2, 15, 10, 7)
+  1: { x: 350, y: 368 },
+  13: { x: 375, y: 385 },
+  25: { x: 388, y: 400 },
+  46: { x: 375, y: 418 },
+  2: { x: 350, y: 435 },
+  15: { x: 325, y: 418 },
+  10: { x: 312, y: 400 },
+  7: { x: 325, y: 385 },
+
+  // Heart / Ego (21, 40, 26, 51)
+  21: { x: 442, y: 380 },
+  40: { x: 478, y: 380 },
+  26: { x: 472, y: 408 },
+  51: { x: 448, y: 408 },
+
+  // Spleen (48, 57, 44, 50, 32, 28, 18)
+  48: { x: 175, y: 485 },
+  44: { x: 210, y: 500 },
+  57: { x: 236, y: 520 },
+  50: { x: 210, y: 540 },
+  32: { x: 175, y: 555 },
+  28: { x: 180, y: 520 },
+  18: { x: 158, y: 520 },
+
+  // Solar Plexus (36, 22, 37, 6, 49, 55, 30)
+  36: { x: 525, y: 485 },
+  22: { x: 490, y: 500 },
+  6: { x: 464, y: 520 },
+  49: { x: 490, y: 540 },
+  30: { x: 525, y: 555 },
+  55: { x: 520, y: 520 },
+  37: { x: 538, y: 500 },
+
+  // Sacral (34, 5, 14, 29, 59, 9, 3, 42, 27)
+  5: { x: 350, y: 486 },
+  14: { x: 375, y: 490 },
+  29: { x: 384, y: 502 },
+  59: { x: 384, y: 520 },
+  9: { x: 375, y: 554 },
+  3: { x: 350, y: 554 },
+  42: { x: 325, y: 554 },
+  27: { x: 316, y: 520 },
+  34: { x: 316, y: 495 },
+
+  // Root (53, 60, 52, 19, 39, 41, 54, 38, 58)
+  53: { x: 325, y: 652 },
+  60: { x: 350, y: 652 },
+  52: { x: 375, y: 652 },
+  19: { x: 384, y: 666 },
+  39: { x: 384, y: 686 },
+  41: { x: 384, y: 706 },
+  54: { x: 316, y: 666 },
+  38: { x: 316, y: 686 },
+  58: { x: 316, y: 706 }
+};
+---
+
+<div class="relative w-full flex flex-col items-center justify-center p-2 sm:p-4">
+  
+  <!-- Bodygraph Interactive SVG Container -->
+  <div class="w-full max-w-[620px] aspect-[700/800] relative bg-slate-950/80 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.6)] p-2 sm:p-4 backdrop-blur-xl overflow-hidden group">
+    
+    <!-- Ambient Background Glows -->
+    <div class="absolute inset-0 pointer-events-none opacity-30">
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-1/4 left-1/3 w-60 h-60 bg-red-500/15 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 right-1/4 w-60 h-60 bg-emerald-500/15 rounded-full blur-3xl"></div>
+    </div>
+
+    <svg
+      id="bodygraphSvg"
+      viewBox="0 0 700 780"
+      class="w-full h-full select-none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <!-- Gradients for Split / Striped Channels -->
+        <linearGradient id="channelSplitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ef4444" />
+          <stop offset="48%" stop-color="#ef4444" />
+          <stop offset="52%" stop-color="#fbbf24" />
+          <stop offset="100%" stop-color="#fbbf24" />
+        </linearGradient>
+
+        <filter id="hdCenterGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <filter id="hdGateGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+
+      <!-- 1. CHANNELS LAYER (36 Channels) -->
+      <g id="hdChannelsGroup" class="channels-layer">
+        {ALL_HD_CHANNELS.map(ch => {
+          const p1 = GATE_COORDS[ch.gate1] || { x: 350, y: 350 };
+          const p2 = GATE_COORDS[ch.gate2] || { x: 350, y: 350 };
+          const defCh = definedChannels.find(c => c.id === ch.id);
+          const isDefined = !!defCh;
+          const actState = defCh?.activationState || 'inactive';
+
+          let strokeColor = 'rgba(255, 255, 255, 0.08)';
+          let strokeWidth = '3';
+          let strokeDasharray = 'none';
+
+          if (isDefined) {
+            strokeWidth = '6';
+            if (actState === 'both') strokeColor = 'url(#channelSplitGrad)';
+            else if (actState === 'unconscious') strokeColor = '#ef4444'; // Red
+            else strokeColor = '#f59e0b'; // Conscious Black/Gold
+          }
+
+          return (
+            <g class="hd-channel-item group cursor-pointer" data-channel-id={ch.id} data-tooltip={`${ch.germanName} (${ch.circuitLabel})`}>
+              <!-- Channel Outer Glow Line when active -->
+              {isDefined && (
+                <line
+                  x1={p1.x}
+                  y1={p1.y}
+                  x2={p2.x}
+                  y2={p2.y}
+                  stroke={strokeColor}
+                  stroke-width="12"
+                  stroke-opacity="0.3"
+                  stroke-linecap="round"
+                />
+              )}
+              <!-- Main Channel Line -->
+              <line
+                x1={p1.x}
+                y1={p1.y}
+                x2={p2.x}
+                y2={p2.y}
+                stroke={strokeColor}
+                stroke-width={strokeWidth}
+                stroke-linecap="round"
+                class="transition-all duration-300 hover:stroke-white hover:stroke-width-8"
+              />
+            </g>
+          );
+        })}
+      </g>
+
+      <!-- 2. CENTERS LAYER (9 Geometric Shapes) -->
+      <g id="hdCentersGroup" class="centers-layer">
+        
+        <!-- 1. HEAD CENTER (Kopf - Triangle pointing UP) -->
+        {(() => {
+          const isDef = definedCenters.includes('head');
+          const info = HD_CENTERS.head;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="head" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Feste Inspiration)' : 'Offen (Grenzenlose geistige Freiheit)'}`}>
+              <polygon
+                points="350,22 395,95 305,95"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#fde047' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-amber-300"
+              />
+              <text x="350" y="86" fill={isDef ? '#000000' : '#94a3b8'} font-size="10" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">KOPF</text>
+            </g>
+          );
+        })()}
+
+        <!-- 2. AJNA CENTER (Ajna - Triangle pointing DOWN) -->
+        {(() => {
+          const isDef = definedCenters.includes('ajna');
+          const info = HD_CENTERS.ajna;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="ajna" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Feste Gedankenmuster)' : 'Offen (Flexibler, unvoreingenommener Geist)'}`}>
+              <polygon
+                points="305,128 395,128 350,205"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#4ade80' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-emerald-300"
+              />
+              <text x="350" y="152" fill={isDef ? '#000000' : '#94a3b8'} font-size="10" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">AJNA</text>
+            </g>
+          );
+        })()}
+
+        <!-- 3. THROAT CENTER (Kehle - Square) -->
+        {(() => {
+          const isDef = definedCenters.includes('throat');
+          const info = HD_CENTERS.throat;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="throat" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Feste Stimme & Manifestation)' : 'Offen (Chamäleon der Kommunikation)'}`}>
+              <rect
+                x="315"
+                y="240"
+                width="70"
+                height="70"
+                rx="8"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#f59e0b' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-amber-400"
+              />
+              <text x="350" y="280" fill={isDef ? '#ffffff' : '#94a3b8'} font-size="10" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">KEHLE</text>
+            </g>
+          );
+        })()}
+
+        <!-- 4. G-CENTER (Identität - Diamond) -->
+        {(() => {
+          const isDef = definedCenters.includes('gCenter');
+          const info = HD_CENTERS.gCenter;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="gCenter" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Feste Identität & Richtung)' : 'Offen (Spiegel für Menschen & Orte)'}`}>
+              <polygon
+                points="350,355 398,402 350,450 302,402"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#fbbf24' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-yellow-300"
+              />
+              <text x="350" y="406" fill={isDef ? '#000000' : '#94a3b8'} font-size="11" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">SELBST</text>
+            </g>
+          );
+        })()}
+
+        <!-- 5. HEART / EGO CENTER (Herz - Small Triangle pointing down/left) -->
+        {(() => {
+          const isDef = definedCenters.includes('heart');
+          const info = HD_CENTERS.heart;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="heart" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Echte Willenskraft & Versprechen)' : 'Offen (Frei von Beweiszwang)'}`}>
+              <polygon
+                points="435,372 488,372 460,420"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#f87171' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-red-300"
+              />
+              <text x="460" y="392" fill={isDef ? '#ffffff' : '#94a3b8'} font-size="9" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">HERZ</text>
+            </g>
+          );
+        })()}
+
+        <!-- 6. SPLEEN CENTER (Milz - Triangle pointing right) -->
+        {(() => {
+          const isDef = definedCenters.includes('spleen');
+          const info = HD_CENTERS.spleen;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="spleen" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Spontane Körper-Intuition)' : 'Offen (Sensibler Barometer für Gesundheit)'}`}>
+              <polygon
+                points="150,465 245,520 150,575"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#fbbf24' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-amber-300"
+              />
+              <text x="180" y="524" fill={isDef ? '#000000' : '#94a3b8'} font-size="10" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">MILZ</text>
+            </g>
+          );
+        })()}
+
+        <!-- 7. SOLAR PLEXUS CENTER (Emotionen - Triangle pointing left) -->
+        {(() => {
+          const isDef = definedCenters.includes('solarPlexus');
+          const info = HD_CENTERS.solarPlexus;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="solarPlexus" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Emotionale Welle & Tiefe)' : 'Offen (Empathischer Spiegel fremder Gefühle)'}`}>
+              <polygon
+                points="550,465 455,520 550,575"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#fb923c' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-orange-300"
+              />
+              <text x="520" y="524" fill={isDef ? '#ffffff' : '#94a3b8'} font-size="10" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">SOLAR</text>
+            </g>
+          );
+        })()}
+
+        <!-- 8. SACRAL CENTER (Sakral - Square) -->
+        {(() => {
+          const isDef = definedCenters.includes('sacral');
+          const info = HD_CENTERS.sacral;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="sacral" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Unerschöpfliche Lebens- & Schaffenskraft)' : 'Offen (Weisheit über Arbeitsrhythmen & Pausen)'}`}>
+              <rect
+                x="310"
+                y="480"
+                width="80"
+                height="80"
+                rx="8"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#f87171' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-red-400"
+              />
+              <text x="350" y="526" fill={isDef ? '#ffffff' : '#94a3b8'} font-size="11" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">SAKRAL</text>
+            </g>
+          );
+        })()}
+
+        <!-- 9. ROOT CENTER (Wurzel - Square) -->
+        {(() => {
+          const isDef = definedCenters.includes('root');
+          const info = HD_CENTERS.root;
+          return (
+            <g class="hd-center-node cursor-pointer" data-center-id="root" data-tooltip={`${info.germanName}: ${isDef ? 'Definiert (Fester Umgang mit Druck & Stress)' : 'Offen (Freiheit von äußerer Eile)'}`}>
+              <rect
+                x="310"
+                y="645"
+                width="80"
+                height="75"
+                rx="8"
+                fill={isDef ? info.primaryColor : '#0f172a'}
+                stroke={isDef ? '#b45309' : 'rgba(255,255,255,0.25)'}
+                stroke-width="2.5"
+                filter={isDef ? 'url(#hdCenterGlow)' : 'none'}
+                class="transition-all duration-300 hover:stroke-amber-600"
+              />
+              <text x="350" y="688" fill={isDef ? '#ffffff' : '#94a3b8'} font-size="11" font-weight="900" text-anchor="middle" font-family="'Cinzel', serif">WURZEL</text>
+            </g>
+          );
+        })()}
+
+      </g>
+
+      <!-- 3. GATES PINS LAYER (64 Gate Numbers) -->
+      <g id="hdGatesGroup" class="gates-layer">
+        {Object.entries(GATE_COORDS).map(([gStr, coord]) => {
+          const gateNum = parseInt(gStr, 10);
+          const act = activeGates[gateNum];
+          const isActive = !!act;
+          const gateData = getGateData(gateNum);
+
+          let circleFill = 'rgba(15, 23, 42, 0.9)';
+          let circleStroke = 'rgba(255, 255, 255, 0.2)';
+          let textColor = '#64748b';
+          let strokeW = '1';
+
+          if (isActive) {
+            strokeW = '2';
+            if (act.conscious && act.unconscious) {
+              circleFill = '#78350f';
+              circleStroke = '#fbbf24';
+              textColor = '#fef08a';
+            } else if (act.unconscious) {
+              circleFill = '#7f1d1d';
+              circleStroke = '#ef4444';
+              textColor = '#fca5a5';
+            } else {
+              circleFill = '#451a03';
+              circleStroke = '#f59e0b';
+              textColor = '#fde047';
+            }
+          }
+
+          return (
+            <g
+              class="hd-gate-pin group cursor-pointer transition-transform duration-200 hover:scale-125"
+              data-gate={gateNum}
+              data-tooltip={`Tor ${gateNum}: ${gateData.iChingName} (${gateData.keynote}) - ${isActive ? (act.conscious && act.unconscious ? 'Persönlichkeit & Design (Beide)' : act.unconscious ? 'Design (Rot / Unbewusst)' : 'Persönlichkeit (Schwarz / Bewusst)') : 'Inaktiv'}`}
+            >
+              <circle
+                cx={coord.x}
+                cy={coord.y}
+                r={isActive ? '8.5' : '6.5'}
+                fill={circleFill}
+                stroke={circleStroke}
+                stroke-width={strokeW}
+                filter={isActive ? 'url(#hdGateGlow)' : 'none'}
+              />
+              <text
+                x={coord.x}
+                y={coord.y + (isActive ? 3.5 : 3)}
+                font-size={isActive ? '8' : '7'}
+                font-weight="900"
+                fill={textColor}
+                text-anchor="middle"
+                font-family="monospace"
+              >
+                {gateNum}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+
+    </svg>
+
+    <!-- Tooltip Element -->
+    <div
+      id="bodygraphTooltip"
+      class="hidden absolute z-50 px-3.5 py-2 rounded-xl bg-slate-950/95 border border-amber-500/50 text-slate-100 text-xs font-medium shadow-2xl backdrop-blur-md pointer-events-none max-w-xs transition-opacity duration-150"
+    ></div>
+  </div>
+
+  <!-- Legend & Activations Status Indicator -->
+  <div class="flex flex-wrap items-center justify-center gap-4 text-xs mt-3 pt-2 text-slate-300 font-tech">
+    <div class="flex items-center gap-1.5">
+      <span class="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+      <span class="text-amber-300 font-bold">Bewusst (Persönlichkeit / Schwarz)</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-300 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
+      <span class="text-red-400 font-bold">Unbewusst (Design / Rot)</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-r from-red-500 to-amber-500 border border-white/40 shadow-[0_0_8px_rgba(255,255,255,0.3)]"></span>
+      <span class="text-white font-bold">Beidseitig aktiviert</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <span class="w-3.5 h-3.5 rounded-full bg-slate-900 border border-white/20"></span>
+      <span class="text-slate-400">Offen / Inaktiv</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function setupBodygraphInteractions() {
+    const tooltip = document.getElementById('bodygraphTooltip');
+    const svg = document.getElementById('bodygraphSvg');
+    if (!tooltip || !svg) return;
+
+    const showTooltip = (text: string, e: MouseEvent) => {
+      tooltip.textContent = text;
+      tooltip.classList.remove('hidden');
+      const rect = svg.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      tooltip.style.left = `${Math.min(x + 15, rect.width - 240)}px`;
+      tooltip.style.top = `${Math.max(10, y - 35)}px`;
+    };
+
+    const hideTooltip = () => {
+      tooltip.classList.add('hidden');
+    };
+
+    const interactiveItems = document.querySelectorAll('.hd-center-node, .hd-gate-pin, .hd-channel-item');
+    interactiveItems.forEach(el => {
+      el.addEventListener('mouseenter', (e: any) => {
+        const text = el.getAttribute('data-tooltip') || '';
+        if (text) showTooltip(text, e);
+      });
+      el.addEventListener('mousemove', (e: any) => {
+        const text = el.getAttribute('data-tooltip') || '';
+        if (text) showTooltip(text, e);
+      });
+      el.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupBodygraphInteractions();
+  });
+</script>

@@ -1,5 +1,5 @@
-// Neurodidactic Birkenbihl 4 Cognitive Dimension Spheres (Themen-Sphären)
-// Groups the 11 gates into 4 intuitive cognitive clusters for optimal decoding (Pauken -> 0) and highest Lupos factor.
+// Neurodidactic Birkenbihl Cognitive Dimension Spheres (Themen-Sphären)
+// Groups the 12 gates into intuitive cognitive clusters for optimal decoding (Pauken -> 0) and highest Lupos factor.
 
 export interface SoulGate {
   id: string;
@@ -42,8 +42,23 @@ export const SOUL_SPHERES: SoulSphere[] = [
     ]
   },
   {
-    id: 'sphere_karma',
+    id: 'sphere_humandesign',
     num: 'Sphäre II',
+    name: 'Human Design Matrix',
+    shortQuestion: 'Wie ist mein energetisches System gebaut?',
+    icon: '🧬',
+    themeColor: 'rose',
+    borderActive: 'border-rose-400 bg-rose-500/20 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.35)]',
+    textAccent: 'text-rose-300',
+    badgeBg: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+    birkenbihlAnchor: 'Dein energetisches Betriebssystem: Bodygraph, 9 Zentren, 36 Kanäle, 4 PHS-Pfeile und der interaktive HD Neurodidaktik-Agent.',
+    gates: [
+      { id: 'humandesign', gate: 'Tor XII', label: 'Human Design Matrix', sublabel: 'Bodygraph, 9 Zentren, PHS & HD-Agent', icon: '🧬' }
+    ]
+  },
+  {
+    id: 'sphere_karma',
+    num: 'Sphäre III',
     name: 'Karma & Schwingung',
     shortQuestion: 'Wohin ruft meine Seele?',
     icon: '🔮',
@@ -60,8 +75,8 @@ export const SOUL_SPHERES: SoulSphere[] = [
   },
   {
     id: 'sphere_praxis',
-    num: 'Sphäre III',
-    name: 'Praxis, Heilung & Rhythmus',
+    num: 'Sphäre IV',
+    name: 'Praxis & Rhythmus',
     shortQuestion: 'Was nährt mich im Alltag?',
     icon: '🌿',
     themeColor: 'emerald',
@@ -77,8 +92,8 @@ export const SOUL_SPHERES: SoulSphere[] = [
   },
   {
     id: 'sphere_resonance',
-    num: 'Sphäre IV',
-    name: 'Resonanz & Welt-Orte',
+    num: 'Sphäre V',
+    name: 'Resonanz & Orte',
     shortQuestion: 'Wo & mit wem wachse ich?',
     icon: '🌍',
     themeColor: 'cyan',
