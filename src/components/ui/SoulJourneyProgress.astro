@@ -1,6 +1,8 @@
 ---
 // Neurodidactic Birkenbihl Soul Journey Progress
-// 4 Master Dimension Spheres for intuitive, frictionless exploration
+// 5 Master Dimension Spheres for intuitive, frictionless exploration
+import { SOUL_SPHERES } from '../../lib/astrology/spheres';
+
 interface Props {
   activeStep?: string;
 }
@@ -14,41 +16,50 @@ const SPHERES_JOURNEY = [
     sphereColor: 'border-amber-500/30 bg-amber-500/5',
     tagColor: 'text-amber-300',
     gates: [
-      { id: 'radix', num: '1', title: 'Fundament', subtitle: 'Radix & 4 Achsen', icon: '🌌', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
-      { id: 'pillars', num: '2', title: '3 Lebens-Säulen', subtitle: 'Liebe & Beruf', icon: '💖', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
-      { id: 'dossier', num: '3', title: '7 Strahlen', subtitle: 'Hohes Seelen-Dossier', icon: '✦', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' }
+      { id: 'radix', num: 'I', title: 'Fundament', subtitle: 'Radix & 4 Achsen', icon: '🌌', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
+      { id: 'pillars', num: 'II', title: '3 Lebens-Säulen', subtitle: 'Liebe & Beruf', icon: '💖', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' },
+      { id: 'dossier', num: 'III', title: '7 Strahlen', subtitle: 'Hohes Seelen-Dossier', icon: '✦', color: 'from-amber-500 to-yellow-600', borderColor: 'border-amber-400' }
     ]
   },
   {
     sphereNum: 'Sphäre II',
-    sphereName: 'Karma & Schwingung',
-    sphereColor: 'border-purple-500/30 bg-purple-500/5',
-    tagColor: 'text-purple-300',
+    sphereName: 'Human Design Matrix',
+    sphereColor: 'border-rose-500/30 bg-rose-500/5',
+    tagColor: 'text-rose-300',
     gates: [
-      { id: 'karmic', num: '4', title: 'Karmische Tore', subtitle: 'Mondknoten & Vertex', icon: '☊', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
-      { id: 'numerology', num: '5', title: 'Numerologie', subtitle: 'Pythagoras Schwingung', icon: '🔢', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
-      { id: 'angel_numbers', num: '6', title: 'Engelszahlen', subtitle: 'Synchronizitäten & Uhren', icon: '🕊️', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' }
+      { id: 'humandesign', num: 'XII', title: 'Human Design', subtitle: 'Bodygraph & HD-Agent', icon: '🧬', color: 'from-rose-500 to-amber-600', borderColor: 'border-rose-400' }
     ]
   },
   {
     sphereNum: 'Sphäre III',
-    sphereName: 'Praxis, Heilung & Rhythmus',
-    sphereColor: 'border-emerald-500/30 bg-emerald-500/5',
-    tagColor: 'text-emerald-300',
+    sphereName: 'Karma & Schwingung',
+    sphereColor: 'border-purple-500/30 bg-purple-500/5',
+    tagColor: 'text-purple-300',
     gates: [
-      { id: 'gemstones', num: '7', title: 'Heilsteine', subtitle: 'Persönliche Kristalle', icon: '💎', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
-      { id: 'moon_wisdom', num: '8', title: 'Mond & Lebensanker', subtitle: 'Rhythmus & Tages-Leitsatz', icon: '🌙', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
-      { id: 'constellations', num: '9', title: 'Sternbilder-Atlas', subtitle: '12 Zeichen & Sterne', icon: '✨', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' }
+      { id: 'karmic', num: 'IV', title: 'Karmische Tore', subtitle: 'Mondknoten & Vertex', icon: '☊', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
+      { id: 'numerology', num: 'V', title: 'Numerologie', subtitle: 'Pythagoras Schwingung', icon: '🔢', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' },
+      { id: 'angel_numbers', num: 'VI', title: 'Engelszahlen', subtitle: 'Synchronizitäten & Uhren', icon: '🕊️', color: 'from-purple-500 to-indigo-600', borderColor: 'border-purple-400' }
     ]
   },
   {
     sphereNum: 'Sphäre IV',
-    sphereName: 'Resonanz & Welt-Orte',
+    sphereName: 'Praxis & Rhythmus',
+    sphereColor: 'border-emerald-500/30 bg-emerald-500/5',
+    tagColor: 'text-emerald-300',
+    gates: [
+      { id: 'gemstones', num: 'VII', title: 'Heilsteine', subtitle: 'Persönliche Kristalle', icon: '💎', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
+      { id: 'moon_wisdom', num: 'VIII', title: 'Mond & Lebensanker', subtitle: 'Rhythmus & Tages-Leitsatz', icon: '🌙', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' },
+      { id: 'constellations', num: 'IX', title: 'Sternbilder-Atlas', subtitle: '12 Zeichen & Sterne', icon: '✨', color: 'from-emerald-500 to-teal-600', borderColor: 'border-emerald-400' }
+    ]
+  },
+  {
+    sphereNum: 'Sphäre V',
+    sphereName: 'Resonanz & Orte',
     sphereColor: 'border-cyan-500/30 bg-cyan-500/5',
     tagColor: 'text-cyan-300',
     gates: [
-      { id: 'geochart', num: '10', title: 'Astro-Kartographie', subtitle: 'Globale Kraftorte', icon: '🌍', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' },
-      { id: 'synastry', num: '11', title: 'Partner & Familie', subtitle: 'Synastrie & Harmonie', icon: '💞', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' }
+      { id: 'geochart', num: 'X', title: 'Astro-Kartographie', subtitle: 'Globale Kraftorte', icon: '🌍', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' },
+      { id: 'synastry', num: 'XI', title: 'Partner & Familie', subtitle: 'Synastrie & Harmonie', icon: '💞', color: 'from-cyan-500 to-blue-600', borderColor: 'border-cyan-400' }
     ]
   }
 ];
@@ -61,15 +72,15 @@ const SPHERES_JOURNEY = [
     <div class="flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <span class="text-amber-400 text-sm">✧</span>
-        <span class="text-xs font-black uppercase tracking-widest text-slate-200 font-cinzel">Die 4 Sphären deiner Seelenreise (11 Tore)</span>
+        <span class="text-xs font-black uppercase tracking-widest text-slate-200 font-cinzel">Die 5 Sphären deiner Seelenreise (12 Tore)</span>
       </div>
       <div class="text-[11px] text-slate-400 font-lato">
         Birkenbihl-Kategoriensystem • Klicke auf ein Tor zum direkten Reisen ➔
       </div>
     </div>
 
-    <!-- 4-Sphere Responsive Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+    <!-- 5-Sphere Responsive Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
       {SPHERES_JOURNEY.map(sphere => (
         <div class={`p-3 rounded-2xl border ${sphere.sphereColor} space-y-2`}>
           <!-- Sphere Header -->
@@ -77,7 +88,7 @@ const SPHERES_JOURNEY = [
             <span class={`text-[10px] font-bold uppercase tracking-wider font-tech ${sphere.tagColor}`}>
               {sphere.sphereNum}: {sphere.sphereName}
             </span>
-            <span class="text-[9px] font-mono text-slate-500">{sphere.gates.length} Tore</span>
+            <span class="text-[9px] font-mono text-slate-500">{sphere.gates.length} Tor{sphere.gates.length > 1 ? 'e' : ''}</span>
           </div>
 
           <!-- Gates in this sphere -->
