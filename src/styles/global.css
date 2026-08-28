@@ -129,67 +129,99 @@
 }
 
 /* =========================================================================
-   1. DEFAULT COSMIC THEME STYLES (Ψ-NEXUS Kosmisches Seelenbuch)
+   1. DEFAULT COSMIC THEME STYLES (Ψ-NEXUS Boxed Architectural Design)
    ========================================================================= */
 .cosmic-bg {
-  background-color: #03050d;
+  background-color: #060811;
   background-image: 
-    radial-gradient(1.5px 1.5px at 25px 35px, #ffffff, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 65px 105px, rgba(255,255,255,0.95), rgba(0,0,0,0)),
-    radial-gradient(2.5px 2.5px at 135px 55px, #fde047, rgba(0,0,0,0)),
-    radial-gradient(1.5px 1.5px at 215px 175px, #c084fc, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 305px 255px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 405px 85px, #67e8f9, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 485px 335px, #fef08a, rgba(0,0,0,0)),
-    radial-gradient(2.5px 2.5px at 580px 220px, #ffffff, rgba(0,0,0,0)),
-    radial-gradient(1.5px 1.5px at 670px 140px, #fde047, rgba(0,0,0,0)),
-    radial-gradient(1px 1px at 750px 380px, #a5b4fc, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 840px 95px, #67e8f9, rgba(0,0,0,0)),
-    radial-gradient(1.5px 1.5px at 930px 290px, #fef08a, rgba(0,0,0,0)),
-    radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.22) 0%, transparent 60%),
-    radial-gradient(ellipse at 15% 45%, rgba(168, 85, 247, 0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 65%, rgba(234, 179, 8, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 95%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
-    linear-gradient(180deg, #060918 0%, #03050d 100%);
-  background-size: 550px 550px, 420px 420px, 480px 480px, 680px 680px, 520px 520px, 620px 620px, 380px 380px, 700px 700px, 600px 600px, 450px 450px, 800px 800px, 500px 500px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    radial-gradient(1.2px 1.2px at 30px 40px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 90px 120px, rgba(255,255,255,0.5), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 200px 70px, rgba(245,158,11,0.6), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 340px 220px, rgba(255,255,255,0.4), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 520px 150px, rgba(255,255,255,0.6), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 700px 300px, rgba(245,158,11,0.5), rgba(0,0,0,0)),
+    radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse at 50% 100%, rgba(15, 23, 42, 0.6) 0%, transparent 70%),
+    linear-gradient(180deg, #090d18 0%, #05070e 100%);
+  background-size: 600px 600px, 450px 450px, 550px 550px, 700px 700px, 500px 500px, 650px 650px, 100% 100%, 100% 100%, 100% 100%;
   background-attachment: fixed;
 }
 
-/* Noble Glassmorphism Cards */
-.cosmic-glass {
-  background: rgba(10, 14, 32, 0.75);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+/* Structured Boxed Architecture Framework */
+.boxed-canvas {
+  max-width: 88rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .boxed-canvas {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .boxed-canvas {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.boxed-frame {
+  background: rgba(10, 14, 26, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.05);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 768px) {
+  .boxed-frame {
+    padding: 2.25rem;
+  }
+}
+
+/* Noble Boxed Cards */
+.cosmic-glass {
+  background: rgba(11, 15, 28, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.65);
+  border-radius: 1.25rem;
   position: relative;
 }
 
 .cosmic-glass-gold {
-  background: linear-gradient(145deg, rgba(26, 21, 58, 0.7) 0%, rgba(12, 10, 32, 0.85) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(234, 179, 8, 0.35);
-  box-shadow: 0 20px 55px -10px rgba(0, 0, 0, 0.7), 0 0 35px rgba(234, 179, 8, 0.15);
+  background: rgba(14, 18, 32, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(234, 179, 8, 0.28);
+  box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(234, 179, 8, 0.06);
+  border-radius: 1.25rem;
   position: relative;
 }
 
 .cosmic-glass-royal {
-  background: linear-gradient(145deg, rgba(20, 16, 50, 0.75) 0%, rgba(8, 12, 28, 0.88) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(168, 85, 247, 0.12);
+  background: rgba(12, 16, 30, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.7);
+  border-radius: 1.25rem;
   position: relative;
 }
 
-/* Ornate Celestial Corner Highlights */
+/* Restrained Celestial Corner Highlights */
 .cosmic-corner-accent::before,
 .cosmic-corner-accent::after {
   content: '✦';
   position: absolute;
-  font-size: 10px;
-  color: rgba(234, 179, 8, 0.6);
+  font-size: 9px;
+  color: rgba(234, 179, 8, 0.5);
   pointer-events: none;
 }
 .cosmic-corner-accent::before {
@@ -201,71 +233,72 @@
   right: 10px;
 }
 
-/* Birkenbihl Neurodidactic Decoder Boxes */
+/* Birkenbihl Neurodidactic Box */
 .birkenbihl-box {
-  background: linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(99, 102, 241, 0.06) 100%);
+  background: rgba(12, 16, 30, 0.85);
   border: 1px solid rgba(234, 179, 8, 0.25);
-  border-left: 4px solid #f59e0b;
-  border-radius: 1rem;
-  padding: 1rem 1.25rem;
+  border-left: 3px solid #f59e0b;
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
 }
 
 .birkenbihl-badge {
-  background: linear-gradient(135deg, rgba(234, 179, 8, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
-  border: 1px solid rgba(234, 179, 8, 0.4);
-  box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #fde047;
+  box-shadow: 0 0 12px rgba(234, 179, 8, 0.1);
 }
 
-/* Folder Navigation & Tabs */
+/* Folder Navigation & Tabs (Clean Boxed Tabs) */
 .cosmic-folder-tab {
-  background: rgba(13, 19, 39, 0.7);
+  background: rgba(15, 21, 38, 0.8);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.875rem;
+  transition: all 0.22s ease-in-out;
 }
 
 .cosmic-folder-tab:hover {
-  background: rgba(26, 35, 66, 0.85);
-  border-color: rgba(234, 179, 8, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgba(0,0,0,0.5), 0 0 15px rgba(234, 179, 8, 0.15);
+  background: rgba(24, 32, 56, 0.9);
+  border-color: rgba(234, 179, 8, 0.35);
+  transform: translateY(-1px);
 }
 
 .cosmic-folder-tab.active {
-  background: linear-gradient(180deg, rgba(234, 179, 8, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
+  background: rgba(234, 179, 8, 0.14);
   border-color: #f59e0b;
-  box-shadow: 0 0 30px rgba(234, 179, 8, 0.25), inset 0 1px 0 rgba(254, 240, 138, 0.4);
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.15), inset 0 1px 0 rgba(254, 240, 138, 0.3);
   color: #ffffff;
 }
 
-/* Glowing Metallic Gradients */
+/* Refined Typography Gradients */
 .cosmic-gold-gradient {
-  background: linear-gradient(135deg, #fffbeb 0%, #fde047 30%, #f59e0b 70%, #b45309 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 35%, #f59e0b 80%, #d97706 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .cosmic-cyan-gradient {
-  background: linear-gradient(135deg, #ecfeff 0%, #67e8f9 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #94a3b8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .cosmic-purple-gradient {
-  background: linear-gradient(135deg, #faf5ff 0%, #c084fc 50%, #9333ea 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 40%, #f59e0b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Glow Dropshadows */
+/* Refined Glow Dropshadows */
 .glow-gold {
-  filter: drop-shadow(0 0 12px rgba(234, 179, 8, 0.5));
+  filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.4));
 }
 .glow-cyan {
-  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));
+  filter: drop-shadow(0 0 8px rgba(148, 163, 184, 0.3));
 }
 .glow-purple {
-  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
+  filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.3));
 }
 
 /* =========================================================================

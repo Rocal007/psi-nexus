@@ -53,8 +53,8 @@ const SEMANTIC_MENU_CHAPTERS = [
     
     <!-- Logo & Branding -->
     <a href="/" class="flex items-center gap-3 group shrink-0">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-500 to-purple-600 p-[1.5px] shadow-[0_0_20px_rgba(234,179,8,0.4)] brand-icon-box">
-        <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-amber-300 font-bold text-xl group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 font-serif brand-icon-letter">
+      <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 p-[1px] shadow-[0_0_15px_rgba(234,179,8,0.2)] brand-icon-box">
+        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-amber-300 font-bold text-xl group-hover:scale-105 transition-transform duration-200 font-serif brand-icon-letter">
           Ψ
         </div>
       </div>
@@ -62,7 +62,7 @@ const SEMANTIC_MENU_CHAPTERS = [
         <div class="font-black text-base tracking-wide text-white flex items-center gap-1.5 brand-title">
           <span class="cosmic-gold-gradient font-serif font-black text-lg">Ψ</span>
           <span class="text-white font-black header-brand-text">NEXUS</span>
-          <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hidden xl:inline-block theme-badge-label">VFB</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 hidden xl:inline-block theme-badge-label">VFB</span>
         </div>
         <div class="text-[10px] uppercase tracking-widest text-slate-400 font-medium hidden sm:block header-subtitle-text">
           Das Kosmische Seelenbuch & Radix
@@ -74,14 +74,14 @@ const SEMANTIC_MENU_CHAPTERS = [
     <a
       href="#personalitySummarySection"
       id="headerActivePersonBadge"
-      class="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs transition-all cursor-pointer shadow-sm group truncate"
+      class="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 hover:border-amber-400/40 text-xs transition-all cursor-pointer shadow-sm group truncate"
       title="Zur individuellen Persönlichkeits-Zusammenfassung springen"
     >
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+      <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
       <span class="font-bold text-white group-hover:text-amber-300 transition-colors font-tech" id="headerPersonName">
         Edle Seele
       </span>
-      <span class="text-slate-400">|</span>
+      <span class="text-slate-500">|</span>
       <span class="text-amber-300 font-mono text-[11px]" id="headerPersonSigns">
         ☉ Sonne • ☽ Mond • ↑ AC
       </span>
@@ -92,7 +92,7 @@ const SEMANTIC_MENU_CHAPTERS = [
       
       <a
         href="#decoderToggleHeader"
-        class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-xs font-semibold text-purple-300 transition-all cursor-pointer"
+        class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-amber-300 transition-all cursor-pointer"
       >
         <span>🧠</span>
         <span>Birkenbihl</span>
@@ -111,7 +111,7 @@ const SEMANTIC_MENU_CHAPTERS = [
       <button
         type="button"
         id="headerNewChartBtn"
-        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all shadow-[0_0_15px_rgba(234,179,8,0.2)] cursor-pointer items-center gap-1.5 chart-btn"
+        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer items-center gap-1.5 chart-btn"
       >
         <span>✧</span>
         <span>Neues Profil</span>
