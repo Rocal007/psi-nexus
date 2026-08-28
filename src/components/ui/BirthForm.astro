@@ -114,20 +114,20 @@ const defaultName = initialValues?.name || '';
   class={`cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/35 shadow-2xl relative cosmic-corner-accent transition-all duration-300 ${hasActiveProfile ? 'hidden' : ''} mt-4`}
 >
   <!-- Glowing header banner -->
-  <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5 border-b border-white/10 pb-4">
     <div class="flex items-center gap-3.5">
       <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/30 to-purple-500/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
         ✦
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-[10px] uppercase font-bold tracking-widest text-amber-400">1. Schritt: Seelen-Profil anlegen</span>
-          <span class="text-[10px] text-slate-400">• SQLite Persistenz</span>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Schritt 1: Profil-Wahl</span>
+          <span class="text-[10px] text-slate-400">• SQLite & Ephemeriden</span>
         </div>
         <h2 class="text-xl md:text-2xl font-extrabold text-white">
-          Initialisiere deine Seelen-Matrix
+          Wähle oder erstelle dein Seelen-Profil
         </h2>
-        <p class="text-xs text-slate-300">Gib deine Geburtsdaten ein oder wähle ein bestehendes Profil, um dein persönliches Kosmisches Seelenbuch in Echtzeit zu generieren.</p>
+        <p class="text-xs text-slate-300">Entweder eigene Geburtsdaten eingeben ODER ein gespeichertes Profil / einen Meister-Archetypen auswählen.</p>
       </div>
     </div>
 
@@ -142,291 +142,342 @@ const defaultName = initialValues?.name || '';
     </button>
   </div>
 
-  <!-- Form Quick Saved Profiles Banner (if profiles exist in storage) -->
-  <div id="formSavedProfilesBanner" class="hidden p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 mb-5 flex flex-wrap items-center justify-between gap-3 text-xs">
-    <div class="flex items-center gap-2 text-amber-300 font-semibold">
+  <!-- Segmented Mode Switcher Bar: [ ✏️ Profil eingeben ] vs [ 👥 Profil auswählen ] -->
+  <div class="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-950/80 border border-white/10 mb-6 max-w-xl mx-auto">
+    <button
+      type="button"
+      id="tabModeEnter"
+      class="mode-toggle-btn flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm cursor-pointer"
+    >
+      <span>✏️</span>
+      <span>1. Profil selbst eingeben</span>
+    </button>
+    <button
+      type="button"
+      id="tabModeSelect"
+      class="mode-toggle-btn flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all flex items-center justify-center gap-2 border border-transparent hover:bg-white/5 cursor-pointer"
+    >
       <span>👥</span>
-      <span>Gespeicherte Profile vorhanden:</span>
-    </div>
-    <div id="formQuickProfilesList" class="flex flex-wrap gap-1.5">
-      <!-- Injected via JS -->
-    </div>
+      <span>2. Profil auswählen (Gespeichert & Demo)</span>
+    </button>
   </div>
 
-
-  <form id="astroForm" class="space-y-5">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- 1. Birth Date -->
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <label for="birthDate" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
-            Geburtsdatum *
-          </label>
-          <span class="text-[10px] text-slate-400 font-normal">Sonne & Lebensweg</span>
+  <!-- PANEL A: Enter New Profile Form -->
+  <div id="panelModeEnter" class="space-y-5">
+    <form id="astroForm" class="space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- 1. Birth Date -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="birthDate" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
+              Geburtsdatum *
+            </label>
+            <span class="text-[10px] text-slate-400 font-normal">Sonne & Lebensweg</span>
+          </div>
+          <input
+            type="date"
+            id="birthDate"
+            name="birthDate"
+            value={defaultDate}
+            required
+            class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm transition-all"
+          />
+          <p class="text-[10px] text-slate-400 leading-tight">Bestimmt Sonnenposition & Lebenswegzahl.</p>
         </div>
-        <input
-          type="date"
-          id="birthDate"
-          name="birthDate"
-          value={defaultDate}
-          required
-          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm transition-all"
-        />
-        <p class="text-[10px] text-slate-400 leading-tight">Bestimmt die Sonnenposition & den numerologischen Lebensweg.</p>
-      </div>
 
-      <!-- 2. Birth Time -->
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <label for="birthTime" class="block text-xs uppercase font-bold tracking-wider text-cyan-300">
-            Geburtszeit *
-          </label>
-          <span id="birthTimeBadge" class="text-[10px] text-cyan-400 font-bold">
-            (Exakte Minute)
-          </span>
-        </div>
-        <input
-          type="time"
-          id="birthTime"
-          name="birthTime"
-          value={defaultTime}
-          required
-          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-cyan-500/30 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-[0_0_10px_rgba(6,182,212,0.1)]"
-        />
-
-        <!-- Checkbox: Unknown Birth Time -->
-        <div class="pt-1">
-          <label class="flex items-center gap-2 cursor-pointer select-none group">
-            <input
-              type="checkbox"
-              id="unknownTimeCheckbox"
-              name="unknownTime"
-              class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-400 focus:ring-offset-slate-950 cursor-pointer transition-all"
-            />
-            <span class="text-xs text-slate-300 group-hover:text-amber-300 transition-colors font-medium">
-              Kenne Geburtsstunde nicht
+        <!-- 2. Birth Time -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="birthTime" class="block text-xs uppercase font-bold tracking-wider text-cyan-300">
+              Geburtszeit *
+            </label>
+            <span id="birthTimeBadge" class="text-[10px] text-cyan-400 font-bold">
+              (Exakte Minute)
             </span>
-          </label>
+          </div>
+          <input
+            type="time"
+            id="birthTime"
+            name="birthTime"
+            value={defaultTime}
+            required
+            class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-cyan-500/30 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-[0_0_10px_rgba(6,182,212,0.1)]"
+          />
+
+          <!-- Checkbox: Unknown Birth Time -->
+          <div class="pt-1">
+            <label class="flex items-center gap-2 cursor-pointer select-none group">
+              <input
+                type="checkbox"
+                id="unknownTimeCheckbox"
+                name="unknownTime"
+                class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-400 focus:ring-offset-slate-950 cursor-pointer transition-all"
+              />
+              <span class="text-xs text-slate-300 group-hover:text-amber-300 transition-colors font-medium">
+                Kenne Geburtsstunde nicht
+              </span>
+            </label>
+          </div>
+
+          <div id="unknownTimeNotice" class="hidden p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200/90 leading-tight flex items-start gap-2 mt-1.5 shadow-sm">
+            <span class="text-amber-400 text-sm">☀️</span>
+            <span><strong>Sonnen-Horoskop (12:00 Uhr):</strong> Planetenpositionen, Tierkreiszeichen, Aspekte & Lebenswegzahl sind vollkommen präzise.</span>
+          </div>
+          <p id="birthTimeStandardHint" class="text-[10px] text-slate-400 leading-tight">Fixiert den Aszendenten & die 12 Häuser.</p>
         </div>
 
-        <div id="unknownTimeNotice" class="hidden p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200/90 leading-tight flex items-start gap-2 mt-1.5 shadow-sm">
-          <span class="text-amber-400 text-sm">☀️</span>
-          <span><strong>Sonnen-Horoskop (12:00 Uhr):</strong> Planetenpositionen, Tierkreiszeichen, Aspekte & Lebenswegzahl sind vollkommen präzise. Aszendent und Häuser dienen als kosmische solare Ausrichtung.</span>
+        <!-- 3. Birth City -->
+        <div class="space-y-1.5 relative">
+          <div class="flex items-center justify-between">
+            <label for="citySearch" class="block text-xs uppercase font-bold tracking-wider text-purple-300">
+              Geburtsort *
+            </label>
+            <span class="text-[10px] text-slate-400 font-normal">Geokoordinaten</span>
+          </div>
+          <input
+            type="text"
+            id="citySearch"
+            name="cityName"
+            value={defaultCity}
+            placeholder="Stadt suchen (z. B. Wien, Berlin, Graz...)"
+            autocomplete="off"
+            required
+            class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 text-sm transition-all"
+          />
+          <p class="text-[10px] text-slate-400 leading-tight">Bestimmt Himmelsausrichtung & Zeitzone.</p>
+
+          <!-- Hidden Lat / Lng / Timezone fields -->
+          <input type="hidden" id="latitude" name="latitude" value={defaultLat} />
+          <input type="hidden" id="longitude" name="longitude" value={defaultLng} />
+          <input type="hidden" id="timezone" name="timezone" value={defaultTz} />
+
+          <!-- Autocomplete dropdown container -->
+          <div
+            id="cityDropdown"
+            class="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-amber-500/30 rounded-xl shadow-2xl z-50 max-h-56 overflow-y-auto hidden"
+          >
+          </div>
         </div>
-        <p id="birthTimeStandardHint" class="text-[10px] text-slate-400 leading-tight">Fixiert den Aszendenten (Seelentor) & die 12 Häuser.</p>
       </div>
 
-      <!-- 3. Birth City -->
-      <div class="space-y-1.5 relative">
-        <div class="flex items-center justify-between">
-          <label for="citySearch" class="block text-xs uppercase font-bold tracking-wider text-purple-300">
-            Geburtsort *
-          </label>
-          <span class="text-[10px] text-slate-400 font-normal">Geokoordinaten</span>
+      <!-- Secondary Settings: Name & Houses -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/10">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="userName" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
+              Vollständiger Name
+            </label>
+            <span class="text-[10px] text-amber-400 font-medium">
+              (Für Namens- & Herzzahl)
+            </span>
+          </div>
+          <input
+            type="text"
+            id="userName"
+            name="name"
+            value={defaultName}
+            placeholder="Vorname & Nachname (z. B. Denise Mustermann)"
+            class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-amber-500/25 focus:outline-none focus:border-amber-400 text-sm transition-all"
+          />
+          <p class="text-[10px] text-slate-400 leading-tight">Enthüllt deine persönliche Schwingungs-Signatur.</p>
         </div>
-        <input
-          type="text"
-          id="citySearch"
-          name="cityName"
-          value={defaultCity}
-          placeholder="Stadt suchen (z. B. Wien, Berlin, Graz...)"
-          autocomplete="off"
-          required
-          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 text-sm transition-all"
-        />
-        <p class="text-[10px] text-slate-400 leading-tight">Bestimmt die Himmelsausrichtung zum Geburtsort.</p>
 
-        <!-- Hidden Lat / Lng / Timezone fields -->
-        <input type="hidden" id="latitude" name="latitude" value={defaultLat} />
-        <input type="hidden" id="longitude" name="longitude" value={defaultLng} />
-        <input type="hidden" id="timezone" name="timezone" value={defaultTz} />
-
-        <!-- Autocomplete dropdown container -->
-        <div
-          id="cityDropdown"
-          class="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-amber-500/30 rounded-xl shadow-2xl z-50 max-h-56 overflow-y-auto hidden"
-        >
-        </div>
-      </div>
-    </div>
-
-    <!-- Secondary Settings: Houses & Optional Name -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/10">
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <label for="userName" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
-            Vollständiger Name
-          </label>
-          <span class="text-[10px] text-amber-400 font-medium">
-            (Für Namens- & Herzzahl)
-          </span>
-        </div>
-        <input
-          type="text"
-          id="userName"
-          name="name"
-          value={defaultName}
-          placeholder="Vorname & Nachname (z. B. Denise Mustermann)"
-          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-amber-500/25 focus:outline-none focus:border-amber-400 text-sm transition-all"
-        />
-        <p class="text-[10px] text-slate-400 leading-tight">Enthüllt deine persönliche Schwingungs-Signatur.</p>
-      </div>
-
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <label for="houseSystem" class="block text-xs uppercase font-bold tracking-wider text-slate-300">
-            Häusersystem
-          </label>
-          <span class="text-[10px] text-slate-400 font-normal">Raumteilung</span>
-        </div>
-        <select
-          id="houseSystem"
-          name="houseSystem"
-          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 text-sm"
-        >
-          <option value="placidus" selected={defaultSystem === 'placidus'}>Placidus (Klassischer Standard der Astrologie)</option>
-          <option value="equal" selected={defaultSystem === 'equal'}>Equal Houses (Gleichmäßige 30°-Felder ab AC)</option>
-        </select>
-        <p class="text-[10px] text-slate-400 leading-tight">Placidus berücksichtigt die Erdneigung optimal.</p>
-      </div>
-    </div>
-
-    <!-- Action Button & Famous Personality Presets -->
-    <div class="space-y-4 pt-4 border-t border-white/10">
-      <!-- Famous Personality Presets (1452 – Gegenwart) -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <span class="text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1.5 font-tech">
-            <span>📜</span>
-            <span>Berühmte Seelen-Profile (1452 – Gegenwart):</span>
-          </span>
-          <span class="text-[11px] text-slate-400 font-mono">6 historische & moderne Meister</span>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <!-- 1. Leonardo da Vinci (1452) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1452-04-15"
-            data-time="21:40"
-            data-city="Vinci"
-            data-lat="43.7844"
-            data-lng="10.9258"
-            data-tz="Europe/Rome"
-            data-name="Leonardo da Vinci"
-            title="Universalgenie & Renaissance-Meister (1452)"
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="houseSystem" class="block text-xs uppercase font-bold tracking-wider text-slate-300">
+              Häusersystem
+            </label>
+            <span class="text-[10px] text-slate-400 font-normal">Raumteilung</span>
+          </div>
+          <select
+            id="houseSystem"
+            name="houseSystem"
+            class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 text-sm"
           >
-            <span>🎨</span>
-            <span class="font-semibold">Leonardo da Vinci</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1452)</span>
-          </button>
-
-          <!-- 2. J. W. von Goethe (1749) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1749-08-28"
-            data-time="12:00"
-            data-city="Frankfurt am Main"
-            data-lat="50.1109"
-            data-lng="8.6821"
-            data-tz="Europe/Berlin"
-            data-name="J. W. von Goethe"
-            title="Dichterfürst & Universalgelehrter (1749)"
-          >
-            <span>🖋️</span>
-            <span class="font-semibold">J.W. Goethe</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1749)</span>
-          </button>
-
-          <!-- 3. C. G. Jung (1875) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1875-07-26"
-            data-time="19:30"
-            data-city="Kesswil"
-            data-lat="47.5976"
-            data-lng="9.3175"
-            data-tz="Europe/Zurich"
-            data-name="Carl Gustav Jung"
-            title="Begründer der Analytischen Psychologie & Archetypen-Lehre (1875)"
-          >
-            <span>🧠</span>
-            <span class="font-semibold">C.G. Jung</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1875)</span>
-          </button>
-
-          <!-- 4. Albert Einstein (1879) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1879-03-14"
-            data-time="11:30"
-            data-city="Ulm"
-            data-lat="48.4011"
-            data-lng="9.9876"
-            data-tz="Europe/Berlin"
-            data-name="Albert Einstein"
-            title="Physiker & Mystiker der Relativität (1879)"
-          >
-            <span>🌌</span>
-            <span class="font-semibold">Albert Einstein</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1879)</span>
-          </button>
-
-          <!-- 5. Vera F. Birkenbihl (1946) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1946-04-26"
-            data-time="10:30"
-            data-city="München"
-            data-lat="48.1351"
-            data-lng="11.5820"
-            data-tz="Europe/Berlin"
-            data-name="Vera F. Birkenbihl"
-            title="Pionierin der Neurodidaktik & Gehirngerechtes Denken (1946)"
-          >
-            <span>💡</span>
-            <span class="font-semibold">Vera F. Birkenbihl</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1946)</span>
-          </button>
-
-          <!-- 6. Steve Jobs (1955) -->
-          <button
-            type="button"
-            class="preset-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-slate-200 hover:text-white border border-white/10 hover:border-amber-500/40 transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-sm group"
-            data-date="1955-02-24"
-            data-time="19:15"
-            data-city="San Francisco"
-            data-lat="37.7749"
-            data-lng="-122.4194"
-            data-tz="America/Los_Angeles"
-            data-name="Steve Jobs"
-            title="Visionär, Design-Philosoph & Innovator (1955)"
-          >
-            <span>🍎</span>
-            <span class="font-semibold">Steve Jobs</span>
-            <span class="text-[10px] text-slate-400 font-mono group-hover:text-amber-300">(1955)</span>
-          </button>
+            <option value="placidus" selected={defaultSystem === 'placidus'}>Placidus (Klassischer Standard der Astrologie)</option>
+            <option value="equal" selected={defaultSystem === 'equal'}>Equal Houses (Gleichmäßige 30°-Felder ab AC)</option>
+          </select>
+          <p class="text-[10px] text-slate-400 leading-tight">Placidus berücksichtigt die Erdneigung optimal.</p>
         </div>
       </div>
 
       <!-- Submit button -->
-      <div class="flex justify-end pt-1">
+      <div class="flex justify-end pt-2">
         <button
           type="submit"
           id="submitCalcBtn"
-          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-[0_0_30px_rgba(234,179,8,0.45)] hover:shadow-[0_0_40px_rgba(234,179,8,0.7)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-[0_0_30px_rgba(234,179,8,0.45)] hover:shadow-[0_0_40px_rgba(234,179,8,0.7)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>✧</span>
-          <span>Berechnen & in DB Speichern</span>
-          <span>✦</span>
+          <span>✨</span>
+          <span>Mein Seelenbuch berechnen & Frage stellen ➔</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- PANEL B: Select Existing Profile or Demo Archetype -->
+  <div id="panelModeSelect" class="space-y-6 hidden">
+    
+    <!-- Section 1: Gespeicherte Profile aus der DB -->
+    <div class="space-y-3">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <div class="flex items-center gap-2 text-xs font-bold text-amber-300 font-tech">
+          <span>👥</span>
+          <span>Deine gespeicherten Seelen-Profile (<span id="selectPanelProfileCount">0</span>)</span>
+        </div>
+        <span class="text-[10px] text-slate-400 font-mono">SQLite / LocalStorage</span>
+      </div>
+
+      <div id="selectPanelProfilesList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Dynamically populated with saved profile cards -->
+      </div>
+
+      <div id="selectPanelNoProfilesHint" class="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-center text-xs text-slate-400 space-y-1">
+        <p>Noch keine eigenen Profile gespeichert.</p>
+        <p class="text-[11px] text-slate-500">Klicke oben auf „1. Profil selbst eingeben“ oder wähle unten einen Meister-Archetypen.</p>
+      </div>
+    </div>
+
+    <!-- Section 2: 6 Inspirierende Meister & Demo-Archetypen -->
+    <div class="space-y-3 pt-2">
+      <div class="flex items-center justify-between border-b border-white/10 pb-2">
+        <div class="flex items-center gap-2 text-xs font-bold text-amber-300 font-tech">
+          <span>🌌</span>
+          <span>Inspirierende Meister & Archetypen (1452 – Gegenwart)</span>
+        </div>
+        <span class="text-[10px] text-slate-400 font-mono">1-Klick Vorschau</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- 1. Leonardo da Vinci -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1452-04-15"
+          data-time="21:40"
+          data-city="Vinci"
+          data-lat="43.7844"
+          data-lng="10.9258"
+          data-tz="Europe/Rome"
+          data-name="Leonardo da Vinci"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🎨</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1452</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">Leonardo da Vinci</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Universalgenie & Renaissance-Meister • Widder ☉ / Schütze ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
+        </button>
+
+        <!-- 2. J. W. von Goethe -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1749-08-28"
+          data-time="12:00"
+          data-city="Frankfurt am Main"
+          data-lat="50.1109"
+          data-lng="8.6821"
+          data-tz="Europe/Berlin"
+          data-name="J. W. von Goethe"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🖋️</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1749</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">J.W. von Goethe</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Dichterfürst & Universalgelehrter • Jungfrau ☉ / Skorpion ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
+        </button>
+
+        <!-- 3. C. G. Jung -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1875-07-26"
+          data-time="19:30"
+          data-city="Kesswil"
+          data-lat="47.5976"
+          data-lng="9.3175"
+          data-tz="Europe/Zurich"
+          data-name="Carl Gustav Jung"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🧠</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1875</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">Carl Gustav Jung</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Begründer der Archetypen-Lehre • Löwe ☉ / Wassermann ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
+        </button>
+
+        <!-- 4. Albert Einstein -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1879-03-14"
+          data-time="11:30"
+          data-city="Ulm"
+          data-lat="48.4011"
+          data-lng="9.9876"
+          data-tz="Europe/Berlin"
+          data-name="Albert Einstein"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🌌</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1879</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">Albert Einstein</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Physiker & Mystiker der Raumzeit • Fische ☉ / Schütze ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
+        </button>
+
+        <!-- 5. Vera F. Birkenbihl -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1946-04-26"
+          data-time="10:30"
+          data-city="München"
+          data-lat="48.1351"
+          data-lng="11.5820"
+          data-tz="Europe/Berlin"
+          data-name="Vera F. Birkenbihl"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">💡</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1946</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">Vera F. Birkenbihl</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Pionierin der Neurodidaktik • Stier ☉ / Krebs ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
+        </button>
+
+        <!-- 6. Steve Jobs -->
+        <button
+          type="button"
+          class="preset-btn p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-1.5 group cursor-pointer shadow-md"
+          data-date="1955-02-24"
+          data-time="19:15"
+          data-city="San Francisco"
+          data-lat="37.7749"
+          data-lng="-122.4194"
+          data-tz="America/Los_Angeles"
+          data-name="Steve Jobs"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🍎</span>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">1955</span>
+          </div>
+          <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors">Steve Jobs</div>
+          <p class="text-[11px] text-slate-400 leading-snug">Visionär & Design-Philosoph • Fische ☉ / Jungfrau ↑</p>
+          <div class="text-[10px] font-bold text-amber-300/80 pt-1 group-hover:text-amber-300">Profil laden & Fragen stellen ➔</div>
         </button>
       </div>
     </div>
-  </form>
+
+  </div>
 </div>
 
 <!-- Cosmic Calculation Loading Overlay -->
@@ -788,6 +839,79 @@ const defaultName = initialValues?.name || '';
           });
         });
       }
+
+      // Populate Mode Select Panel (Tab 2: Profil auswählen)
+      const selectPanelList = document.getElementById('selectPanelProfilesList');
+      const selectPanelCount = document.getElementById('selectPanelProfileCount');
+      const selectPanelNoHint = document.getElementById('selectPanelNoProfilesHint');
+
+      if (selectPanelCount) selectPanelCount.textContent = profiles.length.toString();
+
+      if (selectPanelList && selectPanelNoHint) {
+        if (profiles.length === 0) {
+          selectPanelList.innerHTML = '';
+          selectPanelNoHint.classList.remove('hidden');
+        } else {
+          selectPanelNoHint.classList.add('hidden');
+          selectPanelList.innerHTML = profiles.map(p => `
+            <div class="p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900 border border-white/10 hover:border-amber-500/50 transition-all text-left space-y-2 group shadow-md flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xl">👤</span>
+                  ${p.id === currentActiveId ? '<span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">Aktives Profil</span>' : '<span class="text-[9px] font-mono text-slate-400">Gespeichert</span>'}
+                </div>
+                <div class="font-bold text-white group-hover:text-amber-300 text-sm transition-colors truncate">
+                  ${p.name || 'Edle Seele'}
+                </div>
+                <p class="text-[11px] text-slate-300 leading-snug">
+                  🗓️ ${p.birthDate} • ${p.isUnknownTime ? '12:00 Uhr (Solar)' : p.birthTime + ' Uhr'}<br>
+                  📍 ${p.cityName}
+                </p>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-white/5 mt-2">
+                <button
+                  type="button"
+                  class="select-panel-load-btn text-xs font-bold text-amber-300 hover:text-amber-200 cursor-pointer flex items-center gap-1"
+                  data-id="${p.id}"
+                >
+                  <span>Laden & Fragen ➔</span>
+                </button>
+                <button
+                  type="button"
+                  class="select-panel-delete-btn text-slate-500 hover:text-rose-400 p-1 rounded transition-colors cursor-pointer text-xs"
+                  data-id="${p.id}"
+                  data-name="${p.name || 'Profil'}"
+                  title="Profil löschen"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          selectPanelList.querySelectorAll('.select-panel-load-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const target = e.currentTarget as HTMLElement;
+              const pid = target.dataset.id;
+              const found = profiles.find(x => x.id === pid);
+              if (found) {
+                applyProfileValues(found);
+              }
+            });
+          });
+
+          selectPanelList.querySelectorAll('.select-panel-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const target = e.currentTarget as HTMLElement;
+              const pid = target.dataset.id;
+              const pname = target.dataset.name || 'Profil';
+              if (pid) handleDeleteProfile(pid, pname);
+            });
+          });
+        }
+      }
     }
 
     // Toggle saved profiles dropdown
@@ -801,6 +925,36 @@ const defaultName = initialValues?.name || '';
         savedProfilesMenu?.classList.add('hidden');
       }
     });
+
+    // Form Mode Tabs (1. Profil eingeben vs. 2. Profil auswählen)
+    const tabModeEnter = document.getElementById('tabModeEnter');
+    const tabModeSelect = document.getElementById('tabModeSelect');
+    const panelModeEnter = document.getElementById('panelModeEnter');
+    const panelModeSelect = document.getElementById('panelModeSelect');
+
+    function setFormMode(mode: 'enter' | 'select') {
+      if (mode === 'enter') {
+        tabModeEnter?.classList.add('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'shadow-sm');
+        tabModeEnter?.classList.remove('border-transparent', 'text-slate-400');
+        tabModeSelect?.classList.remove('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'shadow-sm');
+        tabModeSelect?.classList.add('border-transparent', 'text-slate-400');
+
+        panelModeEnter?.classList.remove('hidden');
+        panelModeSelect?.classList.add('hidden');
+      } else {
+        tabModeSelect?.classList.add('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'shadow-sm');
+        tabModeSelect?.classList.remove('border-transparent', 'text-slate-400');
+        tabModeEnter?.classList.remove('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'shadow-sm');
+        tabModeEnter?.classList.add('border-transparent', 'text-slate-400');
+
+        panelModeSelect?.classList.remove('hidden');
+        panelModeEnter?.classList.add('hidden');
+        renderSavedProfiles();
+      }
+    }
+
+    tabModeEnter?.addEventListener('click', () => setFormMode('enter'));
+    tabModeSelect?.addEventListener('click', () => setFormMode('select'));
 
     renderSavedProfiles();
     syncFormWithActiveProfile();

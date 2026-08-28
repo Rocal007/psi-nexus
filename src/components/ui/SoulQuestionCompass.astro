@@ -1,0 +1,186 @@
+---
+// Soul Question Compass Component (Interaktiver Seelen-Fragen-Kompass)
+// "Und dann fragen": Gives users 6 intuitive, profound questions to explore instead of confronting them with 12 complex technical tabs.
+
+interface Props {
+  userName?: string;
+  sunSign?: string;
+}
+
+const { userName = 'Edle Seele', sunSign = '' } = Astro.props;
+
+const QUESTIONS = [
+  {
+    id: 'question_love',
+    gateTarget: 'pillars',
+    icon: '💖',
+    tag: 'Liebe & Beziehung',
+    question: 'Welche Beziehungs- & Partner-Dynamiken prägen mein Herz?',
+    desc: 'Erforsche deine 3 Lebens-Säulen, dein 7. Haus (Deszendent) und deine karmischen Partnerbänder.',
+    actionLabel: 'Liebes- & Partnerschafts-Matrix öffnen ➔'
+  },
+  {
+    id: 'question_career',
+    gateTarget: 'radix',
+    subtarget: 'cardMC',
+    icon: '💼',
+    tag: 'Berufung & Erfolg',
+    question: 'Wo liegt mein größtes berufliches Potenzial und mein Lebensgipfel?',
+    desc: 'Dein Medium Coeli (MC), Sonnen-Kraft und die Aspekte deiner Gestirne für Meisterschaft im Beruf.',
+    actionLabel: 'Berufungs- & MC-Analyse öffnen ➔'
+  },
+  {
+    id: 'question_karma',
+    gateTarget: 'karmic',
+    icon: '☊',
+    tag: 'Seelenauftrag & Karma',
+    question: 'Wohin ruft meine Seele und was ist meine eigentliche Lebensaufgabe?',
+    desc: 'Die Mondknoten-Achse: Vom vertrauten Südknoten zum seelischen Wachstum deines Nordknotens.',
+    actionLabel: 'Karmische Tore & Schicksalsachse öffnen ➔'
+  },
+  {
+    id: 'question_humandesign',
+    gateTarget: 'humandesign',
+    icon: '🧬',
+    tag: 'Entscheidungen & Energie',
+    question: 'Wie treffe ich ab sofort verlässliche Entscheidungen im Alltag?',
+    desc: 'Dein genetischer Human Design Bodygraph, deine angeborene Strategie und deine innere Autorität.',
+    actionLabel: 'Human Design Matrix öffnen ➔'
+  },
+  {
+    id: 'question_numbers',
+    gateTarget: 'numerology',
+    icon: '🔢',
+    tag: 'Zahlen & Engelsbotschaften',
+    question: 'Welche Schwingungs-Codes & Synchronizitäten begleiten mich?',
+    desc: 'Pythagoräische Lebenszahl, Seelen-Herzzahl und die Bedeutung von Spiegeluhrzeiten (11:11, 222).',
+    actionLabel: 'Numerologie & Engelszahlen öffnen ➔'
+  },
+  {
+    id: 'question_daily',
+    gateTarget: 'moon_wisdom',
+    icon: '🌙',
+    tag: 'Alltag, Rhythmus & Kristalle',
+    question: 'Wie bringe ich meinen Biorhythmus & Alltag in harmonischen Fluss?',
+    desc: 'Mondkalender für Haare & Haushalt, bio-energetische Heilsteine und dein ewiger Seelen-Leitspruch.',
+    actionLabel: 'Mondkalender & Heilstein-Apotheke öffnen ➔'
+  }
+];
+---
+
+<div id="soulQuestionCompass" class="boxed-frame space-y-6 no-print my-4 relative overflow-hidden transition-all duration-300">
+  <!-- Top Ambient Glow -->
+  <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Compass Header -->
+  <div class="text-center space-y-2 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest font-tech">
+      <span>🧭</span>
+      <span>Schritt 2: Wähle deine Seelen-Frage</span>
+    </div>
+    <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">
+      Was möchtest du heute über dein Leben erfahren?
+    </h2>
+    <p class="text-slate-300 text-xs sm:text-sm font-lato max-w-2xl mx-auto">
+      Klicke auf die Frage, die dich aktuell am meisten beschäftigt. Der Wizard führt dich direkt zur passenden, mundgerechten Erkenntnis ohne langes Suchen.
+    </p>
+  </div>
+
+  <!-- 6 Interactive Question Cards Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+    {QUESTIONS.map((item) => (
+      <button
+        type="button"
+        class="question-compass-card p-5 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 border border-white/10 hover:border-amber-400/60 shadow-lg text-left transition-all duration-300 flex flex-col justify-between group cursor-pointer hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(234,179,8,0.15)]"
+        data-compass-target={item.gateTarget}
+        data-compass-subtarget={item.subtarget || ''}
+      >
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-300 flex items-center justify-center text-xl border border-amber-500/30 group-hover:rotate-6 transition-transform">
+              {item.icon}
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-amber-300/90 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+              {item.tag}
+            </span>
+          </div>
+
+          <h3 class="text-sm font-bold text-white group-hover:text-amber-200 transition-colors leading-snug">
+            {item.question}
+          </h3>
+
+          <p class="text-xs text-slate-300 leading-relaxed font-lato">
+            {item.desc}
+          </p>
+        </div>
+
+        <div class="pt-3 mt-3 border-t border-white/5 flex items-center justify-between text-xs font-bold text-amber-300 group-hover:text-amber-200">
+          <span>{item.actionLabel}</span>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Or Explore All 12 Gates Line -->
+  <div class="pt-2 text-center">
+    <button
+      type="button"
+      id="compassAllGatesBtn"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+    >
+      <span>📜</span>
+      <span>Oder alle 12 Seelentore der Reihe nach durchblättern</span>
+      <span class="text-amber-400">➔</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  function setupQuestionCompass() {
+    const cards = document.querySelectorAll('.question-compass-card');
+    const allBtn = document.getElementById('compassAllGatesBtn');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const target = card.getAttribute('data-compass-target') || 'radix';
+        const subtarget = card.getAttribute('data-compass-subtarget') || '';
+
+        // Switch to the target tab
+        const matchingTab = document.querySelector(`.tab-btn[data-tab-target="${target}"]`) as HTMLElement;
+        if (matchingTab) {
+          matchingTab.click();
+        }
+
+        // Smooth scroll to the content panel
+        setTimeout(() => {
+          if (subtarget) {
+            const subEl = document.getElementById(subtarget);
+            if (subEl) {
+              subEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              return;
+            }
+          }
+          const panel = document.getElementById(`panel-${target}`);
+          if (panel) {
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      });
+    });
+
+    allBtn?.addEventListener('click', () => {
+      const firstTab = document.querySelector('.tab-btn[data-tab-target="radix"]') as HTMLElement;
+      if (firstTab) firstTab.click();
+      const wizardNav = document.getElementById('soulWizardNavigator');
+      if (wizardNav) {
+        wizardNav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupQuestionCompass);
+  } else {
+    setupQuestionCompass();
+  }
+</script>

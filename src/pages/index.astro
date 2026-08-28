@@ -4,6 +4,7 @@ import BirthForm from '../components/ui/BirthForm.astro';
 import FolderTabs from '../components/ui/FolderTabs.astro';
 import SoulJourneyProgress from '../components/ui/SoulJourneyProgress.astro';
 import SoulWizardNavigator from '../components/ui/SoulWizardNavigator.astro';
+import SoulQuestionCompass from '../components/ui/SoulQuestionCompass.astro';
 import WizardEssenceCard from '../components/ui/WizardEssenceCard.astro';
 import BirkenbihlDecoder from '../components/ui/BirkenbihlDecoder.astro';
 import RadixWheel from '../components/chart/RadixWheel.astro';
@@ -162,12 +163,14 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       </div>
     </div>
 
-    <!-- Birkenbihl Instant Decoder Widget -->
-    <BirkenbihlDecoder />
-
-    <!-- Input Form Section -->
+    <!-- Stage 1: Input Form Section (Eingeben oder Auswählen) -->
     <div id="form-section" class="relative z-40 overflow-visible">
       <BirthForm initialValues={chartInput} hasActiveProfile={hasExplicitQuery} />
+    </div>
+
+    <!-- Stage 2: Soul Question Compass ("Und dann fragen") -->
+    <div id="question-section" class={hasExplicitQuery ? '' : 'hidden'}>
+      <SoulQuestionCompass userName={userName || 'Edle Seele'} sunSign={chart.synthesis.sun.planet.sign.name} />
     </div>
 
     <!-- Matrix Status Banner (shows when in profile creation state) -->
@@ -177,23 +180,21 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
           Ψ
         </div>
         <div>
-          <div class="font-bold text-white text-sm sm:text-base">Dein Seelenbuch wartet auf deine Daten</div>
-          <p class="text-slate-300 text-xs mt-0.5">Trage oben deine Geburtsdaten ein oder wähle einen Demo-Archetypen, um deine Seelen-Matrix & alle 11 Tore zu berechnen.</p>
+          <div class="font-bold text-white text-sm sm:text-base">Schritt 1: Profil eingeben oder auswählen</div>
+          <p class="text-slate-300 text-xs mt-0.5">Trage oben deine Daten ein oder wähle einen Meister-Archetypen, um deine Seelen-Matrix & alle 12 Tore freizuschalten.</p>
         </div>
       </div>
       <a href="#form-section" class="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs shrink-0 transition-all">
-        Zum Eingabeformular ➔
+        Zur Profil-Wahl ➔
       </a>
     </div>
 
-    <!-- 5-Step Soul Journey Stepper (Gamified Progression) -->
-    <SoulJourneyProgress activeStep="radix" />
-
-    <!-- Guided Soul Wizard Navigator Bar (Step-by-Step Assistant) -->
-    <SoulWizardNavigator activeGate="radix" />
-
-    <!-- Cosmic Dossier Folders Navigation Bar -->
-    <FolderTabs activeTab="radix" />
+    <!-- Stage 3: 5-Step Soul Journey Stepper & Guided Soul Wizard Navigator Bar -->
+    <div id="soulDossierWrapper" class="space-y-6">
+      <SoulJourneyProgress activeStep="radix" />
+      <SoulWizardNavigator activeGate="radix" />
+      <FolderTabs activeTab="radix" />
+    </div>
 
     <!-- Full-Width Main Dossier Content Panels -->
     <div class="space-y-8 min-w-0 w-full">
@@ -753,8 +754,13 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       </div>
     </div>
 
+    <!-- Birkenbihl Instant Decoder Widget (Wissens-Referenz & Glossar) -->
+    <div id="decoderToggleHeader" class="mt-8">
+      <BirkenbihlDecoder />
+    </div>
+
     <!-- E-E-A-T Quality, Methodology & Trust Framework -->
-    <div class="mt-12">
+    <div class="mt-8">
       <EeatTrustSection />
     </div>
 
