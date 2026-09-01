@@ -346,15 +346,22 @@ const fullName = chart.input.name || 'Edle Seele';
 
   </div>
 
-  <!-- Astro-Numerology Synergy Box -->
-  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 space-y-4 shadow-2xl">
-    <div class="flex items-center gap-3 border-b border-white/10 pb-3">
-      <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/30">
-        ✧
-      </span>
-      <div>
-        <h3 id="numSynHeadline" class="text-lg font-bold text-white">{numerology.astroSynergy.headline}</h3>
-        <p class="text-xs text-slate-400">Wie Zahlen & Gestirne als harmonische Einheit wirken</p>
+  <!-- Astro-Numerology Synergy Box (Dynamic Matrix Engine) -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/10 space-y-5 shadow-2xl relative overflow-hidden">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/30">
+          ✧
+        </span>
+        <div>
+          <h3 id="numSynHeadline" class="text-lg font-bold text-white">{numerology.astroSynergy.headline}</h3>
+          <p class="text-xs text-slate-400" id="numSynTypeLabel">{numerology.astroSynergy.synergyTypeLabel}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-amber-500/15 border border-amber-500/30 text-amber-300">
+          Resonanz: {numerology.astroSynergy.compatibilityScore}%
+        </span>
       </div>
     </div>
 
@@ -362,11 +369,20 @@ const fullName = chart.input.name || 'Edle Seele';
       {numerology.astroSynergy.description}
     </p>
 
-    <div class="p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 text-xs space-y-1">
-      <div class="font-bold text-amber-300 flex items-center gap-1">
-        <span>✦</span> Kosmische Synthese-Leitlinie:
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+      <div class="p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 text-xs space-y-1.5 flex flex-col justify-between">
+        <div class="font-bold text-amber-300 flex items-center gap-1">
+          <span>✦</span> Kosmische Synthese-Leitlinie:
+        </div>
+        <p id="numSynGuidance" class="text-slate-300 italic leading-relaxed">{numerology.astroSynergy.coreGuidance}</p>
       </div>
-      <p id="numSynGuidance" class="text-slate-300 italic">{numerology.astroSynergy.coreGuidance}</p>
+
+      <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-500/30 text-xs space-y-1.5 flex flex-col justify-between">
+        <div class="font-bold text-purple-300 flex items-center gap-1">
+          <span>🔮</span> Transformations-Mantra:
+        </div>
+        <p id="numSynMantra" class="text-purple-100 font-cormorant italic text-sm leading-relaxed">{numerology.astroSynergy.transformationMantra}</p>
+      </div>
     </div>
   </div>
 </div>

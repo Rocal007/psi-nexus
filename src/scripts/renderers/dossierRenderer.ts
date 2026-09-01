@@ -417,10 +417,14 @@ export function renderNumerologySection(chart: CompleteNatalChart): void {
 
   const numSynHeadline = document.getElementById('numSynHeadline');
   if (numSynHeadline) numSynHeadline.textContent = numerology.astroSynergy.headline;
+  const numSynTypeLabel = document.getElementById('numSynTypeLabel');
+  if (numSynTypeLabel) numSynTypeLabel.textContent = numerology.astroSynergy.synergyTypeLabel;
   const numSynDescription = document.getElementById('numSynDescription');
   if (numSynDescription) numSynDescription.textContent = numerology.astroSynergy.description;
   const numSynGuidance = document.getElementById('numSynGuidance');
   if (numSynGuidance) numSynGuidance.textContent = numerology.astroSynergy.coreGuidance;
+  const numSynMantra = document.getElementById('numSynMantra');
+  if (numSynMantra) numSynMantra.textContent = numerology.astroSynergy.transformationMantra;
 }
 
 export function renderAngelNumbers(chart: CompleteNatalChart): void {

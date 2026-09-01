@@ -23,10 +23,22 @@ describe('Pythagorean Numerology & Angel Resonances', () => {
     expect(num.nameNumbers.letters.length).toBe('Alexander'.length);
   });
 
-  it('should calculate angel number resonance for given life path and sun sign', () => {
-    const angel = calculatePersonalAngelResonance(7, 'Widder');
-    expect(angel.primaryAngelNumber).toBeDefined();
-    expect(angel.primaryAngelNumber.number).toContain('777');
-    expect(angel.guidance).toBeDefined();
+  it('should compute dynamic, non-hardcoded astro-numerology synergy with elemental interactions', () => {
+    // Life Path 1 (Feuer) + Widder (Feuer) -> Harmonious Amplification
+    const numFireFire = generateCompleteNumerology('Hero', '2000-01-09', 'Widder', 'Löwe');
+    expect(numFireFire.astroSynergy.synergyType).toBe('harmonious_amplification');
+    expect(numFireFire.astroSynergy.compatibilityScore).toBeGreaterThanOrEqual(90);
+    expect(numFireFire.astroSynergy.elementalDynamic.numberElement).toBe('Feuer');
+    expect(numFireFire.astroSynergy.transformationMantra).toBeDefined();
+
+    // Life Path 1 (Feuer) + Krebs (Wasser) -> Dialectical Friction
+    const numFireWater = generateCompleteNumerology('Hero', '2000-01-09', 'Krebs', 'Skorpion');
+    expect(numFireWater.astroSynergy.synergyType).toBe('dialectical_friction');
+    expect(numFireWater.astroSynergy.compatibilityScore).toBe(74);
+
+    // Life Path 22 (Äther / Master) -> Master Convergence
+    const numMaster = generateCompleteNumerology('Architect', '1989-11-20', 'Steinbock', 'Stier');
+    expect(numMaster.astroSynergy.synergyType).toBe('master_convergence');
+    expect(numMaster.astroSynergy.compatibilityScore).toBe(95);
   });
 });

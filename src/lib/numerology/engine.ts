@@ -409,17 +409,14 @@ export function calculateNameNumerology(fullName: string, lifePathNum: number): 
   };
 }
 
+import { calculateDynamicAstroSynergy, type DynamicAstroSynergy } from './astroSynergyMatrix';
+
 export interface CompleteNumerologyProfile {
   fullName: string;
   lifePath: NumerologyNumberInfo;
   birthday: { day: number; reduced: number; info: NumerologyNumberInfo };
   nameNumbers: NameNumerologyResult;
-  astroSynergy: {
-    headline: string;
-    description: string;
-    harmoniousElements: string[];
-    coreGuidance: string;
-  };
+  astroSynergy: DynamicAstroSynergy;
 }
 
 export function generateCompleteNumerology(
@@ -431,18 +428,7 @@ export function generateCompleteNumerology(
   const lifePath = calculateLifePathNumber(birthDate);
   const birthday = calculateBirthdayNumber(birthDate);
   const nameNumbers = calculateNameNumerology(fullName, lifePath.number);
-
-  const astroSynergy = {
-    headline: `Synthese: Lebenszahl ${lifePath.number} & Sonne in ${sunSign}`,
-    description: `Deine Lebenszahl ${lifePath.number} (${lifePath.name}) bildet das energetische Schwingungsfundament für dein Sonnenzeichen ${sunSign} und deinen Aszendenten ${ascendantSign}. Wo deine Lebenszahl den übergeordneten Seelenlehrplan definiert, zeigen die Gestirne die psychologische Färbung und die Lebensbühnen.`,
-    harmoniousElements: [
-      `Lebenswegzahl ${lifePath.number}: Regiert durch ${lifePath.rulingPlanet} • Resoniert mit ${lifePath.zodiacResonance}.`,
-      `Namenszahl ${nameNumbers.expression.number}: Deine sichtbare Ausdruckskraft und dein magnetisches Schicksalspotenzial.`,
-      `Herzzahl (Seelendrang) ${nameNumbers.soulUrge.number}: Was deine Seele im tiefsten Inneren wahrhaft ersehnt und nährt.`,
-      `Reifezahl ${nameNumbers.maturity.number}: Das vollendete Lebenswerk in der zweiten Lebenshälfte.`
-    ],
-    coreGuidance: `Verschmelze die Disziplin deiner Zahlen mit der Intuition deines Geburtshoroskops: Lebe die Stärken von Lebenszahl ${lifePath.number} und lass dein Sonnenlicht (${sunSign}) strahlen!`
-  };
+  const astroSynergy = calculateDynamicAstroSynergy(lifePath, nameNumbers, sunSign, ascendantSign);
 
   return {
     fullName: fullName || 'Seelen-Reisende(r)',

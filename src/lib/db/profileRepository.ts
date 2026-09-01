@@ -1,11 +1,10 @@
 /**
  * Unified Profile Repository (Industrial Gold Standard)
- * Implements an Offline-First repository pattern reconciling LocalStorage L1-cache with Backend SQLite.
+ * Implements an Offline-First repository pattern operating on reliable client storage.
  */
 
 import type { SavedProfile } from './profileStore';
 import { getClientProfiles, saveClientProfile, deleteClientProfile, getActiveProfile, setCurrentProfileId } from './profileStore';
-import { Result } from '../dto/result';
 
 export interface SyncResult {
   readonly success: boolean;
@@ -38,19 +37,10 @@ export class ProfileRepository {
   }
 
   /**
-   * Saves or updates a profile with instant local persistence and background server synchronization.
+   * Saves or updates a profile with instant local persistence.
    */
   public static save(profileData: Omit<SavedProfile, 'id' | 'updatedAt'> & { id?: string }): SavedProfile {
-    const saved = saveClientProfile(profileData);
-    
-    // Background sync to server if in browser
-    if (typeof window !== 'undefined') {
-      this.syncSingleToServer(saved).catch(err => {
-        console.warn('[ProfileRepository] Server sync background warning:', err);
-      });
-    }
-
-    return saved;
+    return saveClientProfile(profileData);
   }
 
   /**
@@ -65,75 +55,22 @@ export class ProfileRepository {
   }
 
   /**
-   * Deletes a profile locally and schedules deletion on server.
+   * Deletes a profile locally.
    */
   public static delete(id: string): boolean {
-    const success = deleteClientProfile(id);
-    if (success && typeof window !== 'undefined') {
-      fetch(`/api/users/${id}`, { method: 'DELETE' }).catch(err => {
-        console.warn('[ProfileRepository] Failed to delete on server:', err);
-      });
-    }
-    return success;
+    return deleteClientProfile(id);
   }
 
   /**
-   * Full two-way reconciliation between LocalStorage and SQLite backend.
+   * Reconciles local profile store.
    */
   public static async syncWithServer(): Promise<SyncResult> {
-    if (typeof window === 'undefined') {
-      return { success: false, syncedCount: 0, serverProfiles: [], error: 'SSR environment' };
-    }
-
-    try {
-      const clientProfiles = this.getAll();
-      const res = await fetch('/api/users/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientProfiles })
-      });
-
-      if (!res.ok) {
-        throw new Error(`Sync API responded with status ${res.status}`);
-      }
-
-      const data = await res.json();
-      if (data.success && Array.isArray(data.serverProfiles)) {
-        // Update local storage with consolidated server profiles if newer
-        const serverList = data.serverProfiles as SavedProfile[];
-        if (serverList.length > 0) {
-          localStorage.setItem('astro_nexus_saved_profiles_v1', JSON.stringify(serverList));
-          window.dispatchEvent(new CustomEvent('astro_profiles_synced', { detail: serverList }));
-        }
-
-        return {
-          success: true,
-          syncedCount: data.syncedCount || 0,
-          serverProfiles: serverList
-        };
-      }
-
-      return {
-        success: false,
-        syncedCount: 0,
-        serverProfiles: [],
-        error: data.error || 'Unknown sync response'
-      };
-    } catch (err: any) {
-      return {
-        success: false,
-        syncedCount: 0,
-        serverProfiles: [],
-        error: err.message || 'Network error during profile sync'
-      };
-    }
-  }
-
-  private static async syncSingleToServer(profile: SavedProfile): Promise<void> {
-    await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(profile)
-    });
+    const clientProfiles = this.getAll();
+    return {
+      success: true,
+      syncedCount: clientProfiles.length,
+      serverProfiles: clientProfiles
+    };
   }
 }
+

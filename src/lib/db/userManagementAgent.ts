@@ -6,7 +6,6 @@ import {
   deleteClientProfile,
   normalizeTimeString 
 } from './profileStore';
-import type { UserProfileRecord, DatabaseStats } from './sqlite';
 
 export interface UserClusterSummary {
   totalProfiles: number;
@@ -187,153 +186,65 @@ export class UserManagementAgent {
   }
 
   // ==========================================
-  // BACKEND SYNCHRONISATION & REST API CALLS
+  // CLIENT PERSISTENCE, EXPORT & IMPORT
   // ==========================================
 
   /**
-   * Führt einen bidirektionalen Sync zwischen Client LocalStorage und SQLite-Backend durch
+   * Führt einen Sync durch (lokale Persistenz Bestätigung)
    */
-  public static async syncWithBackend(): Promise<{ success: boolean; syncedCount: number; serverProfiles: UserProfileRecord[]; stats?: DatabaseStats; error?: string }> {
-    if (typeof window === 'undefined') {
-      return { success: false, syncedCount: 0, serverProfiles: [], error: 'Nur im Browser ausführbar' };
-    }
-
-    try {
-      const clientProfiles = getClientProfiles();
-      const res = await fetch('/api/users/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientProfiles })
-      });
-
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        throw new Error(errJson.error || `HTTP ${res.status}`);
-      }
-
-      const json = await res.json();
-      if (json.success && Array.isArray(json.serverProfiles)) {
-        // Map server profiles to SavedProfile structure for LocalStorage
-        const mappedProfiles: SavedProfile[] = json.serverProfiles.map((sp: UserProfileRecord) => ({
-          id: sp.id,
-          name: sp.name,
-          birthDate: sp.birthDate,
-          birthTime: sp.birthTime,
-          cityName: sp.cityName,
-          latitude: sp.latitude,
-          longitude: sp.longitude,
-          timezone: sp.timezone,
-          houseSystem: sp.houseSystem,
-          sunSign: sp.sunSign,
-          moonSign: sp.moonSign,
-          ascendantSign: sp.ascendantSign,
-          lifePathNumber: sp.lifePathNumber,
-          updatedAt: sp.updatedAt
-        }));
-
-        localStorage.setItem('astro_nexus_saved_profiles_v1', JSON.stringify(mappedProfiles));
-        
-        // Find if server has an active profile marked with is_current
-        const serverCurrent = json.serverProfiles.find((p: UserProfileRecord) => p.isCurrent === 1);
-        if (serverCurrent) {
-          localStorage.setItem('astro_nexus_current_profile_id', serverCurrent.id);
-        }
-
-        window.dispatchEvent(new CustomEvent('astro_profiles_updated', { detail: mappedProfiles }));
-        window.dispatchEvent(new CustomEvent('astro_backend_synced', { detail: json }));
-
-        return {
-          success: true,
-          syncedCount: json.syncedCount || 0,
-          serverProfiles: json.serverProfiles,
-          stats: json.stats
-        };
-      }
-
-      return { success: false, syncedCount: 0, serverProfiles: [], error: 'Unerwartetes Server-Antwortformat' };
-    } catch (e: any) {
-      console.warn('Backend Sync Notice:', e.message);
-      return { success: false, syncedCount: 0, serverProfiles: [], error: e.message || String(e) };
-    }
+  public static async syncWithBackend(): Promise<{ success: boolean; syncedCount: number; serverProfiles: SavedProfile[]; stats?: any; error?: string }> {
+    const profiles = getClientProfiles();
+    return {
+      success: true,
+      syncedCount: profiles.length,
+      serverProfiles: profiles
+    };
   }
 
   /**
-   * Lädt alle Benutzer aus dem SQLite Backend
-   */
-  public static async fetchBackendUsers(filter: { query?: string; sunSign?: string; role?: string } = {}): Promise<UserProfileRecord[]> {
-    try {
-      const params = new URLSearchParams();
-      if (filter.query) params.set('query', filter.query);
-      if (filter.sunSign) params.set('sunSign', filter.sunSign);
-      if (filter.role) params.set('role', filter.role);
-
-      const res = await fetch(`/api/users?${params.toString()}`);
-      if (!res.ok) return [];
-      const json = await res.json();
-      return json.success && Array.isArray(json.data) ? json.data : [];
-    } catch (e) {
-      console.error('Fetch backend users error:', e);
-      return [];
-    }
-  }
-
-  /**
-   * Speichert ein Profil im Backend
-   */
-  public static async saveToBackend(profileData: Partial<UserProfileRecord>): Promise<UserProfileRecord | null> {
-    try {
-      const res = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profileData)
-      });
-      if (!res.ok) return null;
-      const json = await res.json();
-      return json.success ? json.data : null;
-    } catch (e) {
-      console.error('Save to backend error:', e);
-      return null;
-    }
-  }
-
-  /**
-   * Löscht ein Profil aus dem Backend
-   */
-  public static async deleteFromBackend(id: string): Promise<boolean> {
-    try {
-      const res = await fetch(`/api/users/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
-      });
-      return res.ok;
-    } catch (e) {
-      console.error('Delete from backend error:', e);
-      return false;
-    }
-  }
-
-  /**
-   * Aktiviert ein Profil im Backend
-   */
-  public static async activateInBackend(id: string): Promise<boolean> {
-    try {
-      const res = await fetch(`/api/users/${encodeURIComponent(id)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'activate' })
-      });
-      return res.ok;
-    } catch (e) {
-      console.error('Activate in backend error:', e);
-      return false;
-    }
-  }
-
-  /**
-   * Löst den Download des JSON- oder CSV-Exports aus
+   * Löst den Download des JSON- oder CSV-Exports aus (Browser native)
    */
   public static triggerExportDownload(format: 'json' | 'csv' = 'json') {
     if (typeof window === 'undefined') return;
-    window.location.href = `/api/users/export?format=${format}`;
+    const profiles = getClientProfiles();
+    let blob: Blob;
+    let filename: string;
+
+    if (format === 'json') {
+      const data: ProfileExportData = {
+        version: '1.0',
+        exportedAt: new Date().toISOString(),
+        count: profiles.length,
+        profiles
+      };
+      blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      filename = `nexus_profiles_export_${new Date().toISOString().slice(0, 10)}.json`;
+    } else {
+      const headers = ['ID', 'Name', 'Geburtsdatum', 'Geburtszeit', 'Ort', 'Breitengrad', 'Längengrad', 'Zeitzone', 'Häusersystem'];
+      const rows = profiles.map(p => [
+        p.id,
+        `"${(p.name || '').replace(/"/g, '""')}"`,
+        p.birthDate,
+        p.birthTime,
+        `"${(p.cityName || '').replace(/"/g, '""')}"`,
+        p.latitude,
+        p.longitude,
+        p.timezone,
+        p.houseSystem
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      filename = `nexus_profiles_export_${new Date().toISOString().slice(0, 10)}.csv`;
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   /**
@@ -342,22 +253,20 @@ export class UserManagementAgent {
   public static async uploadImportFile(file: File): Promise<{ success: boolean; importedCount: number; errors?: string[] }> {
     try {
       const content = await file.text();
-      const parsed = JSON.parse(content);
-      
-      const res = await fetch('/api/users/import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(parsed)
-      });
-
-      const json = await res.json();
-      if (json.success) {
-        // Trigger auto-sync to pull newly imported profiles into local store
-        await this.syncWithBackend();
+      let importedCount = 0;
+      if (file.name.endsWith('.json')) {
+        const parsed = JSON.parse(content);
+        const list: any[] = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.profiles) ? parsed.profiles : []);
+        for (const item of list) {
+          if (item.birthDate && item.cityName) {
+            saveClientProfile(item);
+            importedCount++;
+          }
+        }
       }
-      return json;
+      return { success: true, importedCount };
     } catch (e: any) {
-      return { success: false, importedCount: 0, errors: [e.message || 'Dateifehler'] };
+      return { success: false, importedCount: 0, errors: [e.message || 'Dateifehler beim Importieren'] };
     }
   }
 }
