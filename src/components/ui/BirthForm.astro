@@ -601,34 +601,35 @@ const defaultName = initialValues?.name || '';
     // Sync form fields with active profile or URL params
     function syncFormWithActiveProfile() {
       const params = new URLSearchParams(window.location.search);
-      const active = getActiveProfile();
+      const hasParams = params.has('birthDate') || params.has('name');
+      const active = hasParams ? getActiveProfile() : null;
 
       const dateEl = document.getElementById('birthDate') as HTMLInputElement;
       const timeEl = document.getElementById('birthTime') as HTMLInputElement;
       const nameEl = document.getElementById('userName') as HTMLInputElement;
       const houseEl = document.getElementById('houseSystem') as HTMLSelectElement;
 
-      const birthDate = params.get('birthDate') || active?.birthDate;
-      const birthTime = params.get('birthTime') || active?.birthTime;
-      const cityName = params.get('cityName') || active?.cityName;
-      const lat = params.get('latitude') || active?.latitude?.toString();
-      const lng = params.get('longitude') || active?.longitude?.toString();
-      const tz = params.get('timezone') || active?.timezone;
-      const name = params.get('name') || active?.name;
-      const houseSystem = params.get('houseSystem') || active?.houseSystem;
+      const birthDate = params.get('birthDate') || active?.birthDate || '';
+      const birthTime = params.get('birthTime') || active?.birthTime || '12:00';
+      const cityName = params.get('cityName') || active?.cityName || '';
+      const lat = params.get('latitude') || active?.latitude?.toString() || '48.2082';
+      const lng = params.get('longitude') || active?.longitude?.toString() || '16.3738';
+      const tz = params.get('timezone') || active?.timezone || 'Europe/Vienna';
+      const name = params.get('name') || active?.name || '';
+      const houseSystem = params.get('houseSystem') || active?.houseSystem || 'placidus';
       const isUnknown = params.get('unknownTime') === 'true' || Boolean(active?.isUnknownTime);
 
-      if (birthDate && dateEl) dateEl.value = birthDate;
-      if (birthTime && timeEl) {
+      if (dateEl) dateEl.value = birthDate;
+      if (timeEl) {
         timeEl.value = birthTime;
         lastKnownTime = birthTime;
       }
-      if (cityName && cityInput) cityInput.value = cityName;
-      if (lat && latInput) latInput.value = lat;
-      if (lng && lngInput) lngInput.value = lng;
-      if (tz && tzInput) tzInput.value = tz;
-      if (name && nameEl) nameEl.value = name;
-      if (houseSystem && houseEl) houseEl.value = houseSystem;
+      if (cityInput) cityInput.value = cityName;
+      if (latInput) latInput.value = lat;
+      if (lngInput) lngInput.value = lng;
+      if (tzInput) tzInput.value = tz;
+      if (nameEl) nameEl.value = name;
+      if (houseEl) houseEl.value = houseSystem;
 
       setUnknownTimeState(isUnknown);
     }
@@ -716,8 +717,10 @@ const defaultName = initialValues?.name || '';
 
     // Refresh Saved Profiles in UI
     function renderSavedProfiles() {
+      const params = new URLSearchParams(window.location.search);
+      const hasParams = params.has('birthDate') || params.has('name');
       const profiles = getClientProfiles();
-      const active = getActiveProfile();
+      const active = hasParams ? getActiveProfile() : null;
       const currentActiveId = active?.id;
 
       if (profileCountBadge) {

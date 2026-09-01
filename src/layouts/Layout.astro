@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/ui/Header.astro';
 import ConstellationBackground from '../components/ui/ConstellationBackground.astro';
 import FloatingThemeWidget from '../components/ui/FloatingThemeWidget.astro';
+import UserManagementModal from '../components/ui/UserManagementModal.astro';
 
 interface Props {
   title?: string;
@@ -90,6 +91,9 @@ const schemaData = {
     <main class="flex-1 relative z-10">
       <slot />
     </main>
+
+    <!-- Global User Management Modal with SQLite Backend -->
+    <UserManagementModal />
 
     <!-- Floating Theme Switcher Widget -->
     <FloatingThemeWidget />

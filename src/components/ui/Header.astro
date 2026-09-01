@@ -74,7 +74,7 @@ const SEMANTIC_MENU_CHAPTERS = [
     <a
       href="#personalitySummarySection"
       id="headerActivePersonBadge"
-      class="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 hover:border-amber-400/40 text-xs transition-all cursor-pointer shadow-sm group truncate"
+      class="hidden items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 hover:border-amber-400/40 text-xs transition-all cursor-pointer shadow-sm group truncate"
       title="Zur individuellen Persönlichkeits-Zusammenfassung springen"
     >
       <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
@@ -110,8 +110,18 @@ const SEMANTIC_MENU_CHAPTERS = [
 
       <button
         type="button"
+        id="headerUserManagerBtn"
+        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/35 text-purple-300 text-xs font-bold transition-all shadow-sm cursor-pointer items-center gap-1.5"
+        title="Benutzer- & Profilverwaltung mit SQLite-Backend öffnen"
+      >
+        <span>👥</span>
+        <span>Benutzer</span>
+      </button>
+
+      <button
+        type="button"
         id="headerNewChartBtn"
-        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer items-center gap-1.5 chart-btn"
+        class="hidden md:flex px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer items-center gap-1.5 chart-btn"
       >
         <span>✧</span>
         <span>Neues Profil</span>
@@ -236,18 +246,27 @@ const SEMANTIC_MENU_CHAPTERS = [
       <div class="space-y-2 pt-2 border-t border-white/5">
         <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-tech">Direkt-Werkzeuge</div>
         <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <button
+            type="button"
+            id="drawerUserManagerBtn"
+            class="p-2.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
+          >
+            👥 Benutzer (SQLite)
+          </button>
           <a
             href="#decoderToggleHeader"
-            class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 text-center transition-all cursor-pointer close-drawer-link"
+            class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center"
           >
-            🧠 Birkenbihl-Decoder
+            🧠 Birkenbihl
           </a>
+        </div>
+        <div class="pt-1">
           <button
             type="button"
             id="drawerNewChartBtn"
-            class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1 font-semibold"
+            class="w-full p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1 font-semibold"
           >
-            ✧ Neues Profil
+            ✧ Neues Profil erstellen
           </button>
         </div>
       </div>
@@ -266,6 +285,19 @@ const SEMANTIC_MENU_CHAPTERS = [
     const closeLinks = document.querySelectorAll('.close-drawer-link');
     const headerNewChartBtn = document.getElementById('headerNewChartBtn');
     const drawerNewChartBtn = document.getElementById('drawerNewChartBtn');
+    const headerUserManagerBtn = document.getElementById('headerUserManagerBtn');
+    const drawerUserManagerBtn = document.getElementById('drawerUserManagerBtn');
+
+    headerUserManagerBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('astro_open_user_manager'));
+    });
+
+    drawerUserManagerBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeDrawer();
+      window.dispatchEvent(new CustomEvent('astro_open_user_manager'));
+    });
 
     function openDrawer() {
       if (!drawer || !panel) return;

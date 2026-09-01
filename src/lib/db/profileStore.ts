@@ -3,6 +3,10 @@
 export interface SavedProfile {
   id: string;
   name: string;
+  email?: string;
+  role?: 'admin' | 'member' | 'client' | 'family' | 'guest';
+  tags?: string;
+  notes?: string;
   birthDate: string;
   birthTime: string;
   isUnknownTime?: boolean;
@@ -92,6 +96,11 @@ export function saveClientProfile(profile: Omit<SavedProfile, 'id' | 'updatedAt'
 export function getCurrentProfileId(): string | null {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem(CURRENT_ID_KEY);
+}
+
+export function setCurrentProfileId(id: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(CURRENT_ID_KEY, id);
 }
 
 export function getActiveProfile(): SavedProfile | null {

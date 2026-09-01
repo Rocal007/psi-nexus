@@ -3,18 +3,23 @@ import {
   getClientProfiles, 
   saveClientProfile, 
   getActiveProfile, 
-  getCurrentProfileId, 
-  clearActiveProfile, 
   deleteClientProfile,
   normalizeTimeString 
 } from './profileStore';
+import type { UserProfileRecord, DatabaseStats } from './sqlite';
 
 export interface UserClusterSummary {
   totalProfiles: number;
   activeProfile: SavedProfile | null;
-  elementalBreakdown: Record<string, number>;
+  elementalBreakdown: {
+    fire: number;
+    earth: number;
+    air: number;
+    water: number;
+  };
   sunSignDistribution: Record<string, number>;
   lifePathDistribution: Record<number, number>;
+  roleDistribution: Record<string, number>;
   profiles: SavedProfile[];
 }
 
@@ -31,14 +36,27 @@ export interface ProfileExportData {
   profiles: SavedProfile[];
 }
 
+const ELEMENT_MAP: Record<string, 'fire' | 'earth' | 'air' | 'water'> = {
+  'Widder': 'fire', 'Löwe': 'fire', 'Schütze': 'fire',
+  'Aries': 'fire', 'Leo': 'fire', 'Sagittarius': 'fire',
+  'Stier': 'earth', 'Jungfrau': 'earth', 'Steinbock': 'earth',
+  'Taurus': 'earth', 'Virgo': 'earth', 'Capricorn': 'earth',
+  'Zwillinge': 'air', 'Waage': 'air', 'Wassermann': 'air',
+  'Gemini': 'air', 'Libra': 'air', 'Aquarius': 'air',
+  'Krebs': 'water', 'Skorpion': 'water', 'Fische': 'water',
+  'Cancer': 'water', 'Scorpio': 'water', 'Pisces': 'water'
+};
+
+import { validateBirthProfileInputDTO, Result } from '../dto';
+
 /**
  * UserManagementAgent - Orchestriert Benutzer- & Seelen-Profile,
- * Mehrbenutzer-Dynamiken, DSGVO-konforme Exporte und Profil-Validierungen
- * im Einklang mit der NEXUS-Spezifikation.
+ * Mehrbenutzer-Dynamiken, SQLite Backend-Synchronisation, DSGVO-Exporte
+ * und neurodidaktische Profil-Führung (NEXUS-Standard).
  */
 export class UserManagementAgent {
   /**
-   * Validiert und bereinigt die Eingabedaten für ein Profil
+   * Validiert und bereinigt Eingabedaten über die standardisierte DTO-Schicht
    */
   public static validateProfileData(data: {
     name?: string;
@@ -51,50 +69,47 @@ export class UserManagementAgent {
     timezone?: string;
     houseSystem?: 'placidus' | 'equal';
   }): ProfileValidationResult {
-    const errors: string[] = [];
+    const rawCandidate = {
+      name: data.name?.trim(),
+      birthDate: data.birthDate?.trim() || '',
+      birthTime: normalizeTimeString(data.birthTime, data.isUnknownTime),
+      isUnknownTime: Boolean(data.isUnknownTime),
+      cityName: data.cityName?.trim() || 'Wien',
+      latitude: typeof data.latitude === 'number' ? data.latitude : 48.2082,
+      longitude: typeof data.longitude === 'number' ? data.longitude : 16.3738,
+      timezone: data.timezone?.trim() || 'Europe/Vienna',
+      houseSystem: data.houseSystem || 'placidus'
+    };
 
-    if (!data.name || !data.name.trim()) {
-      errors.push('Name darf nicht leer sein.');
+    const result = validateBirthProfileInputDTO(rawCandidate);
+
+    if (Result.isErr(result)) {
+      return {
+        isValid: false,
+        errors: result.error.errors.map(e => `${e.field}: ${e.message}`),
+        sanitizedProfile: undefined
+      };
     }
-
-    if (!data.birthDate || !data.birthDate.trim()) {
-      errors.push('Geburtsdatum ist erforderlich.');
-    } else {
-      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!dateRegex.test(data.birthDate.trim())) {
-        errors.push('Ungültiges Datumsformat (Erwartet: YYYY-MM-DD).');
-      }
-    }
-
-    if (data.latitude !== undefined && (isNaN(data.latitude) || data.latitude < -90 || data.latitude > 90)) {
-      errors.push('Breitengrad (Latitude) muss zwischen -90 und 90 liegen.');
-    }
-
-    if (data.longitude !== undefined && (isNaN(data.longitude) || data.longitude < -180 || data.longitude > 180)) {
-      errors.push('Längengrad (Longitude) muss zwischen -180 und 180 liegen.');
-    }
-
-    const sanitizedTime = normalizeTimeString(data.birthTime, data.isUnknownTime);
 
     return {
-      isValid: errors.length === 0,
-      errors,
+      isValid: true,
+      errors: [],
       sanitizedProfile: {
-        name: data.name?.trim(),
-        birthDate: data.birthDate?.trim(),
-        birthTime: sanitizedTime,
-        isUnknownTime: Boolean(data.isUnknownTime),
-        cityName: data.cityName?.trim() || 'Wien, Österreich',
-        latitude: typeof data.latitude === 'number' ? data.latitude : 48.2082,
-        longitude: typeof data.longitude === 'number' ? data.longitude : 16.3738,
-        timezone: data.timezone?.trim() || 'Europe/Vienna',
-        houseSystem: data.houseSystem || 'placidus'
+        name: result.value.name,
+        birthDate: result.value.birthDate,
+        birthTime: result.value.birthTime,
+        isUnknownTime: result.value.isUnknownTime,
+        cityName: result.value.cityName,
+        latitude: result.value.latitude,
+        longitude: result.value.longitude,
+        timezone: result.value.timezone,
+        houseSystem: result.value.houseSystem
       }
     };
   }
 
   /**
-   * Liefert eine zusammenfassende Übersicht über alle gespeicherten Benutzer-Profile
+   * Liefert eine zusammenfassende Übersicht über alle Benutzer-Profile
    */
   public static getClusterSummary(): UserClusterSummary {
     const profiles = getClientProfiles();
@@ -102,10 +117,14 @@ export class UserManagementAgent {
 
     const sunSignDistribution: Record<string, number> = {};
     const lifePathDistribution: Record<number, number> = {};
+    const roleDistribution: Record<string, number> = {};
+    const elementalBreakdown = { fire: 0, earth: 0, air: 0, water: 0 };
 
     profiles.forEach(p => {
       if (p.sunSign) {
         sunSignDistribution[p.sunSign] = (sunSignDistribution[p.sunSign] || 0) + 1;
+        const elem = ELEMENT_MAP[p.sunSign];
+        if (elem) elementalBreakdown[elem]++;
       }
       if (p.lifePathNumber) {
         lifePathDistribution[p.lifePathNumber] = (lifePathDistribution[p.lifePathNumber] || 0) + 1;
@@ -115,15 +134,16 @@ export class UserManagementAgent {
     return {
       totalProfiles: profiles.length,
       activeProfile: active,
-      elementalBreakdown: {},
+      elementalBreakdown,
       sunSignDistribution,
       lifePathDistribution,
+      roleDistribution,
       profiles
     };
   }
 
   /**
-   * Erstellt oder aktualisiert ein Profil sicher über den Agenten
+   * Erstellt oder aktualisiert ein Profil im Client-Store
    */
   public static upsertProfile(profile: Omit<SavedProfile, 'id' | 'updatedAt'> & { id?: string }): SavedProfile {
     const validation = this.validateProfileData(profile);
@@ -146,7 +166,7 @@ export class UserManagementAgent {
   }
 
   /**
-   * Wechselt das aktive Benutzerprofil
+   * Wechselt das aktive Profil im Client
    */
   public static switchActiveProfile(profileId: string): SavedProfile | null {
     if (typeof window === 'undefined') return null;
@@ -160,74 +180,184 @@ export class UserManagementAgent {
   }
 
   /**
-   * Löscht ein Profil sicher
+   * Löscht ein Profil im Client
    */
   public static removeProfile(profileId: string): boolean {
     return deleteClientProfile(profileId);
   }
 
+  // ==========================================
+  // BACKEND SYNCHRONISATION & REST API CALLS
+  // ==========================================
+
   /**
-   * DSGVO-Datenexport aller Profile als JSON
+   * Führt einen bidirektionalen Sync zwischen Client LocalStorage und SQLite-Backend durch
    */
-  public static exportProfilesAsJson(): string {
-    const profiles = getClientProfiles();
-    const exportPayload: ProfileExportData = {
-      version: 'NEXUS-V1.0',
-      exportedAt: new Date().toISOString(),
-      count: profiles.length,
-      profiles
-    };
-    return JSON.stringify(exportPayload, null, 2);
+  public static async syncWithBackend(): Promise<{ success: boolean; syncedCount: number; serverProfiles: UserProfileRecord[]; stats?: DatabaseStats; error?: string }> {
+    if (typeof window === 'undefined') {
+      return { success: false, syncedCount: 0, serverProfiles: [], error: 'Nur im Browser ausführbar' };
+    }
+
+    try {
+      const clientProfiles = getClientProfiles();
+      const res = await fetch('/api/users/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientProfiles })
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `HTTP ${res.status}`);
+      }
+
+      const json = await res.json();
+      if (json.success && Array.isArray(json.serverProfiles)) {
+        // Map server profiles to SavedProfile structure for LocalStorage
+        const mappedProfiles: SavedProfile[] = json.serverProfiles.map((sp: UserProfileRecord) => ({
+          id: sp.id,
+          name: sp.name,
+          birthDate: sp.birthDate,
+          birthTime: sp.birthTime,
+          cityName: sp.cityName,
+          latitude: sp.latitude,
+          longitude: sp.longitude,
+          timezone: sp.timezone,
+          houseSystem: sp.houseSystem,
+          sunSign: sp.sunSign,
+          moonSign: sp.moonSign,
+          ascendantSign: sp.ascendantSign,
+          lifePathNumber: sp.lifePathNumber,
+          updatedAt: sp.updatedAt
+        }));
+
+        localStorage.setItem('astro_nexus_saved_profiles_v1', JSON.stringify(mappedProfiles));
+        
+        // Find if server has an active profile marked with is_current
+        const serverCurrent = json.serverProfiles.find((p: UserProfileRecord) => p.isCurrent === 1);
+        if (serverCurrent) {
+          localStorage.setItem('astro_nexus_current_profile_id', serverCurrent.id);
+        }
+
+        window.dispatchEvent(new CustomEvent('astro_profiles_updated', { detail: mappedProfiles }));
+        window.dispatchEvent(new CustomEvent('astro_backend_synced', { detail: json }));
+
+        return {
+          success: true,
+          syncedCount: json.syncedCount || 0,
+          serverProfiles: json.serverProfiles,
+          stats: json.stats
+        };
+      }
+
+      return { success: false, syncedCount: 0, serverProfiles: [], error: 'Unerwartetes Server-Antwortformat' };
+    } catch (e: any) {
+      console.warn('Backend Sync Notice:', e.message);
+      return { success: false, syncedCount: 0, serverProfiles: [], error: e.message || String(e) };
+    }
   }
 
   /**
-   * Importiert Profile aus einem JSON-Export
+   * Lädt alle Benutzer aus dem SQLite Backend
    */
-  public static importProfilesFromJson(jsonStr: string): { importedCount: number; errors: string[] } {
-    const errors: string[] = [];
-    let importedCount = 0;
-
+  public static async fetchBackendUsers(filter: { query?: string; sunSign?: string; role?: string } = {}): Promise<UserProfileRecord[]> {
     try {
-      const parsed = JSON.parse(jsonStr);
-      const profileList: SavedProfile[] = Array.isArray(parsed) 
-        ? parsed 
-        : Array.isArray(parsed.profiles) 
-          ? parsed.profiles 
-          : [];
+      const params = new URLSearchParams();
+      if (filter.query) params.set('query', filter.query);
+      if (filter.sunSign) params.set('sunSign', filter.sunSign);
+      if (filter.role) params.set('role', filter.role);
 
-      if (profileList.length === 0) {
-        errors.push('Keine gültigen Profile im Import gefunden.');
-        return { importedCount: 0, errors };
-      }
-
-      profileList.forEach((raw, idx) => {
-        const val = this.validateProfileData(raw);
-        if (val.isValid && val.sanitizedProfile) {
-          saveClientProfile({
-            id: raw.id,
-            name: val.sanitizedProfile.name!,
-            birthDate: val.sanitizedProfile.birthDate!,
-            birthTime: val.sanitizedProfile.birthTime!,
-            isUnknownTime: val.sanitizedProfile.isUnknownTime,
-            cityName: val.sanitizedProfile.cityName!,
-            latitude: val.sanitizedProfile.latitude!,
-            longitude: val.sanitizedProfile.longitude!,
-            timezone: val.sanitizedProfile.timezone!,
-            houseSystem: val.sanitizedProfile.houseSystem || 'placidus',
-            sunSign: raw.sunSign,
-            moonSign: raw.moonSign,
-            ascendantSign: raw.ascendantSign,
-            lifePathNumber: raw.lifePathNumber
-          });
-          importedCount++;
-        } else {
-          errors.push(`Profil #${idx + 1} (${raw.name || 'Unbekannt'}) übersprungen: ${val.errors.join(', ')}`);
-        }
-      });
-    } catch (e: any) {
-      errors.push(`Fehler beim Parsen der JSON-Daten: ${e.message || String(e)}`);
+      const res = await fetch(`/api/users?${params.toString()}`);
+      if (!res.ok) return [];
+      const json = await res.json();
+      return json.success && Array.isArray(json.data) ? json.data : [];
+    } catch (e) {
+      console.error('Fetch backend users error:', e);
+      return [];
     }
+  }
 
-    return { importedCount, errors };
+  /**
+   * Speichert ein Profil im Backend
+   */
+  public static async saveToBackend(profileData: Partial<UserProfileRecord>): Promise<UserProfileRecord | null> {
+    try {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileData)
+      });
+      if (!res.ok) return null;
+      const json = await res.json();
+      return json.success ? json.data : null;
+    } catch (e) {
+      console.error('Save to backend error:', e);
+      return null;
+    }
+  }
+
+  /**
+   * Löscht ein Profil aus dem Backend
+   */
+  public static async deleteFromBackend(id: string): Promise<boolean> {
+    try {
+      const res = await fetch(`/api/users/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+      return res.ok;
+    } catch (e) {
+      console.error('Delete from backend error:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Aktiviert ein Profil im Backend
+   */
+  public static async activateInBackend(id: string): Promise<boolean> {
+    try {
+      const res = await fetch(`/api/users/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'activate' })
+      });
+      return res.ok;
+    } catch (e) {
+      console.error('Activate in backend error:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Löst den Download des JSON- oder CSV-Exports aus
+   */
+  public static triggerExportDownload(format: 'json' | 'csv' = 'json') {
+    if (typeof window === 'undefined') return;
+    window.location.href = `/api/users/export?format=${format}`;
+  }
+
+  /**
+   * Importiert Profile aus einer Datei (Upload)
+   */
+  public static async uploadImportFile(file: File): Promise<{ success: boolean; importedCount: number; errors?: string[] }> {
+    try {
+      const content = await file.text();
+      const parsed = JSON.parse(content);
+      
+      const res = await fetch('/api/users/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsed)
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        // Trigger auto-sync to pull newly imported profiles into local store
+        await this.syncWithBackend();
+      }
+      return json;
+    } catch (e: any) {
+      return { success: false, importedCount: 0, errors: [e.message || 'Dateifehler'] };
+    }
   }
 }

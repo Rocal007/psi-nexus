@@ -25,46 +25,13 @@ import PersonalitySummarySection from '../components/interpretation/PersonalityS
 import ShadowHealthDialecticSection from '../components/interpretation/ShadowHealthDialecticSection.astro';
 import HumanDesignSection from '../components/interpretation/HumanDesignSection.astro';
 import EeatTrustSection from '../components/ui/EeatTrustSection.astro';
-import { generateNatalChart, type ChartInput } from '../lib/astrology/engine';
-import { generatePersonalitySummary } from '../lib/astrology/personalitySynthesis';
-import { calculateHumanDesignChart } from '../lib/humandesign/engine';
+import { DashboardController } from '../lib/controllers/dashboardController';
 
-// Extract query parameters or use defaults
-const searchParams = Astro.url.searchParams;
-const hasExplicitQuery = searchParams.has('birthDate') || searchParams.has('name');
-
-const birthDate = searchParams.get('birthDate') || '1991-05-05';
-const birthTime = searchParams.get('birthTime') || '13:00';
-const cityName = searchParams.get('cityName') || 'Wien';
-const latitude = parseFloat(searchParams.get('latitude') || '48.2082');
-const longitude = parseFloat(searchParams.get('longitude') || '16.3738');
-const timezone = searchParams.get('timezone') || 'Europe/Vienna';
-const userName = searchParams.get('name') || '';
-const houseSystem = (searchParams.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as 'placidus' | 'equal';
-
-const chartInput: ChartInput = {
-  birthDate,
-  birthTime,
-  cityName,
-  latitude,
-  longitude,
-  timezone,
-  name: userName,
-  houseSystem
-};
-
-// Generate complete chart calculations
-const chart = generateNatalChart(chartInput);
-const personalitySummary = generatePersonalitySummary(chart);
-const hdChart = calculateHumanDesignChart({
-  name: userName,
-  birthDate,
-  birthTime,
-  cityName,
-  latitude,
-  longitude,
-  timezone
-});
+// Resolve full view model through DTO boundary & controller
+const viewModel = DashboardController.handleRequest(Astro.url.searchParams);
+const { hasExplicitQuery, chartInput, chart, personalitySummary, hdChart } = viewModel;
+const { birthDate, birthTime, cityName, latitude, longitude, timezone, houseSystem } = chartInput;
+const userName = chartInput.name || '';
 
 const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString('de-DE', {
   day: '2-digit',
@@ -966,18 +933,6 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
           houseSystem: (params.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as any
         };
         const chart = generateNatalChart(initialInput);
-        updateDomWithChart(chart);
-      } else if (activeProfile) {
-        const chart = generateNatalChart({
-          birthDate: activeProfile.birthDate,
-          birthTime: activeProfile.birthTime,
-          cityName: activeProfile.cityName,
-          latitude: activeProfile.latitude,
-          longitude: activeProfile.longitude,
-          timezone: activeProfile.timezone,
-          name: activeProfile.name,
-          houseSystem: activeProfile.houseSystem
-        });
         updateDomWithChart(chart);
       } else {
         // App is opened fresh without a profile: ensure creation form is open and start page is clean

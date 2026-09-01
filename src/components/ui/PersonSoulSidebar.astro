@@ -152,24 +152,34 @@ const SEMANTIC_CHAPTERS = [
         </div>
       </div>
 
-      <!-- Quick Actions (Edit / New Profile) -->
-      <div class="pt-2 border-t border-white/10 flex items-center justify-between gap-2 text-xs">
-        <a
-          href="#form-section"
-          id="sidebarEditBtn"
-          class="flex-1 py-1.5 px-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
+      <!-- Quick Actions (Edit / New Profile / User Manager) -->
+      <div class="pt-2 border-t border-white/10 space-y-1.5 text-xs">
+        <div class="flex items-center justify-between gap-2">
+          <a
+            href="#form-section"
+            id="sidebarEditBtn"
+            class="flex-1 py-1.5 px-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <span>✏️</span>
+            <span>Daten anpassen</span>
+          </a>
+          <a
+            href="#form-section"
+            id="sidebarNewBtn"
+            class="py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold transition-all flex items-center gap-1 cursor-pointer"
+          >
+            <span>✧</span>
+            <span>Neu</span>
+          </a>
+        </div>
+        <button
+          type="button"
+          id="sidebarUserManagerBtn"
+          class="w-full py-1.5 px-2.5 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 font-bold transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <span>✏️</span>
-          <span>Daten anpassen</span>
-        </a>
-        <a
-          href="#form-section"
-          id="sidebarNewBtn"
-          class="py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold transition-all flex items-center gap-1 cursor-pointer"
-        >
-          <span>✧</span>
-          <span>Neu</span>
-        </a>
+          <span>👥</span>
+          <span>Alle Profile verwalten (SQLite)</span>
+        </button>
       </div>
     </div>
   </div>
@@ -255,6 +265,7 @@ const SEMANTIC_CHAPTERS = [
 
     const editBtn = document.getElementById('sidebarEditBtn');
     const newBtn = document.getElementById('sidebarNewBtn');
+    const userManagerBtn = document.getElementById('sidebarUserManagerBtn');
     const formContainer = document.getElementById('formContainer');
 
     editBtn?.addEventListener('click', (e) => {
@@ -266,6 +277,11 @@ const SEMANTIC_CHAPTERS = [
     newBtn?.addEventListener('click', (e) => {
       e.preventDefault();
       window.dispatchEvent(new CustomEvent('astro_open_profile_creator'));
+    });
+
+    userManagerBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('astro_open_user_manager'));
     });
   }
 
