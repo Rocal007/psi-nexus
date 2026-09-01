@@ -1226,26 +1226,100 @@
   background: rgba(212, 175, 55, 0.85);
 }
 
-/* Print styling */
+/* Print & PDF Export Styling (Luxury Kosmisches Seelenbuch Dossier) */
 @media print {
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+
   body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
   }
-  .no-print, #folderTabsContainer, .tab-nav-btn, .constellation-bg-svg, #floatingThemeWidget {
+
+  /* Hide interactive controls, animations & overlays */
+  .no-print,
+  #folderTabsContainer,
+  .tab-nav-btn,
+  .constellation-bg-svg,
+  #floatingThemeWidget,
+  #cosmicMenuDrawer,
+  .theme-vignette,
+  .medieval-texture-overlay,
+  .cosmic-hubble-bg,
+  #headerActivePersonBadge,
+  #decoderToggleHeader,
+  header button,
+  footer .seal-pill,
+  button {
     display: none !important;
   }
+
+  /* Reveal all dossier panels sequentially */
   .tab-content-panel {
     display: block !important;
     opacity: 1 !important;
     transform: none !important;
+    page-break-inside: avoid;
     break-inside: avoid;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-  .cosmic-glass, .cosmic-glass-gold, .cosmic-glass-royal {
+
+  /* Force clean white background and crisp dark text on glass containers */
+  .cosmic-glass,
+  .cosmic-glass-gold,
+  .cosmic-glass-royal,
+  .boxed-frame,
+  .boxed-canvas,
+  .p-4,
+  .p-5,
+  .p-6,
+  .p-8,
+  .bg-slate-900,
+  .bg-slate-950,
+  .bg-black\/40 {
     background: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    color: #000000 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
     box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* High contrast text overrides */
+  .text-white,
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-300,
+  .text-slate-400 {
+    color: #1e293b !important;
+  }
+
+  .text-amber-300,
+  .text-amber-400,
+  .cosmic-gold-gradient {
+    color: #b45309 !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    font-weight: 800 !important;
+  }
+
+  .text-cyan-300,
+  .text-cyan-400 {
+    color: #0369a1 !important;
+  }
+
+  .text-purple-300,
+  .text-purple-400 {
+    color: #6d28d9 !important;
+  }
+
+  /* Ensure Radix Wheel SVG prints clearly */
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
   }
 }

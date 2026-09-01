@@ -15,35 +15,159 @@ const {
   description = 'Berechne dein exaktes esoterisches Geburtshoroskop (Radix) mit Planetenständen, Placidus-Häusern, Aszendent, karmischem Seelenauftrag und Sieben-Strahlen-Analyse.'
 } = Astro.props;
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://psi-nexus.org').href;
+const ogImageURL = new URL('/favicon.svg', Astro.site || 'https://psi-nexus.org').href;
+
 const schemaData = {
   '@context': 'https://schema.org',
-  '@type': 'EducationalApplication',
-  name: 'Ψ-NEXUS – Esoterisches Radix & Seelenplan Horoskop',
-  alternateName: 'Ψ-NEXUS E-E-A-T Soul Matrix',
-  applicationCategory: 'EducationalApplication',
-  operatingSystem: 'All',
-  inLanguage: 'de-AT',
-  audience: {
-    '@type': 'Audience',
-    audienceType: 'Self-Improvement & Esoteric Psychology'
-  },
-  author: {
-    '@type': 'Organization',
-    name: 'Ψ-NEXUS Heritage Institute',
-    description: 'Institut für astronomische Ephemeridenberechnung & Neurodidaktik nach Vera F. Birkenbihl',
-    knowsAbout: [
-      'Himmelsmechanik nach VSOP87',
-      'Placidus Häusersystem',
-      'Pythagoräische Numerologie',
-      'Analytische Psychologie & Archetypen nach C.G. Jung'
-    ]
-  },
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'EUR'
-  },
-  description
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://psi-nexus.org/#website',
+      url: 'https://psi-nexus.org',
+      name: 'Ψ-NEXUS – Esoterisches Radix & Seelenplan Horoskop',
+      description: 'Präzisions-Berechnung des esoterischen Geburtshoroskops (Radix) mit VSOP87-Ephemeriden, Placidus-Häusern, Sieben Strahlen & pythagoräischer Numerologie.',
+      inLanguage: ['de-AT', 'de-DE', 'de-CH'],
+      publisher: {
+        '@id': 'https://psi-nexus.org/#organization'
+      }
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://psi-nexus.org/#organization',
+      name: 'Ψ-NEXUS Heritage Institute',
+      url: 'https://psi-nexus.org',
+      logo: 'https://psi-nexus.org/favicon.svg',
+      description: 'Institut für astronomische Ephemeridenberechnung, E-E-A-T-Wissensgraphen & Neurodidaktik nach Vera F. Birkenbihl.',
+      knowsAbout: [
+        'Himmelsmechanik nach VSOP87 & IAU 2006 Standard',
+        'Placidus Häusersystem und Pol-Berechnungen',
+        'Pythagoräische 9-Zahlen-Harmonik & Lebenszahlen',
+        'Sieben Strahlen esoterische Psychologie',
+        'Analytische Psychologie & Archetypen nach C.G. Jung',
+        'Vera F. Birkenbihl Neurodidaktik (Pauken -> 0)'
+      ]
+    },
+    {
+      '@type': ['EducationalApplication', 'SoftwareApplication'],
+      '@id': 'https://psi-nexus.org/#application',
+      name: 'Ψ-NEXUS Soul Matrix & Radix Calculator',
+      alternateName: 'Ψ-NEXUS E-E-A-T Soul Matrix',
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'All (Web Browser, Offline-First SQLite)',
+      inLanguage: ['de-AT', 'de-DE', 'de-CH'],
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock'
+      },
+      featureList: [
+        'VSOP87 Bogensekunden-genaue Ephemeriden',
+        'Placidus & Equal Häuserberechnung',
+        'Interaktives 360° Radix-Rad mit Aspektmatrix',
+        'Pythagoräische Lebenszahl- & Seelenanalyse',
+        'Sieben-Strahlen Seelenstrahl-Diagnostik',
+        'Human Design Körpergrafik & Zentren-Synthese',
+        'Astro-Kartographie & Geodätische Resonanz'
+      ],
+      author: {
+        '@id': 'https://psi-nexus.org/#organization'
+      },
+      description
+    },
+    {
+      '@type': 'HowTo',
+      '@id': 'https://psi-nexus.org/#howto-radix',
+      name: 'Wie berechnet man ein esoterisches Radix-Horoskop & Seelenplan?',
+      description: 'Schritt-für-Schritt Anleitung zur Erstellung eines bogensekunden-genauen Geburtshoroskops mit Planetenständen, Placidus-Häuserspitzen und Seelenstrahl-Analyse.',
+      step: [
+        {
+          '@type': 'HowToStep',
+          position: 1,
+          name: 'Geburtsdaten & Ort erfassen',
+          text: 'Eingabe des Geburtsdatums, der exakten Geburtszeit und des Geburtsortes zur Bestimmung der geographischen Koordinaten (Breite/Länge) und Zeitzone.'
+        },
+        {
+          '@type': 'HowToStep',
+          position: 2,
+          name: 'Ephemeriden & Häuserspitzen berechnen',
+          text: 'Automatische Ausführung der VSOP87-Himmelsmechanik und trigonometrische Placidus-Polberechnung zur Bestimmung von Aszendent (AC) und Medium Coeli (MC).'
+        },
+        {
+          '@type': 'HowToStep',
+          position: 3,
+          name: 'Seelenmatrix & Lebenszahlen entschlüsseln',
+          text: 'Synthese der Planetenkräfte mit der pythagoräischen Lebenszahl, karmischen Mondknoten und den 7 Strahlen nach der Birkenbihl-Methode.'
+        }
+      ]
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://psi-nexus.org/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Was ist ein Radix-Horoskop?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Ein Radix-Horoskop (von lat. radix = Wurzel) ist das astronomisch exakte Abbild des Sternenhimmels zum Zeitpunkt und am geographischen Ort der Geburt. Es zeigt die Positionen der Gestirne in den 12 Tierkreiszeichen und 12 astrologischen Häusern.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Was bedeutet der Aszendent (AC)?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Der Aszendent ist das Tierkreiszeichen, das zum exakten Geburtszeitpunkt am östlichen Horizont aufging. Er markiert die Schnittstelle zwischen Innen- und Außenwelt und symbolisiert das Seelentor sowie die spontane Verhaltensweise eines Menschen.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Wie wird die pythagoräische Lebenszahl berechnet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Die Lebenszahl wird durch die vollständige Quersummenbildung aller Ziffern des Geburtsdatums (Tag + Monat + Jahr) ermittelt und auf eine einstellige Zahl (1–9) oder eine Meisterzahl (11, 22, 33) reduziert.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Warum nutzt Ψ-NEXUS das VSOP87- und Placidus-System?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'VSOP87 ist die von Astronomen und Raumfahrtbehörden genutzte Ephemeriden-Theorie für bogensekunden-genaue Planetenpositionen. Das Placidus-Häusersystem projiziert den Raum-Zeit-Halbbogen der Himmelskugel exakt auf die individuelle Erdposition.'
+          }
+        }
+      ]
+    },
+    {
+      '@type': 'DefinedTermSet',
+      '@id': 'https://psi-nexus.org/#glossary',
+      name: 'Ψ-NEXUS Esoterisches & Astronomisches Glossar',
+      hasDefinedTerm: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'Radix',
+          description: 'Astronomisches Grundhoroskop und Wurzel-Konstellation zum Geburtszeitpunkt.'
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'Aszendent',
+          description: 'Aufsteigendes Tierkreiszeichen am Osthorizont, Seelentor und vitale Ausdruckskraft.'
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'Medium Coeli',
+          description: 'Oberer Schnittpunkt des Meridians mit der Ekliptik, Symbol für Berufung und Lebensziel.'
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'Placidus Häuser',
+          description: 'Trigonometrisches Raum-Zeit-System zur Einteilung der 12 Lebensbereiche.'
+        }
+      ]
+    }
+  ]
 };
 ---
 
@@ -57,10 +181,33 @@ const schemaData = {
     <title>{title}</title>
     <meta name="description" content={description} />
 
-    <!-- Open Graph -->
+    <!-- Canonical & Alternate Hreflang URLs -->
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="de-AT" href={canonicalURL} />
+    <link rel="alternate" hreflang="de-DE" href={canonicalURL} />
+    <link rel="alternate" hreflang="de-CH" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+
+    <!-- Robots & Crawler Directives (Industrial Gold Standard) -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Open Graph Protocol -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Ψ-NEXUS" />
+    <meta property="og:locale" content="de_AT" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    <meta property="og:locale:alternate" content="de_CH" />
+    <meta property="og:image" content={ogImageURL} />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
 
     <!-- Google Fonts: Multi-Theme Typography Suite -->
     <!-- Cosmic: Cinzel, Cormorant Garamond, Lato, Oswald -->

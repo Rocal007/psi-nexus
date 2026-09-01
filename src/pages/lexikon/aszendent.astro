@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://psi-nexus.org/' },
+    { '@type': 'ListItem', position: 2, name: 'Lexikon', item: 'https://psi-nexus.org/lexikon/' },
+    { '@type': 'ListItem', position: 3, name: 'Der Aszendent (AC)', item: 'https://psi-nexus.org/lexikon/aszendent' }
+  ]
+};
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Der Aszendent (AC) in der Astrologie: Bedeutung, Berechnung & Die 12 Seelentore',
+  description: 'Umfassendes Kompendium über den Aszendenten (1. Haus), die exakte astronomische Berechnung und die archetypische Wirkung aller 12 Tierkreiszeichen.',
+  inLanguage: 'de-AT',
+  author: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS Heritage Institute'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS',
+    logo: 'https://psi-nexus.org/favicon.svg'
+  },
+  mainEntityOfPage: 'https://psi-nexus.org/lexikon/aszendent'
+};
+
+const ASCENDANTS = [
+  { sign: 'Widder', symbol: '♈', element: 'Feuer', ruler: 'Mars', essence: 'Pioniergeist, Durchsetzungskraft, spontaner Tatendrang und mutiges Auftreten.' },
+  { sign: 'Stier', symbol: '♉', element: 'Erde', ruler: 'Venus', essence: 'Stabilität, Sinnlichkeit, Ausdauer, Naturverbundenheit und pragmatischer Realismus.' },
+  { sign: 'Zwillinge', symbol: '♊', element: 'Luft', ruler: 'Merkur', essence: 'Neugier, Vielseitigkeit, kommunikative Leichtigkeit und wacher Verstand.' },
+  { sign: 'Krebs', symbol: '♋', element: 'Wasser', ruler: 'Mond', essence: 'Feinfühligkeit, Schutzbedürfnis, emotionale Tiefe und mütterlich-nährende Aura.' },
+  { sign: 'Löwe', symbol: '♌', element: 'Feuer', ruler: 'Sonne', essence: 'Souveränität, Lebensfreude, magnetische Ausstrahlung und natürliche Führungskraft.' },
+  { sign: 'Jungfrau', symbol: '♍', element: 'Erde', ruler: 'Merkur', essence: 'Analytischer Scharfsinn, Präzision, Dienstbereitschaft und Ordnungsprinzip.' },
+  { sign: 'Waage', symbol: '♎', element: 'Luft', ruler: 'Venus', essence: 'Diplomatie, Sinn für Harmonie & Ästhetik, Beziehungsfokus und Eleganz.' },
+  { sign: 'Skorpion', symbol: '♏', element: 'Wasser', ruler: 'Pluto / Mars', essence: 'Tiefgang, Intensität, unbestechlicher Spürsinn und transformative Willenskraft.' },
+  { sign: 'Schütze', symbol: '♐', element: 'Feuer', ruler: 'Jupiter', essence: 'Optimismus, Weitblick, Sinnsuche, philosophischer Freigeist und Enthusiasmus.' },
+  { sign: 'Steinbock', symbol: '♑', element: 'Erde', ruler: 'Saturn', essence: 'Verantwortungsbewusstsein, Disziplin, Ausdauer und strukturierte Beharrlichkeit.' },
+  { sign: 'Wassermann', symbol: '♒', element: 'Luft', ruler: 'Uranus / Saturn', essence: 'Individualismus, Innovationsgeist, Humanismus und unkonventionelle Originalität.' },
+  { sign: 'Fische', symbol: '♓', element: 'Wasser', ruler: 'Neptun / Jupiter', essence: 'Intuition, universelle Empathie, spirituelle Durchlässigkeit und Hingabe.' }
+];
+---
+
+<Layout
+  title="Der Aszendent (AC) | Bedeutung, Berechnung & Die 12 Tore | Ψ-NEXUS"
+  description="Was bedeutet dein Aszendent? Erfahre die exakte astronomische Definition, die Bedeutung der 12 Aszendenten-Zeichen und wie das Seelentor dein Leben prägt."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <div class="boxed-canvas py-8 space-y-10 max-w-5xl mx-auto px-4">
+    
+    <!-- Navigation Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 font-tech">
+      <a href="/" class="hover:text-amber-300">Startseite</a>
+      <span>/</span>
+      <a href="/lexikon/" class="hover:text-amber-300">Lexikon</a>
+      <span>/</span>
+      <span class="text-amber-400">Aszendent (AC)</span>
+    </nav>
+
+    <!-- Header Article Section -->
+    <article class="space-y-8">
+      <div class="boxed-frame space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold font-tech">
+          <span>↑ 1. Astrologisches Haus</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white font-cinzel">
+          Der Aszendent (AC): <span class="cosmic-gold-gradient">Das Tor der Seele</span>
+        </h1>
+
+        <!-- Standalone AI Quotable Definition -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-cyan-500/40 text-slate-200 text-sm md:text-base font-lato leading-relaxed space-y-2">
+          <p>
+            <strong class="text-cyan-300 font-tech">Stand-alone Definition:</strong> Der <strong>Aszendent (AC)</strong> ist dasjenige Tierkreiszeichen, das zum exakten Geburtszeitpunkt am östlichen Horizont des Geburtsortes aufsteigt. Er markiert den Anfang des ersten astrologischen Hauses und beschreibt die vitale Schnittstelle zwischen der inneren Wesensnatur und der äußeren Umwelt.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Mechanics (Cicero-7Q Structured) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="cosmic-glass rounded-3xl p-6 border border-white/10 space-y-3">
+          <h2 class="text-lg font-bold text-amber-300 font-cinzel flex items-center gap-2">
+            <span>🔬</span>
+            <span>Astronomische Berechnung</span>
+          </h2>
+          <p class="text-xs text-slate-300 font-lato leading-relaxed">
+            Weil sich die Erde in 24 Stunden einmal um die eigene Achse dreht, wechselt der Aszendent ca. alle zwei Stunden das Tierkreiszeichen. Zur exakten Berechnung sind die genaue <strong>Geburtsminute</strong> und die <strong>geographischen Koordinaten</strong> (Breite & Länge) zwingend erforderlich.
+          </p>
+        </div>
+
+        <div class="cosmic-glass rounded-3xl p-6 border border-white/10 space-y-3">
+          <h2 class="text-lg font-bold text-cyan-300 font-cinzel flex items-center gap-2">
+            <span>🎭</span>
+            <span>Unterschied: Sonne vs. Aszendent</span>
+          </h2>
+          <p class="text-xs text-slate-300 font-lato leading-relaxed">
+            Das <strong>Sonnenzeichen</strong> (Sternzeichen) spiegelt den inneren, bewussten Wesenskern wider – <em>wer</em> du im Grunde bist. Der <strong>Aszendent</strong> bestimmt dein spontanes Verhaltensmuster, deinen ersten Eindruck und den Filter, durch den du Erfahrungen verarbeitest – <em>wie</em> du in der Welt handelst.
+          </p>
+        </div>
+      </div>
+
+      <!-- Compendium of all 12 Ascendant Signs -->
+      <div class="space-y-6">
+        <div class="border-b border-white/10 pb-3">
+          <h2 class="text-2xl font-black text-white font-cinzel">
+            Die 12 Aszendenten im Überblick
+          </h2>
+          <p class="text-xs text-slate-400">Archetypische Prägungen, Herrscherplaneten und Wesensmerkmale</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ASCENDANTS.map((asc, index) => (
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-white/10 hover:border-amber-500/40 transition-all space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl text-amber-300">{asc.symbol}</span>
+                  <h3 class="font-bold text-white text-base font-cinzel">{asc.sign}</h3>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400">{asc.element}</span>
+              </div>
+
+              <div class="text-[11px] text-amber-300/90 font-tech">
+                Herrscherplanet: <span class="text-white font-semibold">{asc.ruler}</span>
+              </div>
+
+              <p class="text-xs text-slate-300 font-lato leading-relaxed">
+                {asc.essence}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="p-8 rounded-3xl cosmic-glass border border-amber-500/30 text-center space-y-4 shadow-2xl">
+        <h2 class="text-xl sm:text-2xl font-black text-white font-cinzel">
+          Berechne jetzt deinen exakten Aszendenten
+        </h2>
+        <p class="text-xs text-slate-300 max-w-xl mx-auto font-lato">
+          Trage deine Geburtszeit und deinen Geburtsort in den Ψ-NEXUS Horoskop-Rechner ein, um deinen Aszendenten auf die Bogensekunde genau zu berechnen.
+        </p>
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 text-slate-950 font-black text-sm hover:scale-105 transition-all shadow-lg font-tech"
+        >
+          <span>✦ Zum Horoskop-Rechner</span>
+        </a>
+      </div>
+
+    </article>
+
+  </div>
+</Layout>

@@ -91,6 +91,15 @@ const SEMANTIC_MENU_CHAPTERS = [
     <div class="flex items-center gap-2 sm:gap-3">
       
       <a
+        href="/lexikon/"
+        class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-amber-300 transition-all cursor-pointer"
+        title="Zum esoterischen Wissenslexikon"
+      >
+        <span>📖</span>
+        <span>Lexikon</span>
+      </a>
+
+      <a
         href="#decoderToggleHeader"
         class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-amber-300 transition-all cursor-pointer"
       >
@@ -101,11 +110,11 @@ const SEMANTIC_MENU_CHAPTERS = [
       <button
         type="button"
         onclick="window.print()"
-        class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
-        title="Als PDF drucken oder exportieren"
+        class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-amber-300 transition-all cursor-pointer"
+        title="Als druckreifes Seelenbuch exportieren (PDF / Druck)"
       >
         <span>⎙</span>
-        <span>PDF</span>
+        <span>PDF / Druck</span>
       </button>
 
       <button
@@ -246,12 +255,25 @@ const SEMANTIC_MENU_CHAPTERS = [
       <div class="space-y-2 pt-2 border-t border-white/5">
         <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-tech">Direkt-Werkzeuge</div>
         <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <a
+            href="/lexikon/"
+            class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
+          >
+            📖 Lexikon
+          </a>
+          <button
+            type="button"
+            onclick="window.print()"
+            class="p-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:bg-white/10 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
+          >
+            ⎙ PDF / Druck
+          </button>
           <button
             type="button"
             id="drawerUserManagerBtn"
             class="p-2.5 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
           >
-            👥 Benutzer (SQLite)
+            👥 Benutzer (DB)
           </button>
           <a
             href="#decoderToggleHeader"

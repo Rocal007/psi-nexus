@@ -25,6 +25,7 @@ import PersonalitySummarySection from '../components/interpretation/PersonalityS
 import ShadowHealthDialecticSection from '../components/interpretation/ShadowHealthDialecticSection.astro';
 import HumanDesignSection from '../components/interpretation/HumanDesignSection.astro';
 import EeatTrustSection from '../components/ui/EeatTrustSection.astro';
+import GseoFaqSection from '../components/ui/GseoFaqSection.astro';
 import { DashboardController } from '../lib/controllers/dashboardController';
 
 // Resolve full view model through DTO boundary & controller
@@ -710,6 +711,11 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
     <div id="decoderToggleHeader" class="mt-8">
       <BirkenbihlDecoder />
     </div>
+  </div>
+
+  <!-- GSEO Knowledge Matrix & AI-Quotable FAQ Section -->
+  <div class="mt-8">
+    <GseoFaqSection />
   </div>
 
   <!-- E-E-A-T Quality, Methodology & Trust Framework (Subtle Footer Anchor) -->

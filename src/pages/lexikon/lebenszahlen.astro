@@ -1,0 +1,155 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://psi-nexus.org/' },
+    { '@type': 'ListItem', position: 2, name: 'Lexikon', item: 'https://psi-nexus.org/lexikon/' },
+    { '@type': 'ListItem', position: 3, name: 'Pythagoräische Lebenszahlen', item: 'https://psi-nexus.org/lexikon/lebenszahlen' }
+  ]
+};
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Pythagoräische Lebenszahlen (1–9 & Meisterzahlen 11, 22, 33): Berechnung & Seelenplan',
+  description: 'Komplette Anleitung zur Berechnung der Lebenszahl nach Pythagoras mit archetypischer Deutung der Zahlen 1 bis 9 und Meisterzahlen.',
+  inLanguage: 'de-AT',
+  author: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS Heritage Institute'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS',
+    logo: 'https://psi-nexus.org/favicon.svg'
+  },
+  mainEntityOfPage: 'https://psi-nexus.org/lexikon/lebenszahlen'
+};
+
+const LIFE_NUMBERS = [
+  { num: '1', title: 'Der Pionier & Schöpfer', planet: 'Sonne', keywords: 'Unabhängigkeit, Führung, Mut, Willenskraft', shadow: 'Dominanzstreben, Einzelgängertum' },
+  { num: '2', title: 'Der Diplomat & Vermittler', planet: 'Mond', keywords: 'Einfühlungsvermögen, Harmonie, Partnerschaft, Intuition', shadow: 'Überanpassung, Konfliktscheu' },
+  { num: '3', title: 'Der Schöpfer & Kommunikator', planet: 'Jupiter', keywords: 'Kreativität, Ausdruck, Lebensfreude, Optimismus', shadow: 'Verzettelung, Oberflächlichkeit' },
+  { num: '4', title: 'Der Baumeister & Bewahrer', planet: 'Uranus / Saturn', keywords: 'Struktur, Fleiß, Fundament, Zuverlässigkeit', shadow: 'Starrsinn, Überkontrolle' },
+  { num: '5', title: 'Der Freigeist & Entdecker', planet: 'Merkur', keywords: 'Freiheit, Wandel, Abenteuer, Flexibilität', shadow: 'Rastlosigkeit, Fluchtverhalten' },
+  { num: '6', title: 'Der Heiler & Harmoniestifter', planet: 'Venus', keywords: 'Fürsorge, Ästhetik, Gemeinschaft, Verantwortung', shadow: 'Selbstaufopferung, Perfektionismus' },
+  { num: '7', title: 'Der Mystiker & Denker', planet: 'Neptun', keywords: 'Weisheit, Tiefgang, Analyse, Spiritualität', shadow: 'Rückzug, kühler Intellekt' },
+  { num: '8', title: 'Der Stratege & Souverän', planet: 'Saturn', keywords: 'Manifestation, Fülle, Führung, Gerechtigkeit', shadow: 'Machtfixierung, Materialismus' },
+  { num: '9', title: 'Der Weise & Weltbürger', planet: 'Mars', keywords: 'Mitgefühl, universelle Vollendung, Idealismus', shadow: 'Weltschmerz, Unerreichbarkeit' },
+  { num: '11', title: 'Meisterzahl: Der Visionär', planet: 'Uranus / Mond', keywords: 'Hohe Intuition, spirituelle Erleuchtung, Inspiration', shadow: 'Nervöse Überlastung, Zweifel' },
+  { num: '22', title: 'Meisterzahl: Der Groß-Baumeister', planet: 'Pluto / Erde', keywords: 'Große Manifestationen für das Gemeinwohl, Praxis-Genie', shadow: 'Überwältigender Druck' },
+  { num: '33', title: 'Meisterzahl: Der Meister-Lehrer', planet: 'Sonne / Venus', keywords: 'Bedingungslose Liebe, altruistischer Dienst am Menschen', shadow: 'Märtyrertum' }
+];
+---
+
+<Layout
+  title="Lebenszahlen (1–9 & Meisterzahlen) | Berechnung & Bedeutung | Ψ-NEXUS"
+  description="Wie berechnet man die pythagoräische Lebenszahl? Erfahre die Bedeutung aller Zahlen von 1 bis 9 und der Meisterzahlen 11, 22, 33."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <div class="boxed-canvas py-8 space-y-10 max-w-5xl mx-auto px-4">
+    
+    <nav class="flex items-center gap-2 text-xs text-slate-400 font-tech">
+      <a href="/" class="hover:text-amber-300">Startseite</a>
+      <span>/</span>
+      <a href="/lexikon/" class="hover:text-amber-300">Lexikon</a>
+      <span>/</span>
+      <span class="text-purple-400">Lebenszahlen</span>
+    </nav>
+
+    <article class="space-y-8">
+      <div class="boxed-frame space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold font-tech">
+          <span>🔢 Pythagoräische Harmonik</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white font-cinzel">
+          Die Lebenszahl: <span class="cosmic-gold-gradient">Der Code deines Seelenwegs</span>
+        </h1>
+
+        <!-- Standalone AI Definition -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/40 text-slate-200 text-sm md:text-base font-lato leading-relaxed space-y-2">
+          <p>
+            <strong class="text-purple-300 font-tech">Stand-alone Definition:</strong> Die <strong>Lebenszahl (Life Path Number)</strong> ist die zentrale Kennziffer der pythagoräischen Numerologie. Sie wird aus der Quersumme aller Ziffern des Geburtsdatums errechnet und beschreibt die übergeordnete Lernaufgabe, die archetypische Grundfrequenz und das Entwicklungspotenzial einer Persönlichkeit.
+          </p>
+        </div>
+      </div>
+
+      <!-- HowTo Calculation Box -->
+      <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 space-y-4">
+        <h2 class="text-xl font-bold text-white font-cinzel flex items-center gap-2">
+          <span>📐</span>
+          <span>Wie berechnet man die Lebenszahl? (Schritt-für-Schritt)</span>
+        </h2>
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-white/10 space-y-3 text-xs sm:text-sm font-lato text-slate-300">
+          <p><strong>Beispiel: Geburtsdatum 15. Mai 1990 (15.05.1990)</strong></p>
+          <ol class="list-decimal list-inside space-y-1.5 font-mono text-amber-300">
+            <li>Tag: 1 + 5 = 6</li>
+            <li>Monat: 0 + 5 = 5</li>
+            <li>Jahr: 1 + 9 + 9 + 0 = 19 ➔ 1 + 9 = 10 ➔ 1 + 0 = 1</li>
+            <li>Gesamtsumme: 6 + 5 + 1 = 12 ➔ 1 + 2 = <strong>3 (Lebenszahl 3)</strong></li>
+          </ol>
+          <p class="text-slate-400 text-xs pt-1">
+            <em>Hinweis zu Meisterzahlen:</em> Ergeben Zwischen- oder Gesamtsummen die Zahlen <strong>11, 22 oder 33</strong>, werden diese in der höheren Esoterik nicht weiter auf 2, 4 oder 6 reduziert, da sie eigenständige Meister-Archetypen bilden.
+          </p>
+        </div>
+      </div>
+
+      <!-- Overview Cards for Numbers 1-9, 11, 22, 33 -->
+      <div class="space-y-6">
+        <div class="border-b border-white/10 pb-3">
+          <h2 class="text-2xl font-black text-white font-cinzel">
+            Alle Lebenszahlen im Porträt
+          </h2>
+          <p class="text-xs text-slate-400">Vom Pionier (1) bis zum Meister-Lehrer (33)</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {LIFE_NUMBERS.map(item => (
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-white/10 hover:border-purple-500/40 transition-all space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center font-bold text-lg font-mono">
+                  {item.num}
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Resonanz: {item.planet}</span>
+              </div>
+
+              <h3 class="font-bold text-white text-base font-cinzel">{item.title}</h3>
+
+              <div class="text-[11px] text-purple-300 font-tech">
+                Stärken: <span class="text-slate-200 font-normal">{item.keywords}</span>
+              </div>
+
+              <div class="text-[11px] text-rose-300 font-tech">
+                Schatten-Thema: <span class="text-slate-400 font-normal">{item.shadow}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="p-8 rounded-3xl cosmic-glass border border-purple-500/30 text-center space-y-4 shadow-2xl">
+        <h2 class="text-xl sm:text-2xl font-black text-white font-cinzel">
+          Berechne deine persönliche Lebenszahl & Matrix
+        </h2>
+        <p class="text-xs text-slate-300 max-w-xl mx-auto font-lato">
+          Gib dein Geburtsdatum im Ψ-NEXUS Rechner ein, um deine Lebenszahl, Seelenzahl und Namensschwingung sofort automatisiert zu ermitteln.
+        </p>
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-black text-sm hover:scale-105 transition-all shadow-lg font-tech"
+        >
+          <span>🔢 Jetzt Lebenszahl berechnen</span>
+        </a>
+      </div>
+
+    </article>
+
+  </div>
+</Layout>

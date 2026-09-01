@@ -1,0 +1,157 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://psi-nexus.org/' },
+    { '@type': 'ListItem', position: 2, name: 'Lexikon', item: 'https://psi-nexus.org/lexikon/' },
+    { '@type': 'ListItem', position: 3, name: 'Die Sieben Kosmischen Strahlen', item: 'https://psi-nexus.org/lexikon/sieben-strahlen' }
+  ]
+};
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Die Sieben Kosmischen Strahlen der Esoterischen Psychologie (Alice Bailey)',
+  description: 'Umfassendes Kompendium über die 7 Schöpfungsstrahlen, Seelenstrahl, Persönlichkeitsstrahl und energetische Archetypen.',
+  inLanguage: 'de-AT',
+  author: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS Heritage Institute'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Ψ-NEXUS',
+    logo: 'https://psi-nexus.org/favicon.svg'
+  },
+  mainEntityOfPage: 'https://psi-nexus.org/lexikon/sieben-strahlen'
+};
+
+const SEVEN_RAYS = [
+  { ray: 'I', name: 'Strahl des Willens & der Macht', color: 'text-red-400 border-red-500/30', planet: 'Pluto / Sonne', chakra: 'Kronen-Chakra / Sahasrara', quality: 'Führung, Zielstrebigkeit, Zerstörung überholter Formen, Mut', shadow: 'Tyrannei, Härte, Arroganz' },
+  { ray: 'II', name: 'Strahl der Liebe & Weisheit', color: 'text-amber-400 border-amber-500/30', planet: 'Jupiter / Sonne', chakra: 'Herz-Chakra / Anahata', quality: 'Lehre, bedingungslose Liebe, Heilsames Verstehen, Geduld', shadow: 'Passive Trägheit, emotionale Kälte' },
+  { ray: 'III', name: 'Strahl der Aktiven Intelligenz', color: 'text-emerald-400 border-emerald-500/30', planet: 'Saturn / Merkur', chakra: 'Hals-Chakra / Vishuddha', quality: 'Philosophie, Planung, geschäftlicher Scharfsinn, Universaldenken', shadow: 'Rastlose Geschäftigkeit, Manipulation' },
+  { ray: 'IV', name: 'Strahl der Harmonie durch Konflikt', color: 'text-yellow-400 border-yellow-500/30', planet: 'Merkur / Mond', chakra: 'Ajna (Stirn-Chakra)', quality: 'Künste, Poesie, Vermittlung, Synthese gegensätzlicher Pole', shadow: 'Innerer Zerriss, ständiger Streit' },
+  { ray: 'V', name: 'Strahl der Konkreten Wissenschaft', color: 'text-cyan-400 border-cyan-500/30', planet: 'Venus', chakra: 'Drittes Auge (Ajna)', quality: 'Forschung, empirische Präzision, Technologie, Wahrheitsliebe', shadow: 'Dogmatischer Materialismus, Enge' },
+  { ray: 'VI', name: 'Strahl der Hingabe & des Idealismus', color: 'text-rose-400 border-rose-500/30', planet: 'Mars / Neptun', chakra: 'Solarplexus / Manipura', quality: 'Loyalität, Mystik, Begeisterung, selbstloser Einsatz für eine Vision', shadow: 'Fanatismus, Scheuklappendenken' },
+  { ray: 'VII', name: 'Strahl der Zeremoniellen Ordnung & Magie', color: 'text-purple-400 border-purple-500/30', planet: 'Uranus', chakra: 'Wurzel-Chakra / Muladhara', quality: 'Organisation, Ritual, Verankerung geistiger Gesetze im Physischen', shadow: 'Starrer Formalismus, Aberglaube' }
+];
+---
+
+<Layout
+  title="Die Sieben Kosmischen Strahlen | Esoterische Psychologie | Ψ-NEXUS"
+  description="Was sind die Sieben Strahlen nach Alice Bailey? Erfahre die Qualität deines Seelenstrahls, zugeordnete Planeten und Chakren."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <div class="boxed-canvas py-8 space-y-10 max-w-5xl mx-auto px-4">
+    
+    <nav class="flex items-center gap-2 text-xs text-slate-400 font-tech">
+      <a href="/" class="hover:text-amber-300">Startseite</a>
+      <span>/</span>
+      <a href="/lexikon/" class="hover:text-amber-300">Lexikon</a>
+      <span>/</span>
+      <span class="text-amber-400">Sieben Strahlen</span>
+    </nav>
+
+    <article class="space-y-8">
+      <div class="boxed-frame space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold font-tech">
+          <span>✦ Esoterische Psychologie</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white font-cinzel">
+          Die Sieben Strahlen: <span class="cosmic-gold-gradient">Die Farbpalette der Schöpfung</span>
+        </h1>
+
+        <!-- Standalone AI Definition -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/40 text-slate-200 text-sm md:text-base font-lato leading-relaxed space-y-2">
+          <p>
+            <strong class="text-amber-300 font-tech">Stand-alone Definition:</strong> Die <strong>Sieben Kosmischen Strahlen</strong> sind die fundamentalen Energieströme der esoterischen Psychologie (begründet durch Helena Blavatsky und ausformuliert von Alice Bailey). Sie repräsentieren sieben archetypische Schöpfungsqualitäten des Bewusstseins, durch die sich Seelenauftrag, Persönlichkeit und spirituelle Evolution manifestieren.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Pillars: Soul Ray vs. Personality Ray -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="cosmic-glass rounded-3xl p-6 border border-white/10 space-y-3">
+          <h2 class="text-lg font-bold text-amber-300 font-cinzel flex items-center gap-2">
+            <span>✨</span>
+            <span>Der Seelenstrahl</span>
+          </h2>
+          <p class="text-xs text-slate-300 font-lato leading-relaxed">
+            Der Seelenstrahl bleibt über viele Inkarnationen hinweg stabil. Er beschreibt den übergeordneten evolutionären Zweck, das karmische Erbe und die höchste Schwingung, die ein Mensch in dieses Leben einbringen soll.
+          </p>
+        </div>
+
+        <div class="cosmic-glass rounded-3xl p-6 border border-white/10 space-y-3">
+          <h2 class="text-lg font-bold text-cyan-300 font-cinzel flex items-center gap-2">
+            <span>🛡️</span>
+            <span>Der Persönlichkeitsstrahl</span>
+          </h2>
+          <p class="text-xs text-slate-300 font-lato leading-relaxed">
+            Der Persönlichkeitsstrahl wechselt von Leben zu Leben. Er stellt das irdische Werkzeug (Körper, Emotionen, Intellekt) dar, durch das der Seelenstrahl im Alltag wirkt und Erfahrungen sammelt.
+          </p>
+        </div>
+      </div>
+
+      <!-- Compendium of the 7 Rays -->
+      <div class="space-y-6">
+        <div class="border-b border-white/10 pb-3">
+          <h2 class="text-2xl font-black text-white font-cinzel">
+            Die 7 Kosmischen Strahlen im Porträt
+          </h2>
+          <p class="text-xs text-slate-400">Qualitäten, Chakren-Zuordnung und kosmische Lenker</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SEVEN_RAYS.map(item => (
+            <div class={`p-5 rounded-2xl bg-slate-900/80 border ${item.color} space-y-2.5 hover:scale-[1.02] transition-all`}>
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 border border-white/15 flex items-center justify-center font-bold text-sm font-tech">
+                  {item.ray}
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">{item.planet}</span>
+              </div>
+
+              <h3 class="font-bold text-white text-base font-cinzel">{item.name}</h3>
+
+              <div class="text-[11px] text-amber-300 font-tech">
+                Chakra: <span class="text-slate-200 font-normal">{item.chakra}</span>
+              </div>
+
+              <div class="text-[11px] text-emerald-300 font-tech">
+                Eigenschaften: <span class="text-slate-300 font-normal">{item.quality}</span>
+              </div>
+
+              <div class="text-[11px] text-rose-300 font-tech">
+                Herausforderung: <span class="text-slate-400 font-normal">{item.shadow}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="p-8 rounded-3xl cosmic-glass border border-amber-500/30 text-center space-y-4 shadow-2xl">
+        <h2 class="text-xl sm:text-2xl font-black text-white font-cinzel">
+          Entdecke deine Sieben-Strahlen-Signatur
+        </h2>
+        <p class="text-xs text-slate-300 max-w-xl mx-auto font-lato">
+          Der Ψ-NEXUS Horoskop-Rechner analysiert die Planetenkonstellationen deines Radix und berechnet deine primären und sekundären Seelenstrahlen im Hohen Seelendossier (Tor III).
+        </p>
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 text-slate-950 font-black text-sm hover:scale-105 transition-all shadow-lg font-tech"
+        >
+          <span>✦ Jetzt Seelenstrahl berechnen</span>
+        </a>
+      </div>
+
+    </article>
+
+  </div>
+</Layout>

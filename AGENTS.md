@@ -7,6 +7,11 @@
 - **Mandate:** Enforces Clean Architecture, Domain-Driven Design (DDD), strict typing, zero `any`, deterministic state transitions, railway-oriented error handling (`Result<T, E>`), and NEXUS fixpoint cybernetic stability.
 - **Standard:** Industrial Gold Standard (Zero tech debt, zero silent failures, memory safe, asymptotic complexity bounded).
 
+### `seo_gseo_architect` (Senior SEO & GSEO / Generative Visibility Architect)
+- **Role:** Senior Search Engine & Generative Engine Optimization Architect.
+- **Mandate:** Enforces NEXUS Visibility Supremacy (\(V_{\text{NEXUS}}\)), Information Gain, Direct AI Quotability for AI Overviews / SearchGPT / Perplexity, Schema.org entity graphs, Cicero-7Q structure, VFB neurodidactics, LINGUA-LOCAL dialect tuning, and technical Core Web Vitals perfection.
+- **Standard:** Industrial Gold Standard (Zero hallucination fluff, 100% schema valid, strict legal compliance \(P_J = 1\)).
+
 ---
 
 ## Architectural Guidelines

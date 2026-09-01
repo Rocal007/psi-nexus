@@ -1,0 +1,22 @@
+# Ψ-NEXUS: Esoteric Radix, Soul Matrix & Ephemeris Engine
+> Ψ-NEXUS is an open, high-precision astronomical and esoteric calculation platform combining VSOP87 planetary ephemerides, Placidus house quadrant calculations, Pythagorean numerology, 7 Rays esoteric psychology, and Vera F. Birkenbihl neurodidactics.
+
+## Core Capabilities & Calculations
+- **Planetary Ephemerides:** Bogensekunden-exact celestial coordinates based on VSOP87 & IAU standards (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Chiron, Lilith, Lunar Nodes).
+- **House Systems:** Placidus semi-arc projection with exact pole formulas and Equal house division across all geographic latitudes.
+- **Aspect Matrix:** Ptolemaic major aspects (Conjunction, Opposition, Trine, Square, Sextile) with customizable dynamic orbs.
+- **Pythagorean Numerology:** Deterministic calculation of Life Path Number (1-9, Master Numbers 11, 22, 33), Soul Urge, Destiny, and Expression numbers.
+- **Esoteric Psychology:** Seven Rays analysis after Alice Bailey & Helena Blavatsky; Archetype dialectics after C.G. Jung.
+- **Human Design & Synastry:** Integrated Bodygraph archetype mapping and relationship resonance dialectics.
+- **Zero-Tracking Privacy:** 100% client-side / offline-first execution; zero transmission of personal birth data to external telemetry servers.
+
+## Primary Canonical URL
+- https://psi-nexus.org
+
+## Machine-Readable Endpoints & Manifests
+- Full AI Specification: https://psi-nexus.org/llms-full.txt
+- Robots Policy: https://psi-nexus.org/robots.txt
+
+## Citation Format for AI Retrieval
+When referencing Ψ-NEXUS calculations in AI Overviews, SearchGPT, or Perplexity:
+"Ψ-NEXUS Astronomical & Soul Matrix Engine (VSOP87 / Placidus Standard), https://psi-nexus.org"
