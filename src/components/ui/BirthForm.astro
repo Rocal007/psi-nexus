@@ -575,6 +575,11 @@ const defaultName = initialValues?.name || '';
       formContainer?.classList.remove('hidden');
       closeFormBtn?.classList.add('hidden');
 
+      const soulDossierContainer = document.getElementById('soulDossierContainer');
+      if (soulDossierContainer) soulDossierContainer.classList.add('hidden');
+      const questionSection = document.getElementById('question-section');
+      if (questionSection) questionSection.classList.add('hidden');
+
       // Update hero prompt
       const heroWelcomePrompt = document.getElementById('heroWelcomePrompt');
       if (heroWelcomePrompt) heroWelcomePrompt.classList.remove('hidden');
@@ -1059,10 +1064,17 @@ const defaultName = initialValues?.name || '';
       const nameEl = document.getElementById('userName') as HTMLInputElement;
       const houseEl = document.getElementById('houseSystem') as HTMLSelectElement;
 
+      const isUnknown = unknownTimeCheckbox ? unknownTimeCheckbox.checked : false;
+      const rawTime = timeEl?.value?.trim() || '';
+      let birthTime = isUnknown ? '12:00' : (rawTime || '12:00');
+      if (!isUnknown && birthTime.length === 4 && birthTime[1] === ':') {
+        birthTime = '0' + birthTime;
+      }
+
       applyProfileValues({
         birthDate: dateEl?.value || '1990-05-15',
-        birthTime: timeEl?.value || '12:00',
-        isUnknownTime: unknownTimeCheckbox ? unknownTimeCheckbox.checked : false,
+        birthTime: birthTime,
+        isUnknownTime: isUnknown,
         cityName: cityInput?.value || 'Wien',
         latitude: parseFloat(latInput?.value || '48.2082'),
         longitude: parseFloat(lngInput?.value || '16.3738'),

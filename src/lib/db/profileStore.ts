@@ -34,23 +34,42 @@ export function getClientProfiles(): SavedProfile[] {
   }
 }
 
+export function normalizeTimeString(timeStr?: string, isUnknown?: boolean): string {
+  if (isUnknown) return '12:00';
+  if (!timeStr || !timeStr.trim()) return '12:00';
+  const clean = timeStr.trim();
+  const parts = clean.split(':');
+  if (parts.length >= 2) {
+    const hours = parts[0].padStart(2, '0');
+    const minutes = parts[1].padStart(2, '0').slice(0, 2);
+    return `${hours}:${minutes}`;
+  }
+  return clean;
+}
+
 export function saveClientProfile(profile: Omit<SavedProfile, 'id' | 'updatedAt'> & { id?: string }): SavedProfile {
+  const normalizedTime = normalizeTimeString(profile.birthTime, profile.isUnknownTime);
+  const now = new Date().toISOString();
+
   if (typeof window === 'undefined') {
     return {
       ...profile,
+      birthTime: normalizedTime,
+      isUnknownTime: Boolean(profile.isUnknownTime),
       id: profile.id || 'temp-' + Date.now(),
-      updatedAt: new Date().toISOString()
+      updatedAt: now
     };
   }
 
   const profiles = getClientProfiles();
   const id = profile.id || 'user-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
-  const now = new Date().toISOString();
 
   const existingIdx = profiles.findIndex(p => p.id === id || (p.name.toLowerCase() === profile.name.toLowerCase() && p.birthDate === profile.birthDate));
 
   const savedRecord: SavedProfile = {
     ...profile,
+    birthTime: normalizedTime,
+    isUnknownTime: Boolean(profile.isUnknownTime),
     id: existingIdx >= 0 ? profiles[existingIdx].id : id,
     updatedAt: now
   };

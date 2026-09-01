@@ -173,36 +173,21 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
       <SoulQuestionCompass userName={userName || 'Edle Seele'} sunSign={chart.synthesis.sun.planet.sign.name} />
     </div>
 
-    <!-- Matrix Status Banner (shows when in profile creation state) -->
-    <div id="matrixPendingBanner" class={`cosmic-glass rounded-3xl p-5 border border-amber-500/30 text-amber-200 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl ${hasExplicitQuery ? 'hidden' : ''}`}>
-      <div class="flex items-center gap-3.5">
-        <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0 font-serif border border-amber-500/30">
-          Ψ
-        </div>
-        <div>
-          <div class="font-bold text-white text-sm sm:text-base">Schritt 1: Profil eingeben oder auswählen</div>
-          <p class="text-slate-300 text-xs mt-0.5">Trage oben deine Daten ein oder wähle einen Meister-Archetypen, um deine Seelen-Matrix & alle 12 Tore freizuschalten.</p>
-        </div>
+    <!-- Stage 3: Complete Soul Dossier (Revealed when a profile is active) -->
+    <div id="soulDossierContainer" class={hasExplicitQuery ? 'space-y-8 min-w-0 w-full' : 'hidden space-y-8 min-w-0 w-full'}>
+      <div id="soulDossierWrapper" class="space-y-6">
+        <SoulJourneyProgress activeStep="radix" />
+        <SoulWizardNavigator activeGate="radix" />
+        <FolderTabs activeTab="radix" />
       </div>
-      <a href="#form-section" class="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs shrink-0 transition-all">
-        Zur Profil-Wahl ➔
-      </a>
-    </div>
 
-    <!-- Stage 3: 5-Step Soul Journey Stepper & Guided Soul Wizard Navigator Bar -->
-    <div id="soulDossierWrapper" class="space-y-6">
-      <SoulJourneyProgress activeStep="radix" />
-      <SoulWizardNavigator activeGate="radix" />
-      <FolderTabs activeTab="radix" />
-    </div>
-
-    <!-- Full-Width Main Dossier Content Panels -->
-    <div class="space-y-8 min-w-0 w-full">
-      <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
-      <div id="panel-radix" class="tab-content-panel active space-y-8">
-          
-          <!-- Wizard Sofort-Erkenntnis Chunk (Bite-Sized) -->
-          <WizardEssenceCard
+      <!-- Full-Width Main Dossier Content Panels -->
+      <div class="space-y-8 min-w-0 w-full">
+        <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
+        <div id="panel-radix" class="tab-content-panel active space-y-8">
+            
+            <!-- Wizard Sofort-Erkenntnis Chunk (Bite-Sized) -->
+            <WizardEssenceCard
             gateNum="Tor I"
             gateTitle="Kosmisches Fundament & Gestirnskräfte"
             icon="🌌"
@@ -758,11 +743,12 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
     <div id="decoderToggleHeader" class="mt-8">
       <BirkenbihlDecoder />
     </div>
+  </div>
 
-    <!-- E-E-A-T Quality, Methodology & Trust Framework -->
-    <div class="mt-8">
-      <EeatTrustSection />
-    </div>
+  <!-- E-E-A-T Quality, Methodology & Trust Framework (Subtle Footer Anchor) -->
+  <div class="mt-8">
+    <EeatTrustSection />
+  </div>
 
   </div>
 
@@ -994,11 +980,15 @@ const formattedBirthDate = new Date(birthDate + 'T00:00:00').toLocaleDateString(
         });
         updateDomWithChart(chart);
       } else {
-        // App is opened fresh without a profile: ensure creation form is open and prompt is displayed
+        // App is opened fresh without a profile: ensure creation form is open and start page is clean
         const formContainer = document.getElementById('formContainer');
         if (formContainer) formContainer.classList.remove('hidden');
         const summaryCard = document.getElementById('activeProfileSummaryCard');
         if (summaryCard) summaryCard.classList.add('hidden');
+        const questionSection = document.getElementById('question-section');
+        if (questionSection) questionSection.classList.add('hidden');
+        const soulDossierContainer = document.getElementById('soulDossierContainer');
+        if (soulDossierContainer) soulDossierContainer.classList.add('hidden');
       }
 
       window.addEventListener('astro_recalculate_chart', (e: any) => {

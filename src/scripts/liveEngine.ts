@@ -78,6 +78,12 @@ export function updateDomWithChart(chart: CompleteNatalChart) {
   const matrixPending = document.getElementById('matrixPendingBanner');
   if (matrixPending) matrixPending.classList.add('hidden');
 
+  const questionSection = document.getElementById('question-section');
+  if (questionSection) questionSection.classList.remove('hidden');
+
+  const soulDossierContainer = document.getElementById('soulDossierContainer');
+  if (soulDossierContainer) soulDossierContainer.classList.remove('hidden');
+
   // Update Individual Personality Summary in Header / Hero
   const pSummary = generatePersonalitySummary(chart);
   const heroArchetypeTitle = document.getElementById('heroArchetypeTitle');
