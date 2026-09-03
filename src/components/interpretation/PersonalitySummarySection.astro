@@ -32,7 +32,15 @@ const personName = chart.input.name || 'Edle Seele';
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          class="trigger-share-card px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/25 to-yellow-500/30 hover:from-amber-500/40 hover:to-yellow-500/50 border border-amber-500/50 text-amber-200 text-xs font-bold flex items-center gap-1.5 font-tech cursor-pointer shadow-[0_0_12px_rgba(234,179,8,0.25)] hover:scale-[1.03] transition-all"
+          title="Seelen-Siegel als Bild für Instagram Story & WhatsApp generieren"
+        >
+          <span>📲</span>
+          <span>Seelen-Siegel teilen (Story)</span>
+        </button>
         <span class="px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs font-semibold flex items-center gap-1.5 font-tech">
           <span>✦</span>
           <span id="personalityElementTag">{chart.balance.dominantElement}-Dominanz</span>

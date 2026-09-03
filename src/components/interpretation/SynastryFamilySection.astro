@@ -1,6 +1,9 @@
 ---
 import { generateNatalChart, type CompleteNatalChart } from '../../lib/astrology/engine';
 import { calculateSynastry, calculateFamilyMatrix } from '../../lib/astrology/synastry';
+import PartnerMatchingCard from './synastry/PartnerMatchingCard.astro';
+import CompositeChartCard from './synastry/CompositeChartCard.astro';
+import FamilyClusterCard from './synastry/FamilyClusterCard.astro';
 
 interface Props {
   chart: CompleteNatalChart;
@@ -8,7 +11,6 @@ interface Props {
 
 const { chart } = Astro.props;
 
-// Initial default comparison with a complementary archetypal soul partner
 const partnerChartMock = generateNatalChart({
   name: 'Seelenpartner (Muster-Vergleich)',
   birthDate: '1992-03-12',
@@ -25,7 +27,6 @@ const initialFamily = calculateFamilyMatrix([chart, partnerChartMock]);
 ---
 
 <div class="space-y-10" id="synastryFamilySectionRoot">
-  
   <!-- Section Title -->
   <div class="text-center space-y-3 max-w-3xl mx-auto">
     <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full birkenbihl-badge text-rose-300 text-xs font-semibold uppercase tracking-wider">
@@ -42,55 +43,37 @@ const initialFamily = calculateFamilyMatrix([chart, partnerChartMock]);
   <!-- Interactive Mode Switch & Profile Selectors -->
   <div class="cosmic-glass rounded-3xl p-6 md:p-7 border border-white/15 shadow-2xl space-y-6">
     <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
-      <!-- Mode Tabs -->
       <div class="flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-2xl border border-white/10">
-        <button
-          type="button"
-          id="synastryModePartnerBtn"
-          class="px-5 py-2 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] cursor-pointer"
-        >
+        <button type="button" id="synastryModePartnerBtn" class="px-5 py-2 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] cursor-pointer">
           👫 Partner-Synastrie (2 Personen)
         </button>
-        <button
-          type="button"
-          id="synastryModeFamilyBtn"
-          class="px-5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
-        >
+        <button type="button" id="synastryModeFamilyBtn" class="px-5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer">
           👨‍👩‍👧‍👦 Familien-Matrix (Alle Profile)
         </button>
       </div>
 
-      <!-- Quick Add Profile Anchor -->
-      <a
-        href="#form-section"
-        class="text-xs font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 transition-all hover:bg-amber-500/20"
-      >
-        <span>+</span> Neues Profil hinzufügen
-      </a>
+      <div class="flex items-center gap-2">
+        <button type="button" id="btnCalculateSynastry" class="hidden text-xs font-bold text-pink-300 px-3 py-1.5 rounded-xl bg-pink-500/10 border border-pink-500/30 hover:bg-pink-500/20 transition-all cursor-pointer">
+          Berechnen
+        </button>
+        <a href="#form-section" class="text-xs font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 transition-all hover:bg-amber-500/20">
+          <span>+</span> Neues Profil hinzufügen
+        </a>
+      </div>
     </div>
 
-    <!-- Partner Selectors Container -->
+    <!-- Partner Selectors Row -->
     <div id="partnerSelectorsRow" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-1.5">
-        <label class="block text-xs font-bold uppercase tracking-wider text-amber-300">
-          Person 1 (Hauptprofil)
-        </label>
-        <select
-          id="synastrySelectPersonA"
-          class="w-full bg-slate-950 text-white px-3.5 py-2.5 rounded-xl border border-amber-500/30 focus:outline-none focus:border-amber-400 text-xs font-medium"
-        >
+        <label class="block text-xs font-bold uppercase tracking-wider text-amber-300">Person 1 (Hauptprofil)</label>
+        <select id="synastrySelectPersonA" class="w-full bg-slate-950 text-white px-3.5 py-2.5 rounded-xl border border-amber-500/30 focus:outline-none focus:border-amber-400 text-xs font-medium">
           <option value="active">{chart.input.name || 'Aktives Profil'}</option>
         </select>
       </div>
 
       <div class="space-y-1.5">
-        <label class="block text-xs font-bold uppercase tracking-wider text-pink-300">
-          Person 2 (Partner / Vergleichsperson)
-        </label>
-        <select
-          id="synastrySelectPersonB"
-          class="w-full bg-slate-950 text-white px-3.5 py-2.5 rounded-xl border border-pink-500/30 focus:outline-none focus:border-pink-400 text-xs font-medium"
-        >
+        <label class="block text-xs font-bold uppercase tracking-wider text-pink-300">Person 2 (Partner / Vergleichsperson)</label>
+        <select id="synastryPartnerBSelect" name="synastrySelectPersonB" class="w-full bg-slate-950 text-white px-3.5 py-2.5 rounded-xl border border-pink-500/30 focus:outline-none focus:border-pink-400 text-xs font-medium">
           <option value="partner_default">Seelenpartner (Archetyp)</option>
         </select>
       </div>
@@ -99,500 +82,14 @@ const initialFamily = calculateFamilyMatrix([chart, partnerChartMock]);
 
   <!-- PARTNER SYNASTRY VIEW CONTAINER -->
   <div id="partnerSynastryView" class="space-y-8">
-    
-    <!-- 1. Overall Compatibility Hero Card -->
-    <div class="cosmic-glass-gold rounded-3xl p-6 md:p-9 border border-rose-500/40 shadow-2xl relative overflow-hidden cosmic-corner-accent">
-      <div class="absolute -right-12 -bottom-12 w-56 h-56 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="space-y-6 relative z-10">
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rose-500/30 pb-5">
-          <div class="flex items-center gap-3.5">
-            <span class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-2xl border border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.3)]">
-              💖
-            </span>
-            <div>
-              <div class="text-[10px] uppercase font-mono tracking-widest text-rose-400 font-extrabold">
-                Kosmische Beziehungs-Resonanz
-              </div>
-              <h3 class="text-xl md:text-2xl font-black text-white" id="synastryArchetypeTitle">
-                {initialSynastry.scores.archetype}
-              </h3>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <div class="text-[10px] uppercase font-mono text-slate-400 font-bold">Gesamt-Harmonie</div>
-              <div class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 font-mono" id="synastryOverallScore">
-                {initialSynastry.scores.overallScore}%
-              </div>
-            </div>
-            <div class="w-16 h-3 bg-slate-950 rounded-full overflow-hidden border border-white/10">
-              <div id="synastryOverallBar" class="bg-gradient-to-r from-amber-400 via-rose-500 to-pink-500 h-full transition-all duration-700" style={`width: ${initialSynastry.scores.overallScore}%`}></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tagline quote -->
-        <p class="text-sm md:text-base text-slate-200 leading-relaxed italic" id="synastryTagline">
-          "{initialSynastry.scores.tagline}"
-        </p>
-
-        <!-- 4 Harmony Pillars Breakdown Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-          
-          <!-- Emotion -->
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-pink-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-pink-300 flex items-center gap-1"><span>💖</span> Emotion & Herz</span>
-              <span class="font-mono font-bold text-white" id="synScoreEmo">{initialSynastry.scores.emotionalHarmony.score}%</span>
-            </div>
-            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-              <div id="synBarEmo" class="bg-pink-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.emotionalHarmony.score}%`}></div>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-snug" id="synDescEmo">{initialSynastry.scores.emotionalHarmony.description}</p>
-          </div>
-
-          <!-- Passion -->
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-amber-300 flex items-center gap-1"><span>🔥</span> Chemie & Erotik</span>
-              <span class="font-mono font-bold text-white" id="synScorePass">{initialSynastry.scores.passionAndChemistry.score}%</span>
-            </div>
-            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-              <div id="synBarPass" class="bg-amber-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.passionAndChemistry.score}%`}></div>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-snug" id="synDescPass">{initialSynastry.scores.passionAndChemistry.description}</p>
-          </div>
-
-          <!-- Mind -->
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-cyan-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-cyan-300 flex items-center gap-1"><span>🧠</span> Geist & Dialog</span>
-              <span class="font-mono font-bold text-white" id="synScoreMind">{initialSynastry.scores.mindAndCommunication.score}%</span>
-            </div>
-            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-              <div id="synBarMind" class="bg-cyan-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.mindAndCommunication.score}%`}></div>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-snug" id="synDescMind">{initialSynastry.scores.mindAndCommunication.description}</p>
-          </div>
-
-          <!-- Karma & Stability -->
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-purple-500/30 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-purple-300 flex items-center gap-1"><span>⚓</span> Seelenvertrag</span>
-              <span class="font-mono font-bold text-white" id="synScoreKarm">{initialSynastry.scores.karmicBondAndStability.score}%</span>
-            </div>
-            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-              <div id="synBarKarm" class="bg-purple-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.karmicBondAndStability.score}%`}></div>
-            </div>
-            <p class="text-[11px] text-slate-300 leading-snug" id="synDescKarm">{initialSynastry.scores.karmicBondAndStability.description}</p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. The Composite Chart (Das Dritte Wesen der Beziehung) -->
-    <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-6 relative overflow-hidden">
-      <div class="flex items-center gap-3 border-b border-white/10 pb-4">
-        <span class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xl border border-purple-500/30">
-          ✨
-        </span>
-        <div>
-          <div class="text-[10px] uppercase font-mono tracking-widest text-purple-400 font-extrabold">
-            Das Komposit-Horoskop (Midpoints)
-          </div>
-          <h3 class="text-xl font-bold text-white">Das gemeinsame Dritte Wesen eurer Liebe</h3>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Composite Sun -->
-        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-amber-300">
-            <span>☉ Komposit-Sonne</span>
-            <span id="compSunPos" class="font-mono">{initialSynastry.composite.sun.sign.name} ({initialSynastry.composite.sun.degreeString})</span>
-          </div>
-          <p class="text-xs text-slate-200 leading-relaxed" id="compSunDesc">{initialSynastry.composite.sun.interpretation}</p>
-        </div>
-
-        <!-- Composite Moon -->
-        <div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-indigo-300">
-            <span>☽ Komposit-Mond</span>
-            <span id="compMoonPos" class="font-mono">{initialSynastry.composite.moon.sign.name} ({initialSynastry.composite.moon.degreeString})</span>
-          </div>
-          <p class="text-xs text-slate-200 leading-relaxed" id="compMoonDesc">{initialSynastry.composite.moon.interpretation}</p>
-        </div>
-
-        <!-- Composite AC -->
-        <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-cyan-300">
-            <span>↑ Komposit-Aszendent</span>
-            <span id="compAcPos" class="font-mono">{initialSynastry.composite.ascendant.sign.name} ({initialSynastry.composite.ascendant.degreeString})</span>
-          </div>
-          <p class="text-xs text-slate-200 leading-relaxed" id="compAcDesc">{initialSynastry.composite.ascendant.interpretation}</p>
-        </div>
-      </div>
-
-      <!-- Shared Purpose & Pair Gemstone Card -->
-      <div class="p-5 rounded-2xl bg-slate-950/70 border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
-        <div class="space-y-1.5">
-          <div class="font-bold text-white flex items-center gap-1.5">
-            <span>🌟</span> Gemeinsamer Seelenauftrag:
-          </div>
-          <p class="text-slate-300 leading-relaxed" id="compPurposeDesc">
-            {initialSynastry.composite.sharedSoulPurpose}
-          </p>
-        </div>
-
-        <div class="space-y-1.5 p-3.5 rounded-xl bg-pink-950/30 border border-pink-500/30">
-          <div class="font-bold text-pink-300 flex items-center gap-1.5">
-            <span>💎</span> Beziehungs-Kraftstein:
-          </div>
-          <div class="text-white font-semibold" id="compStoneName">{initialSynastry.composite.pairGemstone.name}</div>
-          <p class="text-[11px] text-slate-300 leading-snug" id="compStoneDesc">{initialSynastry.composite.pairGemstone.effect}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Inter-Aspects Table -->
-    <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-5">
-      <div class="flex items-center justify-between border-b border-white/10 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="text-amber-400 text-lg">⚡</span>
-          <h3 class="text-lg font-bold text-white">Aktive Synastrie-Inter-Aspekte</h3>
-        </div>
-        <span class="text-xs font-mono text-slate-400" id="synAspectCount">
-          {initialSynastry.aspects.length} Aspekte berechnet
-        </span>
-      </div>
-
-      <div class="space-y-3 max-h-96 overflow-y-auto pr-1" id="synAspectsList">
-        {initialSynastry.aspects.slice(0, 10).map(asp => (
-          <div class="p-3.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2 font-bold text-sm text-white">
-                <span class="px-2 py-0.5 rounded text-xs border" style={`color: ${asp.color}; border-color: ${asp.color}40; background: ${asp.color}15`}>
-                  {asp.symbol} {asp.aspectName}
-                </span>
-                <span>{asp.headline}</span>
-              </div>
-              <p class="text-xs text-slate-300 leading-relaxed">{asp.esotericMeaning}</p>
-            </div>
-            <span class="text-xs font-mono text-slate-400 bg-black/40 px-2.5 py-1 rounded shrink-0">
-              Orb: {asp.orb.toFixed(1)}°
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-
+    <PartnerMatchingCard initialSynastry={initialSynastry} />
+    <CompositeChartCard initialSynastry={initialSynastry} />
   </div>
 
-  <!-- FAMILY & GROUP MATRIX VIEW CONTAINER (Initially Hidden) -->
+  <!-- FAMILY & GROUP MATRIX VIEW CONTAINER -->
   <div id="familyMatrixView" class="space-y-8 hidden">
-    
-    <!-- 1. Family Element Balance Dashboard -->
-    <div class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/40 shadow-2xl space-y-6">
-      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-500/30 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="w-11 h-11 rounded-2xl bg-amber-500/25 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
-            👨‍👩‍👧‍👦
-          </span>
-          <div>
-            <div class="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-extrabold">
-              Kollektives Familien-Energiefeld
-            </div>
-            <h3 class="text-xl font-black text-white" id="famHeadline">{initialFamily.familyDynamicHeadline}</h3>
-          </div>
-        </div>
-
-        <div class="text-xs font-mono text-slate-300 bg-black/50 px-3.5 py-1.5 rounded-full border border-white/10" id="famMemberCountBadge">
-          {initialFamily.memberCount} Familienmitglieder analysiert
-        </div>
-      </div>
-
-      <!-- 4 Elements Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div class="p-4 rounded-2xl bg-red-950/30 border border-red-500/30 space-y-1 text-center">
-          <div class="text-xs font-bold text-red-300">🔥 Feuer (Tatkraft)</div>
-          <div class="text-2xl font-black text-white font-mono" id="famPctFire">{initialFamily.elementBalance.fire}%</div>
-        </div>
-        <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-1 text-center">
-          <div class="text-xs font-bold text-emerald-300">🏔️ Erde (Sicherheit)</div>
-          <div class="text-2xl font-black text-white font-mono" id="famPctEarth">{initialFamily.elementBalance.earth}%</div>
-        </div>
-        <div class="p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 space-y-1 text-center">
-          <div class="text-xs font-bold text-cyan-300">🌬️ Luft (Dialog)</div>
-          <div class="text-2xl font-black text-white font-mono" id="famPctAir">{initialFamily.elementBalance.air}%</div>
-        </div>
-        <div class="p-4 rounded-2xl bg-blue-950/30 border border-blue-500/30 space-y-1 text-center">
-          <div class="text-xs font-bold text-blue-300">🌊 Wasser (Gefühl)</div>
-          <div class="text-2xl font-black text-white font-mono" id="famPctWater">{initialFamily.elementBalance.water}%</div>
-        </div>
-      </div>
-
-      <!-- Family Karma & Communication -->
-      <div class="p-5 rounded-2xl bg-black/60 border border-amber-500/30 space-y-3 text-xs">
-        <div class="space-y-1">
-          <div class="font-bold text-amber-300 flex items-center gap-1.5">
-            <span>🧭</span> Kollektive Familien-Reifeaufgabe:
-          </div>
-          <p class="text-slate-200 leading-relaxed" id="famKarmaDesc">{initialFamily.familyKarmaLesson}</p>
-        </div>
-        <div class="pt-2 border-t border-white/10 space-y-1">
-          <div class="font-bold text-cyan-300 flex items-center gap-1.5">
-            <span>🧠</span> Birkenbihl-Familien-Kommunikationscode:
-          </div>
-          <p class="text-slate-200 leading-relaxed" id="famCodeDesc">{initialFamily.birkenbihlCommunicationCode}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. Family Members Roles Grid -->
-    <div class="space-y-4">
-      <div class="flex items-center gap-2 border-b border-white/10 pb-3">
-        <span class="text-amber-400">✧</span>
-        <h3 class="text-lg font-bold text-white">Individuelle Seelenrollen im Familienverband</h3>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="famMembersGrid">
-        {initialFamily.members.map(m => (
-          <div class="cosmic-glass rounded-3xl p-5 border border-white/10 space-y-3 shadow-xl">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl p-2 rounded-xl bg-white/5 border border-white/10">{m.roleIcon}</span>
-              <div>
-                <h4 class="font-bold text-white text-sm">{m.name}</h4>
-                <div class="text-[11px] text-amber-300 font-medium">{m.soulRoleTitle}</div>
-                <div class="text-[10px] text-slate-400 font-mono">☉ {m.sunSign} • ☽ {m.moonSign}</div>
-              </div>
-            </div>
-            <div class="p-3 rounded-xl bg-white/5 space-y-1 text-xs">
-              <div class="font-bold text-emerald-300">🎁 Gabe für die Familie:</div>
-              <p class="text-slate-300 text-[11px] leading-snug">{m.giftToFamily}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
+    <FamilyClusterCard initialFamily={initialFamily} />
   </div>
-
 </div>
 
-<script>
-  import { getClientProfiles } from '../../lib/db/profileStore';
-  import { generateNatalChart } from '../../lib/astrology/engine';
-  import { calculateSynastry, calculateFamilyMatrix } from '../../lib/astrology/synastry';
-
-  function initSynastryController() {
-    const modePartnerBtn = document.getElementById('synastryModePartnerBtn');
-    const modeFamilyBtn = document.getElementById('synastryModeFamilyBtn');
-    const partnerView = document.getElementById('partnerSynastryView');
-    const familyView = document.getElementById('familyMatrixView');
-    const selectA = document.getElementById('synastrySelectPersonA') as HTMLSelectElement;
-    const selectB = document.getElementById('synastrySelectPersonB') as HTMLSelectElement;
-    const partnerRow = document.getElementById('partnerSelectorsRow');
-
-    if (!modePartnerBtn || !modeFamilyBtn || !partnerView || !familyView) return;
-
-    // Toggle Modes
-    modePartnerBtn.addEventListener('click', () => {
-      modePartnerBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] cursor-pointer';
-      modeFamilyBtn.className = 'px-5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer';
-      partnerView.classList.remove('hidden');
-      familyView.classList.add('hidden');
-      if (partnerRow) partnerRow.classList.remove('hidden');
-    });
-
-    modeFamilyBtn.addEventListener('click', () => {
-      modeFamilyBtn.className = 'px-5 py-2 rounded-xl text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-purple-600 text-white shadow-[0_0_15px_rgba(234,179,8,0.4)] cursor-pointer';
-      modePartnerBtn.className = 'px-5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer';
-      familyView.classList.remove('hidden');
-      partnerView.classList.add('hidden');
-      if (partnerRow) partnerRow.classList.add('hidden');
-      recalcFamilyMatrix();
-    });
-
-    function populateProfileDropdowns() {
-      const profiles = getClientProfiles();
-      if (!selectA || !selectB) return;
-
-      const currentParams = new URLSearchParams(window.location.search);
-      const activeName = currentParams.get('name') || 'Aktives Profil';
-
-      let optionsA = `<option value="active">${activeName} (Aktives Profil)</option>`;
-      let optionsB = '';
-
-      profiles.forEach(p => {
-        optionsA += `<option value="${p.id}">${p.name} (${p.birthDate} • ${p.cityName})</option>`;
-        optionsB += `<option value="${p.id}">${p.name} (${p.birthDate} • ${p.cityName})</option>`;
-      });
-
-      if (profiles.length === 0) {
-        optionsB = `<option value="partner_default">Seelenpartner (Muster-Vergleich)</option>`;
-      }
-
-      selectA.innerHTML = optionsA;
-      selectB.innerHTML = optionsB;
-    }
-
-    populateProfileDropdowns();
-    window.addEventListener('astro_profiles_updated', populateProfileDropdowns);
-
-    function recalcSynastry() {
-      const profiles = getClientProfiles();
-      const params = new URLSearchParams(window.location.search);
-      
-      const chartA = generateNatalChart({
-        birthDate: params.get('birthDate') || '1991-05-05',
-        birthTime: params.get('birthTime') || '13:00',
-        cityName: params.get('cityName') || 'Wien',
-        latitude: parseFloat(params.get('latitude') || '48.2082'),
-        longitude: parseFloat(params.get('longitude') || '16.3738'),
-        timezone: params.get('timezone') || 'Europe/Vienna',
-        name: params.get('name') || 'Edle Seele',
-        houseSystem: (params.get('houseSystem') === 'equal' ? 'equal' : 'placidus') as any
-      });
-
-      const selBVal = selectB?.value;
-      let chartB = chartA;
-      const foundB = profiles.find(p => p.id === selBVal);
-
-      if (foundB) {
-        chartB = generateNatalChart({
-          birthDate: foundB.birthDate,
-          birthTime: foundB.birthTime,
-          cityName: foundB.cityName,
-          latitude: foundB.latitude,
-          longitude: foundB.longitude,
-          timezone: foundB.timezone,
-          name: foundB.name,
-          houseSystem: foundB.houseSystem || 'placidus'
-        });
-      } else {
-        // Mock partner if only 1 profile exists
-        chartB = {
-          ...chartA,
-          input: {
-            ...chartA.input,
-            name: 'Seelenpartner',
-            birthDate: '1992-03-12',
-            birthTime: '08:45',
-            cityName: 'Salzburg'
-          }
-        };
-      }
-
-      const res = calculateSynastry(chartA, chartB);
-
-      const archTitle = document.getElementById('synastryArchetypeTitle');
-      if (archTitle) archTitle.textContent = res.scores.archetype;
-      const ovScore = document.getElementById('synastryOverallScore');
-      if (ovScore) ovScore.textContent = `${res.scores.overallScore}%`;
-      const ovBar = document.getElementById('synastryOverallBar');
-      if (ovBar) ovBar.style.width = `${res.scores.overallScore}%`;
-      const tag = document.getElementById('synastryTagline');
-      if (tag) tag.textContent = `"${res.scores.tagline}"`;
-
-      const scoreEmo = document.getElementById('synScoreEmo');
-      if (scoreEmo) scoreEmo.textContent = `${res.scores.emotionalHarmony.score}%`;
-      const barEmo = document.getElementById('synBarEmo');
-      if (barEmo) barEmo.style.width = `${res.scores.emotionalHarmony.score}%`;
-      const descEmo = document.getElementById('synDescEmo');
-      if (descEmo) descEmo.textContent = res.scores.emotionalHarmony.description;
-
-      const scorePass = document.getElementById('synScorePass');
-      if (scorePass) scorePass.textContent = `${res.scores.passionAndChemistry.score}%`;
-      const barPass = document.getElementById('synBarPass');
-      if (barPass) barPass.style.width = `${res.scores.passionAndChemistry.score}%`;
-      const descPass = document.getElementById('synDescPass');
-      if (descPass) descPass.textContent = res.scores.passionAndChemistry.description;
-
-      const scoreMind = document.getElementById('synScoreMind');
-      if (scoreMind) scoreMind.textContent = `${res.scores.mindAndCommunication.score}%`;
-      const barMind = document.getElementById('synBarMind');
-      if (barMind) barMind.style.width = `${res.scores.mindAndCommunication.score}%`;
-      const descMind = document.getElementById('synDescMind');
-      if (descMind) descMind.textContent = res.scores.mindAndCommunication.description;
-
-      const scoreKarm = document.getElementById('synScoreKarm');
-      if (scoreKarm) scoreKarm.textContent = `${res.scores.karmicBondAndStability.score}%`;
-      const barKarm = document.getElementById('synBarKarm');
-      if (barKarm) barKarm.style.width = `${res.scores.karmicBondAndStability.score}%`;
-      const descKarm = document.getElementById('synDescKarm');
-      if (descKarm) descKarm.textContent = res.scores.karmicBondAndStability.description;
-
-      // Composite DOM
-      const cSunPos = document.getElementById('compSunPos');
-      if (cSunPos) cSunPos.textContent = `${res.composite.sun.sign.name} (${res.composite.sun.degreeString})`;
-      const cSunDesc = document.getElementById('compSunDesc');
-      if (cSunDesc) cSunDesc.textContent = res.composite.sun.interpretation;
-
-      const cMoonPos = document.getElementById('compMoonPos');
-      if (cMoonPos) cMoonPos.textContent = `${res.composite.moon.sign.name} (${res.composite.moon.degreeString})`;
-      const cMoonDesc = document.getElementById('compMoonDesc');
-      if (cMoonDesc) cMoonDesc.textContent = res.composite.moon.interpretation;
-
-      const cAcPos = document.getElementById('compAcPos');
-      if (cAcPos) cAcPos.textContent = `${res.composite.ascendant.sign.name} (${res.composite.ascendant.degreeString})`;
-      const cAcDesc = document.getElementById('compAcDesc');
-      if (cAcDesc) cAcDesc.textContent = res.composite.ascendant.interpretation;
-
-      const cPurp = document.getElementById('compPurposeDesc');
-      if (cPurp) cPurp.textContent = res.composite.sharedSoulPurpose;
-      const cStoneN = document.getElementById('compStoneName');
-      if (cStoneN) cStoneN.textContent = res.composite.pairGemstone.name;
-      const cStoneD = document.getElementById('compStoneDesc');
-      if (cStoneD) cStoneD.textContent = res.composite.pairGemstone.effect;
-    }
-
-    function recalcFamilyMatrix() {
-      const profiles = getClientProfiles();
-      const charts = profiles.map(p => generateNatalChart({
-        birthDate: p.birthDate,
-        birthTime: p.birthTime,
-        cityName: p.cityName,
-        latitude: p.latitude,
-        longitude: p.longitude,
-        timezone: p.timezone,
-        name: p.name,
-        houseSystem: p.houseSystem || 'placidus'
-      }));
-
-      if (charts.length === 0) return;
-
-      const fam = calculateFamilyMatrix(charts);
-      const famHead = document.getElementById('famHeadline');
-      if (famHead) famHead.textContent = fam.familyDynamicHeadline;
-      const badge = document.getElementById('famMemberCountBadge');
-      if (badge) badge.textContent = `${fam.memberCount} Familienmitglieder analysiert`;
-
-      const pFire = document.getElementById('famPctFire');
-      if (pFire) pFire.textContent = `${fam.elementBalance.fire}%`;
-      const pEarth = document.getElementById('famPctEarth');
-      if (pEarth) pEarth.textContent = `${fam.elementBalance.earth}%`;
-      const pAir = document.getElementById('famPctAir');
-      if (pAir) pAir.textContent = `${fam.elementBalance.air}%`;
-      const pWater = document.getElementById('famPctWater');
-      if (pWater) pWater.textContent = `${fam.elementBalance.water}%`;
-
-      const karmaD = document.getElementById('famKarmaDesc');
-      if (karmaD) karmaD.textContent = fam.familyKarmaLesson;
-      const codeD = document.getElementById('famCodeDesc');
-      if (codeD) codeD.textContent = fam.birkenbihlCommunicationCode;
-    }
-
-    selectA?.addEventListener('change', recalcSynastry);
-    selectB?.addEventListener('change', recalcSynastry);
-    window.addEventListener('astro_recalculate_chart', recalcSynastry);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSynastryController);
-  } else {
-    initSynastryController();
-  }
-</script>
+<script src="../../scripts/controllers/synastryController.ts"></script>

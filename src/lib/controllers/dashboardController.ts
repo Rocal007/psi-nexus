@@ -5,7 +5,7 @@
 
 import { validateBirthProfileInputDTO, BirthProfileDTOMapper, Result, type BirthProfileInputDTO } from '../dto';
 import { generateNatalChart, type CompleteNatalChart, type ChartInput } from '../astrology/engine';
-import { generatePersonalitySummary, type PersonalitySynthesis } from '../astrology/personalitySynthesis';
+import { generatePersonalitySummary, type PersonalitySummary } from '../astrology/personalitySynthesis';
 import { calculateHumanDesignChart } from '../humandesign/engine';
 import type { HDChartData } from '../humandesign/types';
 
@@ -14,7 +14,7 @@ export interface DashboardViewModel {
   readonly chartInput: ChartInput;
   readonly validatedDTO: BirthProfileInputDTO;
   readonly chart: CompleteNatalChart;
-  readonly personalitySummary: PersonalitySynthesis;
+  readonly personalitySummary: PersonalitySummary;
   readonly hdChart: HDChartData;
 }
 

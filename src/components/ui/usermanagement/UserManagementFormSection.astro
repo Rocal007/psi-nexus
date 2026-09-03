@@ -1,0 +1,135 @@
+---
+// UserManagementFormSection: Inline collapsible user add/edit form
+---
+
+<!-- Inline Add / Edit User Form (Collapsible) -->
+<div
+  id="userManagerFormSection"
+  class="hidden p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-amber-500/30 space-y-4 shrink-0 transition-all"
+>
+  <div class="flex items-center justify-between border-b border-white/10 pb-2">
+    <h3 class="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5" id="formHeaderTitle">
+      <span>✨</span>
+      <span>Neues Seelen-Profil anlegen (SQLite Backend)</span>
+    </h3>
+    <button
+      type="button"
+      id="btnCancelUserForm"
+      class="text-xs text-slate-400 hover:text-white cursor-pointer"
+    >
+      Abbrechen ✕
+    </button>
+  </div>
+
+  <form id="userManagerForm" class="space-y-3">
+    <input type="hidden" id="formUserId" value="" />
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Vollständiger Name *</label>
+        <input
+          type="text"
+          id="formUserName"
+          required
+          placeholder="z. B. Sophie Scholl"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Rolle / Status</label>
+        <select
+          id="formUserRole"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        >
+          <option value="client">Klient / Hauptperson</option>
+          <option value="family">Familienmitglied</option>
+          <option value="member">Partner / Herzensmensch</option>
+          <option value="admin">Administrator / Astrologe</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Tags / Labels (Kommagetrennt)</label>
+        <input
+          type="text"
+          id="formUserTags"
+          placeholder="z. B. Partner, VIP, Seelenverwandter"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Geburtsdatum *</label>
+        <input
+          type="date"
+          id="formUserBirthDate"
+          required
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Geburtszeit (HH:MM)</label>
+        <div class="flex items-center gap-2">
+          <input
+            type="time"
+            id="formUserBirthTime"
+            value="12:00"
+            class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+          />
+        </div>
+        <label class="flex items-center gap-1.5 mt-1 text-[10px] text-slate-400 cursor-pointer">
+          <input type="checkbox" id="formUserUnknownTime" class="rounded border-white/20 bg-slate-950" />
+          <span>Unbekannte Zeit (12:00)</span>
+        </label>
+      </div>
+
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Geburtsort / Stadt *</label>
+        <input
+          type="text"
+          id="formUserCity"
+          required
+          placeholder="z. B. Wien, Österreich"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Häusersystem</label>
+        <select
+          id="formUserHouseSystem"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        >
+          <option value="placidus">Placidus (Standard)</option>
+          <option value="equal">Äquales System</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Notizen / Assoziationen</label>
+        <input
+          type="text"
+          id="formUserNotes"
+          placeholder="z. B. Beratung vom 12. Mai, Schwerpunkte: Saturn Return"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        />
+      </div>
+
+      <div class="flex items-end justify-end gap-2">
+        <button
+          type="submit"
+          class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-lg transition-all cursor-pointer flex items-center gap-1.5"
+        >
+          <span>💾</span>
+          <span id="formSubmitBtnText">Profil im Backend speichern</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

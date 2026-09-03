@@ -99,6 +99,15 @@ const SEMANTIC_MENU_CHAPTERS = [
         <span>Lexikon</span>
       </a>
 
+      <button
+        type="button"
+        class="trigger-neuro-player hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/15 to-teal-500/20 hover:from-emerald-500/25 hover:to-teal-500/30 border border-emerald-500/35 text-xs font-bold text-emerald-300 transition-all cursor-pointer shadow-sm group"
+        title="NEXUS Neuro-Akustik Player: ADHS Fokus, Anti-Stress, Deep Work & Schlaf-Frequenzen"
+      >
+        <span class="group-hover:scale-110 transition-transform">🎧</span>
+        <span>Frequenzen</span>
+      </button>
+
       <a
         href="#decoderToggleHeader"
         class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-amber-300 transition-all cursor-pointer"
@@ -115,6 +124,16 @@ const SEMANTIC_MENU_CHAPTERS = [
       >
         <span>⎙</span>
         <span>PDF / Druck</span>
+      </button>
+
+      <button
+        type="button"
+        id="headerLoginBtn"
+        class="hidden sm:flex px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-amber-600/20 hover:from-amber-500/25 hover:to-amber-600/30 border border-amber-500/35 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer items-center gap-1.5"
+        title="Als Benutzer anmelden oder Profil wechseln"
+      >
+        <span id="headerLoginIcon">🔑</span>
+        <span id="headerLoginText">Einloggen</span>
       </button>
 
       <button
@@ -255,6 +274,19 @@ const SEMANTIC_MENU_CHAPTERS = [
       <div class="space-y-2 pt-2 border-t border-white/5">
         <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 font-tech">Direkt-Werkzeuge</div>
         <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <button
+            type="button"
+            class="trigger-neuro-player col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 text-emerald-300 hover:from-emerald-500/30 hover:to-teal-500/30 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
+          >
+            🎧 <span>Frequenzen (ADHS, Fokus & Schlaf)</span>
+          </button>
+          <button
+            type="button"
+            id="drawerLoginBtn"
+            class="p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 border border-amber-500/40 text-amber-300 hover:from-amber-500/30 hover:to-amber-600/30 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
+          >
+            🔑 <span id="drawerLoginText">Einloggen</span>
+          </button>
           <a
             href="/lexikon/"
             class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center gap-1.5 font-bold"
@@ -275,12 +307,6 @@ const SEMANTIC_MENU_CHAPTERS = [
           >
             👥 Benutzer (DB)
           </button>
-          <a
-            href="#decoderToggleHeader"
-            class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 text-center transition-all cursor-pointer close-drawer-link flex items-center justify-center"
-          >
-            🧠 Birkenbihl
-          </a>
         </div>
         <div class="pt-1">
           <button
@@ -309,6 +335,53 @@ const SEMANTIC_MENU_CHAPTERS = [
     const drawerNewChartBtn = document.getElementById('drawerNewChartBtn');
     const headerUserManagerBtn = document.getElementById('headerUserManagerBtn');
     const drawerUserManagerBtn = document.getElementById('drawerUserManagerBtn');
+    const headerLoginBtn = document.getElementById('headerLoginBtn');
+    const drawerLoginBtn = document.getElementById('drawerLoginBtn');
+    const headerLoginText = document.getElementById('headerLoginText');
+    const drawerLoginText = document.getElementById('drawerLoginText');
+    const headerLoginIcon = document.getElementById('headerLoginIcon');
+
+    function refreshHeaderAuthUI() {
+      try {
+        const raw = localStorage.getItem('nexus_auth_session');
+        const sess = raw ? JSON.parse(raw) : null;
+        if (sess && sess.userName) {
+          if (headerLoginText) headerLoginText.textContent = sess.userName;
+          if (drawerLoginText) drawerLoginText.textContent = sess.userName;
+          if (headerLoginIcon) headerLoginIcon.textContent = '👤';
+        } else {
+          const curId = localStorage.getItem('astro_nexus_current_profile_id');
+          const profilesRaw = localStorage.getItem('astro_nexus_saved_profiles_v1');
+          const profiles = profilesRaw ? JSON.parse(profilesRaw) : [];
+          const cur = Array.isArray(profiles) ? profiles.find((p: any) => p.id === curId) : null;
+          if (cur && cur.name) {
+            if (headerLoginText) headerLoginText.textContent = cur.name;
+            if (drawerLoginText) drawerLoginText.textContent = cur.name;
+            if (headerLoginIcon) headerLoginIcon.textContent = '👤';
+          } else {
+            if (headerLoginText) headerLoginText.textContent = 'Einloggen';
+            if (drawerLoginText) drawerLoginText.textContent = 'Einloggen';
+            if (headerLoginIcon) headerLoginIcon.textContent = '🔑';
+          }
+        }
+      } catch {}
+    }
+
+    refreshHeaderAuthUI();
+    window.addEventListener('astro_user_logged_in', refreshHeaderAuthUI);
+    window.addEventListener('astro_user_logged_out', refreshHeaderAuthUI);
+    window.addEventListener('astro_profiles_updated', refreshHeaderAuthUI);
+
+    headerLoginBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('astro_open_login'));
+    });
+
+    drawerLoginBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeDrawer();
+      window.dispatchEvent(new CustomEvent('astro_open_login'));
+    });
 
     headerUserManagerBtn?.addEventListener('click', (e) => {
       e.preventDefault();

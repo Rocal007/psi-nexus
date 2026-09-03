@@ -1,0 +1,72 @@
+---
+import type { SynastryAnalysisResult } from '../../../lib/astrology/synastry';
+
+interface Props {
+  initialSynastry: SynastryAnalysisResult;
+}
+
+const { initialSynastry } = Astro.props;
+---
+
+<div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-6 relative overflow-hidden">
+  <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+    <span class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xl border border-purple-500/30">
+      ✨
+    </span>
+    <div>
+      <div class="text-[10px] uppercase font-mono tracking-widest text-purple-400 font-extrabold">
+        Das Komposit-Horoskop (Midpoints)
+      </div>
+      <h3 class="text-xl font-bold text-white">Das gemeinsame Dritte Wesen eurer Liebe</h3>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <!-- Composite Sun -->
+    <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-2">
+      <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+        <span>☉ Komposit-Sonne</span>
+        <span id="compSunPos" class="font-mono">{initialSynastry.composite.sun.sign.name} ({initialSynastry.composite.sun.degreeString})</span>
+      </div>
+      <p class="text-xs text-slate-200 leading-relaxed" id="compSunDesc">{initialSynastry.composite.sun.interpretation}</p>
+    </div>
+
+    <!-- Composite Moon -->
+    <div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 space-y-2">
+      <div class="flex items-center justify-between text-xs font-bold text-indigo-300">
+        <span>☽ Komposit-Mond</span>
+        <span id="compMoonPos" class="font-mono">{initialSynastry.composite.moon.sign.name} ({initialSynastry.composite.moon.degreeString})</span>
+      </div>
+      <p class="text-xs text-slate-200 leading-relaxed" id="compMoonDesc">{initialSynastry.composite.moon.interpretation}</p>
+    </div>
+
+    <!-- Composite AC -->
+    <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 space-y-2">
+      <div class="flex items-center justify-between text-xs font-bold text-cyan-300">
+        <span>↑ Komposit-Aszendent</span>
+        <span id="compAcPos" class="font-mono">{initialSynastry.composite.ascendant.sign.name} ({initialSynastry.composite.ascendant.degreeString})</span>
+      </div>
+      <p class="text-xs text-slate-200 leading-relaxed" id="compAcDesc">{initialSynastry.composite.ascendant.interpretation}</p>
+    </div>
+  </div>
+
+  <!-- Shared Purpose & Pair Gemstone Card -->
+  <div class="p-5 rounded-2xl bg-slate-950/70 border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+    <div class="space-y-1.5">
+      <div class="font-bold text-white flex items-center gap-1.5">
+        <span>🌟</span> Gemeinsamer Seelenauftrag:
+      </div>
+      <p class="text-slate-300 leading-relaxed" id="compPurposeDesc">
+        {initialSynastry.composite.sharedSoulPurpose}
+      </p>
+    </div>
+
+    <div class="space-y-1.5 p-3.5 rounded-xl bg-pink-950/30 border border-pink-500/30">
+      <div class="font-bold text-pink-300 flex items-center gap-1.5">
+        <span>💎</span> Beziehungs-Kraftstein:
+      </div>
+      <div class="text-white font-semibold" id="compStoneName">{initialSynastry.composite.pairGemstone.name}</div>
+      <p class="text-[11px] text-slate-300 leading-snug" id="compStoneDesc">{initialSynastry.composite.pairGemstone.effect}</p>
+    </div>
+  </div>
+</div>

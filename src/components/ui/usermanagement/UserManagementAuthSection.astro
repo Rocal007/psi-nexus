@@ -1,0 +1,108 @@
+---
+// UserManagementAuthSection: Login & Authentication sub-panel
+---
+
+<!-- Collapsible Login & Authentication Section -->
+<div
+  id="userManagerLoginSection"
+  class="hidden p-4 sm:p-5 rounded-2xl bg-slate-900/95 border border-amber-400/40 space-y-4 shrink-0 shadow-2xl transition-all"
+>
+  <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+    <div class="flex items-center gap-2">
+      <span class="text-lg">🔑</span>
+      <div>
+        <h3 class="text-xs font-black uppercase tracking-wider text-amber-300">
+          Benutzer-Authentifizierung & Seelen-Login
+        </h3>
+        <p class="text-[11px] text-slate-400">
+          Wähle dein registriertes Seelen-Profil oder melde dich mit deinen Zugangsdaten an.
+        </p>
+      </div>
+    </div>
+    <button
+      type="button"
+      id="btnCancelLoginForm"
+      class="text-xs text-slate-400 hover:text-white cursor-pointer px-2 py-1 rounded-lg bg-white/5"
+    >
+      ✕ Schließen
+    </button>
+  </div>
+
+  <!-- Active Session Status Banner -->
+  <div id="loginActiveSessionBanner" class="hidden p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="text-xs text-emerald-200">
+        Aktuell angemeldet als: <strong id="loginSessionUserName" class="text-white"></strong> (<span id="loginSessionRole" class="text-emerald-300 font-mono"></span>)
+      </span>
+    </div>
+    <button
+      type="button"
+      id="btnLogoutUser"
+      class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer transition-all"
+    >
+      Abmelden (Logout)
+    </button>
+  </div>
+
+  <!-- Login Modes -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+    <!-- Mode 1: 1-Click Profile Selection Login -->
+    <div class="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
+      <div class="text-[11px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+        <span>⚡</span>
+        <span>1-Klick Profil-Login (Aus SQLite / Speicher)</span>
+      </div>
+      <p class="text-[11px] text-slate-400">
+        Wähle dein Seelen-Profil direkt aus, um deine persönliche Sitzung sofort zu starten.
+      </p>
+      <div class="flex items-center gap-2">
+        <select
+          id="loginProfileSelect"
+          class="flex-1 px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-amber-400 focus:outline-none"
+        >
+          <option value="">-- Profil auswählen --</option>
+        </select>
+        <button
+          type="button"
+          id="btnLoginSelectProfile"
+          class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer"
+        >
+          Einloggen
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode 2: Credentials Login (Email / Name & PIN) -->
+    <form id="loginCredentialsForm" class="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
+      <div class="text-[11px] font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+        <span>🔒</span>
+        <span>Konto-Anmeldung (Email / Name)</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <input
+          type="text"
+          id="loginEmailOrName"
+          placeholder="Name oder E-Mail"
+          required
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-purple-400 focus:outline-none"
+        />
+        <input
+          type="password"
+          id="loginPin"
+          placeholder="PIN / Passphrase (opt.)"
+          class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/15 text-white text-xs focus:border-purple-400 focus:outline-none"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] text-slate-500 font-mono">NEXUS Auth Security</span>
+        <button
+          type="submit"
+          class="px-4 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 hover:text-white font-bold text-xs transition-all cursor-pointer"
+        >
+          Anmelden ➔
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

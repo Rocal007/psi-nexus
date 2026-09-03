@@ -1,0 +1,66 @@
+---
+// UserManagementStatsBar: Overview metrics and DSGVO export/import buttons
+---
+
+<!-- Cluster Overview & Mini Stats Bar -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
+  <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center gap-3">
+    <div class="text-2xl">👥</div>
+    <div>
+      <div class="text-[10px] uppercase font-bold text-slate-400">Gesamt-Profile</div>
+      <div class="text-lg font-black text-white font-mono" id="statTotalUsers">0</div>
+    </div>
+  </div>
+
+  <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center gap-3">
+    <div class="text-2xl">🌟</div>
+    <div>
+      <div class="text-[10px] uppercase font-bold text-slate-400">Aktives Profil</div>
+      <div class="text-sm font-bold text-amber-300 truncate max-w-[120px]" id="statActiveUser">-</div>
+    </div>
+  </div>
+
+  <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center gap-3">
+    <div class="text-2xl">🔥</div>
+    <div class="min-w-0 flex-1">
+      <div class="text-[10px] uppercase font-bold text-slate-400">Elemente-Pool</div>
+      <div class="flex items-center gap-1 text-[11px] font-mono text-slate-300 mt-0.5" id="statElements">
+        <span class="text-red-400" title="Feuer">F:0</span>
+        <span class="text-emerald-400" title="Erde">E:0</span>
+        <span class="text-cyan-300" title="Luft">L:0</span>
+        <span class="text-blue-400" title="Wasser">W:0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+    <div>
+      <div class="text-[10px] uppercase font-bold text-slate-400">DSGVO & Backup</div>
+      <div class="flex items-center gap-1 mt-1">
+        <button
+          type="button"
+          id="btnExportJson"
+          class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-mono text-slate-300 hover:text-white cursor-pointer"
+          title="JSON-Export herunterladen"
+        >
+          JSON
+        </button>
+        <button
+          type="button"
+          id="btnExportCsv"
+          class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-mono text-slate-300 hover:text-white cursor-pointer"
+          title="CSV-Export herunterladen"
+        >
+          CSV
+        </button>
+        <label
+          class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-mono text-amber-300 hover:text-amber-200 cursor-pointer"
+          title="JSON-Backup hochladen"
+        >
+          Import
+          <input type="file" id="inputImportJson" accept=".json" class="hidden" />
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

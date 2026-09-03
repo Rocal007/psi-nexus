@@ -1,0 +1,648 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import type { HDChartData } from '../../lib/humandesign/types';
+import WizardEssenceCard from '../ui/WizardEssenceCard.astro';
+import PersonalitySummarySection from '../interpretation/PersonalitySummarySection.astro';
+import RadixWheel from '../chart/RadixWheel.astro';
+import ElementBalance from '../chart/ElementBalance.astro';
+import PlanetCard from '../chart/PlanetCard.astro';
+import AspectMatrix from '../chart/AspectMatrix.astro';
+import LifePillarsSection from '../interpretation/LifePillarsSection.astro';
+import KarmicNodesSection from '../interpretation/KarmicNodesSection.astro';
+import NumerologySection from '../interpretation/NumerologySection.astro';
+import AngelNumbersSection from '../interpretation/AngelNumbersSection.astro';
+import EsotericDossier from '../interpretation/EsotericDossier.astro';
+import GemstoneSection from '../interpretation/GemstoneSection.astro';
+import ShadowHealthDialecticSection from '../interpretation/ShadowHealthDialecticSection.astro';
+import MoonAndWisdomSection from '../interpretation/MoonAndWisdomSection.astro';
+import ConstellationExplorer from '../chart/ConstellationExplorer.astro';
+import GeoAstroChart from '../chart/GeoAstroChart.astro';
+import SynastryFamilySection from '../interpretation/SynastryFamilySection.astro';
+import HumanDesignSection from '../interpretation/HumanDesignSection.astro';
+
+interface Props {
+  chart: CompleteNatalChart;
+  hdChart: HDChartData;
+  houseSystem: string;
+}
+
+const { chart, hdChart, houseSystem } = Astro.props;
+---
+
+<!-- Full-Width Main Dossier Content Panels -->
+<div class="space-y-8 min-w-0 w-full">
+  <!-- TAB 1: Radix & Gestirne Panel (Tor I) -->
+  <div id="panel-radix" class="tab-content-panel active space-y-8">
+      
+    <!-- Wizard Sofort-Erkenntnis Chunk (Bite-Sized) -->
+    <WizardEssenceCard
+      gateNum="Tor I"
+      gateTitle="Kosmisches Fundament & Gestirnskräfte"
+      icon="🌌"
+      coreEssence={`Sonne in ${chart.synthesis.sun.planet.sign.name} (${chart.synthesis.sun.planet.degreeString}) und Aszendent in ${chart.housesResult.angles.ascendant.sign.name} bilden deinen unverwechselbaren kosmischen Wesenskern.`}
+      actionLever="Verbinde die bewusste Schöpferkraft deiner Sonne mit dem spontanen Seelentor deines Aszendenten für maximale Authentizität."
+      dailyImpulse="Achte heute bei deiner ersten Begegnung auf deinen spontanen Impuls – das ist die lebendige Kraft deines Aszendenten."
+    />
+
+    <!-- Hauptpunkt: Kompakte Persönlichkeits-Zusammenfassung -->
+    <PersonalitySummarySection chart={chart} />
+
+    <!-- Main Chart Section: Radix Wheel & Overview -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Left / Center: Interactive Radix Wheel (7 Cols) -->
+      <div class="lg:col-span-7 cosmic-glass rounded-3xl p-6 md:p-7 border border-white/15 shadow-2xl flex flex-col items-center cosmic-corner-accent">
+        <div class="w-full flex items-center justify-between border-b border-white/10 pb-4 mb-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-lg border border-amber-500/40">
+              ✦
+            </span>
+            <div>
+              <h2 class="text-lg font-bold text-white">Das Kosmische Radix-Rad</h2>
+              <p class="text-[11px] text-slate-400">Interaktive Gestirns- & Aspekt-Projektion</p>
+            </div>
+          </div>
+          <span class="text-xs text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/30">
+            {houseSystem === 'placidus' ? 'Placidus Häuser' : 'Equal Houses'}
+          </span>
+        </div>
+
+        <RadixWheel chart={chart} />
+
+        <div class="mt-4 p-3.5 rounded-2xl bg-black/40 border border-white/10 text-center text-xs text-slate-300 max-w-xl">
+          <p>💡 <span class="font-semibold text-amber-300">Interaktion:</span> Fahre mit der Maus über ein Planetensymbol oder eine Aspektlinie im Zentrum, um verbundene Kraftströme hervorzuheben.</p>
+        </div>
+      </div>
+
+      <!-- Right: Balance & Key Angles (5 Cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        <ElementBalance balance={chart.balance} />
+
+        <!-- Key Cardinal Angles Card -->
+        <div class="cosmic-glass rounded-3xl p-6 border border-white/15 shadow-2xl space-y-4 cosmic-corner-accent">
+          <div class="flex items-center gap-2.5 border-b border-white/10 pb-3">
+            <span class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-base border border-cyan-500/40">
+              ❖
+            </span>
+            <div>
+              <h3 class="text-base font-bold text-slate-100">Die 4 Kardinalen Achsen</h3>
+              <p class="text-[11px] text-slate-400">Eckpfeiler deiner irdischen Existenz</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div id="cardAC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-cyan-500/30 space-y-1 hover:bg-cyan-500/5 transition-all">
+              <div class="font-bold text-cyan-300 flex items-center gap-1">
+                <span>AC</span> Aszendent (1. Haus)
+              </div>
+              <div class="text-white font-semibold">{chart.housesResult.angles.ascendant.sign.name} ({chart.housesResult.angles.ascendant.degreeString})</div>
+              <div class="text-slate-400 text-[11px]">Auftreten & Seelentor</div>
+            </div>
+
+            <div id="cardMC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-amber-500/30 space-y-1 hover:bg-amber-500/5 transition-all">
+              <div class="font-bold text-amber-300 flex items-center gap-1">
+                <span>MC</span> Medium Coeli (10. Haus)
+              </div>
+              <div class="text-white font-semibold">{chart.housesResult.angles.midheaven.sign.name} ({chart.housesResult.angles.midheaven.degreeString})</div>
+              <div class="text-slate-400 text-[11px]">Berufung & Lebensziel</div>
+            </div>
+
+            <div id="cardDC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-rose-500/30 space-y-1 hover:bg-rose-500/5 transition-all">
+              <div class="font-bold text-rose-300 flex items-center gap-1">
+                <span>DC</span> Deszendent (7. Haus)
+              </div>
+              <div class="text-white font-semibold">{chart.housesResult.angles.descendant.sign.name} ({chart.housesResult.angles.descendant.degreeString})</div>
+              <div class="text-slate-400 text-[11px]">Begegnung & Partner</div>
+            </div>
+
+            <div id="cardIC" class="p-3.5 rounded-2xl bg-white/[0.03] border border-indigo-500/30 space-y-1 hover:bg-indigo-500/5 transition-all">
+              <div class="font-bold text-indigo-300 flex items-center gap-1">
+                <span>IC</span> Imum Coeli (4. Haus)
+              </div>
+              <div class="text-white font-semibold">{chart.housesResult.angles.imumCoeli.sign.name} ({chart.housesResult.angles.imumCoeli.degreeString})</div>
+              <div class="text-slate-400 text-[11px]">Wurzeln & Seelenheimat</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Planetary Table & Aspect Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7">
+        <PlanetCard planets={chart.planets} />
+      </div>
+      <div class="lg:col-span-5">
+        <AspectMatrix aspects={chart.aspects} />
+      </div>
+    </div>
+
+    <!-- Tab Next Navigation Banner (Tor I -> Tor II) -->
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <div class="space-y-1 text-center sm:text-left">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Nächste Seelenebene</div>
+        <h4 class="text-base sm:text-lg font-bold text-white">Tor II: Die 3 Lebens-Säulen (Liebe, Beruf & Erfüllung)</h4>
+        <p class="text-xs text-slate-300">Erfahre, wie deine Gestirne in Liebe und Karriere wirksam werden.</p>
+      </div>
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="pillars"
+      >
+        <span>Weiter zu Tor II</span>
+        <span class="text-base">💖 →</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- TAB 2: Die 3 Lebens-Säulen Panel (Tor II) -->
+  <div id="panel-pillars" class="tab-content-panel space-y-8">
+    
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor II"
+      gateTitle="Die 3 Lebens-Säulen (Liebe, Beruf & Erfüllung)"
+      icon="💖"
+      coreEssence="Deine kosmischen Energien manifestieren sich auf 3 irdischen Lebensbühnen: Herzensbeziehungen, Berufung/MC und Seelenruhe."
+      actionLever="Richte deine berufliche Ausrichtung und Partnerschaftsmuster synchron an deinen tieferen Werten aus."
+      dailyImpulse="Triff heute eine praktische Berufs- oder Beziehungsentscheidung im vollen Einklang mit deinem Herzen."
+    />
+
+    <LifePillarsSection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="radix"
+      >
+        <span>← Zurück zu Tor I</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Nächste Seelenebene</div>
+        <div class="text-sm font-bold text-white">Tor III: Karmische Tore & Schicksalsachsen</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="karmic"
+      >
+        <span>Weiter zu Tor III</span>
+        <span class="text-base">☊ →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 3: Karmische Knoten & Tore Panel (Tor III) -->
+  <div id="panel-karmic" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor III"
+      gateTitle="Karmische Tore & Schicksalsachsen"
+      icon="☊"
+      coreEssence="Die Mondknoten-Achse führt dich vom gewohnten Südknoten-Komfort zur Reifung deines Nordknotens."
+      actionLever="Löse alte karmische Reaktionsschleifen auf und folge mutig dem Wachstumsimpuls deines Nordknotens."
+      dailyImpulse="Verlasse heute eine bequeme Gewohnheit und wage einen mutigen Schritt in Richtung deines Seelenziels."
+    />
+
+    <KarmicNodesSection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="pillars"
+      >
+        <span>← Zurück zu Tor II</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Nächste Seelenebene</div>
+        <div class="text-sm font-bold text-white">Tor IV: Pythagoräische Seelen-Numerologie</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="numerology"
+      >
+        <span>Weiter zu Tor IV</span>
+        <span class="text-base">🔢 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 4: Seelen-Numerologie Panel (Tor IV) -->
+  <div id="panel-numerology" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor IV"
+      gateTitle="Pythagoräische Seelen-Numerologie"
+      icon="🔢"
+      coreEssence={`Deine Lebenszahl ${chart.numerology.lifePath.number} (${chart.numerology.lifePath.archetype}) trägt deinen unverwechselbaren mathematischen Schwingungscode.`}
+      actionLever="Nutze deinen Namenscode und deine Herzzahl als intuitiven Prüfkompass für stimmige Entscheidungen."
+      dailyImpulse="Beobachte heute, welche Zahlensynchronizitäten dir im Tagesverlauf intuitiv begegnen."
+    />
+
+    <NumerologySection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="karmic"
+      >
+        <span>← Zurück zu Tor III</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Nächste Seelenebene</div>
+        <div class="text-sm font-bold text-white">Tor V: Engelszahlen & Spiegeluhrzeiten</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="angel_numbers"
+      >
+        <span>Weiter zu Tor V</span>
+        <span class="text-base">🕊️ →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 5: Engelszahlen & Spiegeluhrzeiten Panel (Tor V) -->
+  <div id="panel-angel_numbers" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor V"
+      gateTitle="Engelszahlen & Spiegeluhrzeiten"
+      icon="🕊️"
+      coreEssence="Wiederkehrende Zahlenreihen (11:11, 222, 777) und Spiegeluhrzeiten sind Synchronizitäten deines Höheren Selbst."
+      actionLever="Bewerte Doppel-Uhrzeiten als kosmischen Moment der Zentrierung, Bestätigung und inneren Ausrichtung."
+      dailyImpulse="Halte beim nächsten Bemerken einer Doppel-Uhrzeit für einen tiefen Atemzug inne und spüre nach."
+    />
+
+    <AngelNumbersSection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="numerology"
+      >
+        <span>← Zurück zu Tor IV</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Die Hohe Seelenmatrix</div>
+        <div class="text-sm font-bold text-white">Tor VI: Das Hohe Esoterische Seelen-Dossier</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="dossier"
+      >
+        <span>Weiter zu Tor VI</span>
+        <span class="text-base">✦ →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 6: Esoterisches Seelen-Dossier Panel (Tor VI) -->
+  <div id="panel-dossier" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor VI"
+      gateTitle="Das Hohe Esoterische Seelen-Dossier (Die 7 Strahlen)"
+      icon="✦"
+      coreEssence="Die 7 Kosmischen Strahlen und Seelenalchemie enthüllen den höheren Sinn und Auftrag deiner Existenz."
+      actionLever="Harmonisiere deinen Seelenstrahl mit deinem Persönlichkeitsstrahl für mühelose Schöpferkraft."
+      dailyImpulse="Nimm dir 2 Minuten in der Stille, um die Qualität deines primären Seelenstrahls bewusst zu spüren."
+    />
+
+    <EsotericDossier chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="angel_numbers"
+      >
+        <span>← Zurück zu Tor V</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Die Kristall-Apotheke</div>
+        <div class="text-sm font-bold text-white">Tor VII: Heilsteine & Kristall-Resonanz</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="gemstones"
+      >
+        <span>Weiter zu Tor VII</span>
+        <span class="text-base">💎 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 7: Heilsteine & Kristall-Resonanz Panel (Tor VII) -->
+  <div id="panel-gemstones" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor VII"
+      gateTitle="Heilsteine & Kristall-Resonanz"
+      icon="💎"
+      coreEssence="Silizium-Kristalle und Naturminerale dienen als bio-energetische Stimmgabeln für deine Elemente & Chakren."
+      actionLever="Gleiche Schwächen deiner Elemente gezielt mit resonanten Kristall- und Mineralschwingungen sanft aus."
+      dailyImpulse="Trage heute deinen Resonanz-Kristall oder stelle einen Heilstein auf deinen Schreibtisch."
+    />
+
+    <GemstoneSection chart={chart} />
+
+    <!-- Psychosomatische Schatten-Analyse, Organe & Positive Dialektik -->
+    <ShadowHealthDialecticSection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="dossier"
+      >
+        <span>← Zurück zu Tor VI</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Das Kosmische Alltags-Tor</div>
+        <div class="text-sm font-bold text-white">Tor VIII: Mondkalender & Seelen-Leitspruch</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="moon_wisdom"
+      >
+        <span>Weiter zu Tor VIII</span>
+        <span class="text-base">🌙 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 8: Mondkalender & Ewiger Seelen-Leitspruch Panel (Tor VIII) -->
+  <div id="panel-moon_wisdom" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor VIII"
+      gateTitle="Mondkalender & Seelen-Leitspruch"
+      icon="🌙"
+      coreEssence="Der Mond steuert die Gezeiten in Zellen, Haaren, Pflanzen und deinem Biorhythmus."
+      actionLever="Nutze zunehmenden Mond zum Aufbauen & Schöpfen, abnehmenden Mond zum Klären & Loslassen."
+      dailyImpulse="Lies morgens deinen persönlichen Seelen-Leitspruch als erste energetische Zentrierung des Tages."
+    />
+
+    <MoonAndWisdomSection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="gemstones"
+      >
+        <span>← Zurück zu Tor VII</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Das Finale Sternen-Tor</div>
+        <div class="text-sm font-bold text-white">Tor IX: Das Große Sternbilder-Kompendium & Himmelsatlas</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="constellations"
+      >
+        <span>Weiter zu Tor IX</span>
+        <span class="text-base">✨ →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 9: Sternbilder-Atlas & Mythologie Panel (Tor IX) -->
+  <div id="panel-constellations" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor IX"
+      gateTitle="Sternbilder-Atlas & Mythologie"
+      icon="✨"
+      coreEssence="Die 12 Tierkreis-Konstellationen und Fixsterne bilden das mythologische Gewölbe deiner Seele."
+      actionLever="Erkenne die mythologische Heldenreise deines Sternzeichens als dein persönliches Meisterungsfeld."
+      dailyImpulse="Blicke heute in den Nachthimmel und verbinde dich mit der Konstellation deines Sonnenzeichens."
+    />
+
+    <ConstellationExplorer chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="moon_wisdom"
+      >
+        <span>← Zurück zu Tor VIII</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Globale Kraftorte</div>
+        <div class="text-sm font-bold text-white">Tor X: Astro-Kartographie & Weltkarte</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="geochart"
+      >
+        <span>Weiter zu Tor X</span>
+        <span class="text-base">🌍 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 10: Astro-Kartographie & Globale Kraftorte Panel (Tor X) -->
+  <div id="panel-geochart" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor X"
+      gateTitle="Astro-Kartographie & Globale Kraftorte"
+      icon="🌍"
+      coreEssence="Globale Planetenlinien zeigen exakt, an welchen Orten der Erde deine Talente am stärksten schwingen."
+      actionLever="Nutze persönliche Planetenlinien für stimmige Reisen, Wohnortwechsel oder geistige Inspiration."
+      dailyImpulse="Erkunde heute auf der Weltkarte einen deiner persönlichen Kraftorte und spüre seine Energie."
+    />
+
+    <GeoAstroChart chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="constellations"
+      >
+        <span>← Zurück zu Tor IX</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Partner & Karma</div>
+        <div class="text-sm font-bold text-white">Tor XI: Partner-Synastrie & Familienmatrix</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="synastry"
+      >
+        <span>Weiter zu Tor XI</span>
+        <span class="text-base">💞 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 11: Partner-Synastrie & Familien-Karmamatrix Panel (Tor XI) -->
+  <div id="panel-synastry" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor XI"
+      gateTitle="Partner-Synastrie & Familien-Karmamatrix"
+      icon="💞"
+      coreEssence="Synastrie und familiäre Karma-Banden spiegeln gemeinsame Lernaufgaben und seelische Bande wider."
+      actionLever="Betrachte Beziehungsdynamiken als heilsame Spiegel für deine persönliche Selbsterkenntnis."
+      dailyImpulse="Schenke heute einem wichtigen Menschen in deinem Leben bedingungslose Wertschätzung."
+    />
+
+    <SynastryFamilySection chart={chart} />
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="geochart"
+      >
+        <span>← Zurück zu Tor X</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech">Das Finale Matrix-Tor</div>
+        <div class="text-sm font-bold text-white">Tor XII: Human Design Bodygraph & Seelen-Matrix</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="humandesign"
+      >
+        <span>Weiter zu Tor XII</span>
+        <span class="text-base">🧬 →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB 12: Human Design & Seelen-Matrix Panel (Tor XII) -->
+  <div id="panel-humandesign" class="tab-content-panel space-y-8">
+    <!-- Wizard Sofort-Erkenntnis Chunk -->
+    <WizardEssenceCard
+      gateNum="Tor XII"
+      gateTitle="Human Design Bodygraph & Energetische Matrix"
+      icon="🧬"
+      coreEssence="Dein genetischer Bodygraph offenbart Typ, Strategie & Autorität – dein praktisches energetisches Betriebssystem."
+      actionLever="Triff Entscheidungen nie aus mentalem Druck, sondern aus deiner angeborenen inneren Autorität."
+      dailyImpulse="Achte bei der nächsten Entscheidung heute auf dein spontanes Körpergefühl."
+    />
+
+    <HumanDesignSection chart={hdChart} />
+
+    <!-- 40-Page High-Res PDF Dossier Teaser Card (Gold Edition) -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-950/90 via-amber-950/30 to-slate-950/90 border border-amber-500/50 shadow-2xl space-y-6 relative overflow-hidden cosmic-glass-gold cosmic-corner-accent">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-widest font-tech">
+            <span>📜</span>
+            <span>Exklusive Gold-Edition • 40+ Seiten</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-white font-cinzel tracking-wide">
+            Dein Vollständiges Kosmisches Seelenbuch als PDF-Dossier
+          </h3>
+
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-lato">
+            Möchtest du dein gesamtes astrologisches und Human Design Lebenswerk für immer als edles, druckreifes Dokument sichern? Das 40-seitige Dossier vereint alle 12 Tore, tiefgehende Aspektanalysen und dein persönliches Geburtsmandala in Museumsqualität.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs text-amber-200/90 font-tech">
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400">✓</span>
+              <span>40+ Seiten hochauflösendes Luxus-Layout (300 DPI)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400">✓</span>
+              <span>Alle 64 Tore & 36 Kanäle im Detail aufgeschlüsselt</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400">✓</span>
+              <span>7 Strahlen Seelenalchemie & Karma-Auflösung</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400">✓</span>
+              <span>Ideal zum Ausdrucken, Binden oder Verschenken</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col items-stretch gap-3 shrink-0 w-full lg:w-auto">
+          <button
+            type="button"
+            onclick="window.print()"
+            class="px-7 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(234,179,8,0.4)] hover:scale-[1.03] transition-all cursor-pointer font-tech"
+          >
+            <span>📥</span>
+            <span>Als PDF-Dossier exportieren</span>
+            <span>➔</span>
+          </button>
+
+          <button
+            type="button"
+            class="trigger-share-card px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:border-amber-400/40 transition-all cursor-pointer font-tech"
+          >
+            <span>📲</span>
+            <span>Seelen-Siegel teilen (Story)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-5 sm:p-6 rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <button
+        type="button"
+        class="tab-nav-btn px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-2 hover:bg-white/10 transition-all cursor-pointer"
+        data-switch-to="synastry"
+      >
+        <span>← Zurück zu Tor XI</span>
+      </button>
+
+      <div class="text-center">
+        <div class="text-xs text-amber-300 font-bold font-tech">✦ Alle 12 Seelentore vollständig erschlossen ✦</div>
+        <div class="text-[11px] text-slate-400 mt-0.5">Dein persönliches, astrologisches & Human Design Seelenbuch ist komplett</div>
+      </div>
+
+      <button
+        type="button"
+        class="tab-nav-btn px-6 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 hover:scale-[1.02] transition-all cursor-pointer shadow-md shrink-0"
+        data-switch-to="radix"
+      >
+        <span>Zurück an den Anfang (Radix) ↺</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+---
+import type { FamilyMatrixResult } from '../../../lib/astrology/synastry';
+
+interface Props {
+  initialFamily: FamilyMatrixResult;
+}
+
+const { initialFamily } = Astro.props;
+---
+
+<div class="space-y-8">
+  <!-- 1. Family Element Balance Dashboard -->
+  <div class="cosmic-glass-gold rounded-3xl p-6 md:p-8 border border-amber-500/40 shadow-2xl space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-500/30 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="w-11 h-11 rounded-2xl bg-amber-500/25 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+          👨‍👩‍👧‍👦
+        </span>
+        <div>
+          <div class="text-[10px] uppercase font-mono tracking-widest text-amber-400 font-extrabold">
+            Kollektives Familien-Energiefeld
+          </div>
+          <h3 class="text-xl font-black text-white" id="famHeadline">{initialFamily.familyDynamicHeadline}</h3>
+        </div>
+      </div>
+
+      <div class="text-xs font-mono text-slate-300 bg-black/50 px-3.5 py-1.5 rounded-full border border-white/10" id="famMemberCountBadge">
+        {initialFamily.memberCount} Familienmitglieder analysiert
+      </div>
+    </div>
+
+    <!-- 4 Elements Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="p-4 rounded-2xl bg-red-950/30 border border-red-500/30 space-y-1 text-center">
+        <div class="text-xs font-bold text-red-300">🔥 Feuer (Tatkraft)</div>
+        <div class="text-2xl font-black text-white font-mono" id="famPctFire">{initialFamily.elementBalance.fire}%</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-1 text-center">
+        <div class="text-xs font-bold text-emerald-300">🏔️ Erde (Sicherheit)</div>
+        <div class="text-2xl font-black text-white font-mono" id="famPctEarth">{initialFamily.elementBalance.earth}%</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 space-y-1 text-center">
+        <div class="text-xs font-bold text-cyan-300">🌬️ Luft (Dialog)</div>
+        <div class="text-2xl font-black text-white font-mono" id="famPctAir">{initialFamily.elementBalance.air}%</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-blue-950/30 border border-blue-500/30 space-y-1 text-center">
+        <div class="text-xs font-bold text-blue-300">🌊 Wasser (Gefühl)</div>
+        <div class="text-2xl font-black text-white font-mono" id="famPctWater">{initialFamily.elementBalance.water}%</div>
+      </div>
+    </div>
+
+    <!-- Family Karma & Communication -->
+    <div class="p-5 rounded-2xl bg-black/60 border border-amber-500/30 space-y-3 text-xs">
+      <div class="space-y-1">
+        <div class="font-bold text-amber-300 flex items-center gap-1.5">
+          <span>🧭</span> Kollektive Familien-Reifeaufgabe:
+        </div>
+        <p class="text-slate-200 leading-relaxed" id="famKarmaDesc">{initialFamily.familyKarmaLesson}</p>
+      </div>
+      <div class="pt-2 border-t border-white/10 space-y-1">
+        <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+          <span>🧠</span> Birkenbihl-Familien-Kommunikationscode:
+        </div>
+        <p class="text-slate-200 leading-relaxed" id="famCodeDesc">{initialFamily.birkenbihlCommunicationCode}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Family Members Roles Grid -->
+  <div class="space-y-4">
+    <div class="flex items-center gap-2 border-b border-white/10 pb-3">
+      <span class="text-amber-400">✧</span>
+      <h3 class="text-lg font-bold text-white">Individuelle Seelenrollen im Familienverband</h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="famMembersGrid">
+      {initialFamily.members.map(m => (
+        <div class="cosmic-glass rounded-3xl p-5 border border-white/10 space-y-3 shadow-xl">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl p-2 rounded-xl bg-white/5 border border-white/10">{m.roleIcon}</span>
+            <div>
+              <h4 class="font-bold text-white text-sm">{m.name}</h4>
+              <div class="text-[11px] text-amber-300 font-medium">{m.soulRoleTitle}</div>
+              <div class="text-[10px] text-slate-400 font-mono">☉ {m.sunSign} • ☽ {m.moonSign}</div>
+            </div>
+          </div>
+          <div class="p-3 rounded-xl bg-white/5 space-y-1 text-xs">
+            <div class="font-bold text-emerald-300">🎁 Gabe für die Familie:</div>
+            <p class="text-slate-300 text-[11px] leading-snug">{m.giftToFamily}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

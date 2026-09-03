@@ -1,0 +1,136 @@
+---
+import type { SynastryAnalysisResult } from '../../../lib/astrology/synastry';
+
+interface Props {
+  initialSynastry: SynastryAnalysisResult;
+}
+
+const { initialSynastry } = Astro.props;
+---
+
+<div class="space-y-8">
+  <!-- 1. Overall Compatibility Hero Card -->
+  <div class="cosmic-glass-gold rounded-3xl p-6 md:p-9 border border-rose-500/40 shadow-2xl relative overflow-hidden cosmic-corner-accent">
+    <div class="absolute -right-12 -bottom-12 w-56 h-56 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="space-y-6 relative z-10">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rose-500/30 pb-5">
+        <div class="flex items-center gap-3.5">
+          <span class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-2xl border border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.3)]">
+            💖
+          </span>
+          <div>
+            <div class="text-[10px] uppercase font-mono tracking-widest text-rose-400 font-extrabold">
+              Kosmische Beziehungs-Resonanz
+            </div>
+            <h3 class="text-xl md:text-2xl font-black text-white" id="synastryArchetypeTitle">
+              {initialSynastry.scores.archetype}
+            </h3>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <div class="text-[10px] uppercase font-mono text-slate-400 font-bold">Gesamt-Harmonie</div>
+            <div class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 font-mono" id="synastryOverallScore">
+              {initialSynastry.scores.overallScore}%
+            </div>
+          </div>
+          <div class="w-16 h-3 bg-slate-950 rounded-full overflow-hidden border border-white/10">
+            <div id="synastryOverallBar" class="bg-gradient-to-r from-amber-400 via-rose-500 to-pink-500 h-full transition-all duration-700" style={`width: ${initialSynastry.scores.overallScore}%`}></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tagline quote -->
+      <p class="text-sm md:text-base text-slate-200 leading-relaxed italic" id="synastryTagline">
+        "{initialSynastry.scores.tagline}"
+      </p>
+
+      <!-- 4 Harmony Pillars Breakdown Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+        
+        <!-- Emotion -->
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-pink-500/30 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-pink-300 flex items-center gap-1"><span>💖</span> Emotion & Herz</span>
+            <span class="font-mono font-bold text-white" id="synScoreEmo">{initialSynastry.scores.emotionalHarmony.score}%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+            <div id="synBarEmo" class="bg-pink-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.emotionalHarmony.score}%`}></div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-snug" id="synDescEmo">{initialSynastry.scores.emotionalHarmony.description}</p>
+        </div>
+
+        <!-- Passion -->
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-amber-500/30 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-amber-300 flex items-center gap-1"><span>🔥</span> Chemie & Erotik</span>
+            <span class="font-mono font-bold text-white" id="synScorePass">{initialSynastry.scores.passionAndChemistry.score}%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+            <div id="synBarPass" class="bg-amber-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.passionAndChemistry.score}%`}></div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-snug" id="synDescPass">{initialSynastry.scores.passionAndChemistry.description}</p>
+        </div>
+
+        <!-- Mind -->
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-cyan-500/30 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-cyan-300 flex items-center gap-1"><span>🧠</span> Geist & Dialog</span>
+            <span class="font-mono font-bold text-white" id="synScoreMind">{initialSynastry.scores.mindAndCommunication.score}%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+            <div id="synBarMind" class="bg-cyan-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.mindAndCommunication.score}%`}></div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-snug" id="synDescMind">{initialSynastry.scores.mindAndCommunication.description}</p>
+        </div>
+
+        <!-- Karma & Stability -->
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-purple-500/30 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-purple-300 flex items-center gap-1"><span>⚓</span> Seelenvertrag</span>
+            <span class="font-mono font-bold text-white" id="synScoreKarm">{initialSynastry.scores.karmicBondAndStability.score}%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+            <div id="synBarKarm" class="bg-purple-400 h-full transition-all duration-500" style={`width: ${initialSynastry.scores.karmicBondAndStability.score}%`}></div>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-snug" id="synDescKarm">{initialSynastry.scores.karmicBondAndStability.description}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Inter-Aspects Table Card -->
+  <div class="cosmic-glass rounded-3xl p-6 md:p-8 border border-white/15 shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="text-amber-400 text-lg">⚡</span>
+        <h3 class="text-lg font-bold text-white">Aktive Synastrie-Inter-Aspekte</h3>
+      </div>
+      <span class="text-xs font-mono text-slate-400" id="synAspectCount">
+        {initialSynastry.aspects.length} Aspekte berechnet
+      </span>
+    </div>
+
+    <div class="space-y-3 max-h-96 overflow-y-auto pr-1" id="synAspectsList">
+      {initialSynastry.aspects.slice(0, 10).map(asp => (
+        <div class="p-3.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 font-bold text-sm text-white">
+              <span class="px-2 py-0.5 rounded text-xs border" style={`color: ${asp.color}; border-color: ${asp.color}40; background: ${asp.color}15`}>
+                {asp.symbol} {asp.aspectName}
+              </span>
+              <span>{asp.headline}</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">{asp.esotericMeaning}</p>
+          </div>
+          <span class="text-xs font-mono text-slate-400 bg-black/40 px-2.5 py-1 rounded shrink-0">
+            Orb: {asp.orb.toFixed(1)}°
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

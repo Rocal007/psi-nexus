@@ -1,0 +1,235 @@
+---
+// Modal for generating and sharing personal high-res Story & Feed cards (Spotify-Wrapped Style)
+---
+
+<div
+  id="soulShareCardModal"
+  class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center justify-center p-4 sm:p-6"
+>
+  <div id="shareModalBackdrop" class="absolute inset-0"></div>
+
+  <div
+    id="shareModalContent"
+    class="relative z-10 w-full max-w-2xl bg-slate-950 border border-amber-500/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl cosmic-glass-gold transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto"
+  >
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xl border border-amber-500/40 font-serif">
+          ✦
+        </div>
+        <div>
+          <h3 class="text-lg sm:text-xl font-black text-white font-cinzel">Dein Kosmisches Seelen-Siegel</h3>
+          <p class="text-xs text-amber-300/80 font-tech">Bereit für Instagram Story, WhatsApp Status & Download</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        id="closeShareModalBtn"
+        class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center text-lg transition-all cursor-pointer"
+        aria-label="Schließen"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Format Selector & Preview -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-center gap-3">
+        <button
+          type="button"
+          id="btnFormatSquare"
+          class="format-toggle-btn active px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer shadow-sm"
+          data-format="square"
+        >
+          📱 Quadrat (1:1 Feed)
+        </button>
+        <button
+          type="button"
+          id="btnFormatStory"
+          class="format-toggle-btn px-4 py-2 rounded-xl bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-xs font-semibold transition-all cursor-pointer"
+          data-format="story"
+        >
+          ✨ Story (9:16 Status)
+        </button>
+      </div>
+
+      <!-- Canvas Container (Live Preview) -->
+      <div class="flex justify-center items-center bg-black/60 rounded-2xl p-4 border border-white/10 min-h-[300px] overflow-hidden">
+        <canvas
+          id="shareTalismanCanvas"
+          class="max-w-full max-h-[50vh] rounded-xl shadow-2xl border border-amber-500/30 object-contain"
+        ></canvas>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+      <button
+        type="button"
+        id="btnDownloadShareCard"
+        class="w-full sm:w-1/2 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:scale-[1.02] transition-all cursor-pointer font-tech"
+      >
+        <span>📥</span>
+        <span>Siegel als Bild speichern (PNG)</span>
+      </button>
+
+      <button
+        type="button"
+        id="btnNativeShareCard"
+        class="w-full sm:w-1/2 py-3.5 px-5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:border-amber-400/40 transition-all cursor-pointer font-tech"
+      >
+        <span>📲</span>
+        <span>Direkt auf WhatsApp / Story teilen</span>
+      </button>
+    </div>
+
+    <p class="text-[11px] text-center text-slate-400">
+      ✦ Wasserzeichen-verifiziert durch <strong class="text-amber-300">psi-nexus.de</strong> • 100% kostenlose, freie Nutzung.
+    </p>
+  </div>
+</div>
+
+<script>
+  import { ShareCardController, type ShareCardData } from '../../scripts/controllers/shareCardController';
+
+  function initShareModal() {
+    const modal = document.getElementById('soulShareCardModal');
+    const content = document.getElementById('shareModalContent');
+    const closeBtn = document.getElementById('closeShareModalBtn');
+    const backdrop = document.getElementById('shareModalBackdrop');
+    const canvas = document.getElementById('shareTalismanCanvas') as HTMLCanvasElement;
+    const btnSquare = document.getElementById('btnFormatSquare');
+    const btnStory = document.getElementById('btnFormatStory');
+    const btnDownload = document.getElementById('btnDownloadShareCard');
+    const btnShare = document.getElementById('btnNativeShareCard');
+
+    let controller: ShareCardController | null = null;
+    let currentFormat: 'square' | 'story' = 'square';
+    let currentData: ShareCardData | null = null;
+
+    if (canvas) {
+      try {
+        controller = new ShareCardController(canvas);
+      } catch (e) {
+        console.error('Canvas init failed', e);
+      }
+    }
+
+    function extractCurrentProfileData(): ShareCardData {
+      const nameEl = document.getElementById('personalityPersonName');
+      const sunEl = document.getElementById('pillarSunSign');
+      const ascEl = document.getElementById('pillarAscSign');
+      const moonEl = document.getElementById('pillarMoonSign');
+      const archetypeEl = document.getElementById('personalityArchetypeTitle');
+      const mantraEl = document.getElementById('personalityMantraText');
+      const elementEl = document.getElementById('personalityElementTag');
+      const lifePathEl = document.getElementById('personalityLifePathTag');
+
+      const userName = nameEl?.textContent?.trim() || 'Edle Seele';
+      const sunSign = sunEl?.textContent?.trim() || 'Kosmische Sonne';
+      const ascendantSign = ascEl?.textContent?.trim() || 'Aszendent';
+      const moonSign = moonEl?.textContent?.trim() || 'Mondkraft';
+      const archetypeName = archetypeEl?.textContent?.trim() || 'Seelenmatrix';
+      const mantraText = mantraEl?.textContent?.trim() || 'Erkenne die kosmische Ordnung in dir selbst.';
+      const dominantElement = elementEl?.textContent?.trim() || 'Harmonie';
+      const lifePathRaw = lifePathEl?.textContent?.replace(/\D/g, '') || '7';
+
+      return {
+        userName,
+        sunSign,
+        sunDegree: 'Wesenskern',
+        moonSign,
+        ascendantSign,
+        lifePathNumber: lifePathRaw,
+        dominantElement,
+        archetypeName,
+        mantraText
+      };
+    }
+
+    function updateCard() {
+      if (!controller) return;
+      currentData = extractCurrentProfileData();
+      controller.render(currentData, currentFormat);
+    }
+
+    function openModal() {
+      if (!modal || !content) return;
+      updateCard();
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      if (!modal || !content) return;
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      document.body.style.overflow = '';
+    }
+
+    btnSquare?.addEventListener('click', () => {
+      currentFormat = 'square';
+      btnSquare.classList.add('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+      btnSquare.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+      btnStory?.classList.remove('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+      btnStory?.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+      updateCard();
+    });
+
+    btnStory?.addEventListener('click', () => {
+      currentFormat = 'story';
+      btnStory.classList.add('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+      btnStory.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+      btnSquare?.classList.remove('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+      btnSquare?.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+      updateCard();
+    });
+
+    btnDownload?.addEventListener('click', () => {
+      const name = (currentData?.userName || 'seelensiegel').toLowerCase().replace(/\s+/g, '-');
+      controller?.download(`psi-nexus-${name}-${currentFormat}.png`);
+    });
+
+    btnShare?.addEventListener('click', async () => {
+      const shared = await controller?.share(
+        `Mein Kosmisches Seelen-Siegel (${currentData?.userName})`,
+        `Hier ist mein Seelenprofil von psi-nexus.de – entdecke auch deine eigene Seelenmatrix:`
+      );
+      if (!shared) {
+        // Fallback to download
+        controller?.download(`psi-nexus-${currentFormat}.png`);
+      }
+    });
+
+    closeBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Global listener to trigger modal from any component
+    window.addEventListener('astro_open_share_card', openModal);
+
+    // Bind all buttons with .trigger-share-card class
+    document.querySelectorAll('.trigger-share-card').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShareModal);
+  } else {
+    initShareModal();
+  }
+</script>

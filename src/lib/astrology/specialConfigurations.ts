@@ -181,6 +181,8 @@ export function detectSpecialConfigurations(
   const venus = planets.find(p => p.id === 'Venus') || planets[3];
   const mars = planets.find(p => p.id === 'Mars') || planets[4];
   const moon = planets.find(p => p.id === 'Moon') || planets[1];
+  const lilith = planets.find(p => p.id === 'Lilith' || p.id.toLowerCase() === 'lilith') || planets[12] || planets[0];
+  const chiron = planets.find(p => p.id === 'Chiron' || p.id.toLowerCase() === 'chiron') || planets[11] || planets[0];
   const descSign = housesResult.angles.descendant.sign;
 
   const relationshipStrengths = [
@@ -189,10 +191,27 @@ export function detectSpecialConfigurations(
     `Mars in ${mars.sign.name}: Deine leidenschaftliche Antriebskraft drückt sich durch ${mars.sign.keywords[0]} aus.`
   ];
 
+  // Dynamic Relationship Challenges derived from Moon, Lilith, and Chiron
+  const moonEl = moon.sign.element;
+  const moonChallenge = moonEl === 'Feuer'
+    ? `Gefahr von Ungeduld und emotionaler Reaktivität (Mond in ${moon.sign.name}): Das intensive Bedürfnis nach Autonomie kann das Gegenüber unvorbereitet treffen.`
+    : moonEl === 'Erde'
+    ? `Festhalten an Kontrollmustern (Mond in ${moon.sign.name}): Das ausgeprägte Sicherheitsbedürfnis hemmt gelegentlich die spontane seelische Hingabe.`
+    : moonEl === 'Luft'
+    ? `Intellektualisierung von Gefühlen (Mond in ${moon.sign.name}): Emotionen werden analysiert statt durchfühlt, was unbewusst Distanz im partnerschaftlichen Dialog erzeugt.`
+    : `Überempfindlichkeit und Rückzugstendenzen (Mond in ${moon.sign.name}): Tief sitzende seelische Schwingungen können zu vorschnellen Schutzmauern führen.`;
+
+  const lilithChallenge = `Lilith in ${lilith.sign.name} (${lilith.sign.keywords.slice(0, 2).join(' / ')}): Ein kompromissloser Autonomie-Reflex erfordert Achtsamkeit, Unabhängigkeit nicht als Flucht vor echter Intimität einzusetzen.`;
+  const chironChallenge = `Chirons Urwunde in ${chiron.sign.name}: Mahnt davor, alte seelische Verletzungen auf den Partner zu projizieren oder unbewusst Erlösung im Außen zu suchen.`;
+
   const relationshipChallenges = [
-    `Gefahr, dass dein inneres Sicherheitsbedürfnis (Mond in ${moon.sign.name}) mit dem Wunsch nach Freiheit kollidiert.`,
-    `Unbewusste Erwartungshaltung, dass der Partner die eigenen verborgenen Schatten heilen soll.`
+    moonChallenge,
+    lilithChallenge,
+    chironChallenge
   ];
+
+  // Dynamic Soul Partner Trigger derived from Chiron, Lilith, and Moon
+  const dynamicSoulPartnerTrigger = `Dein Seelenpartner berührt deine Chiron-Urwunde im Zeichen ${chiron.sign.name} (${chiron.sign.keywords.slice(0, 2).join(' / ')}) und entfacht die transformative Schöpferkraft von Lilith in ${lilith.sign.name}: Er fordert dich liebevoll heraus, alte Schutzpanzer abzulegen, deine emotionale Wahrheit (Mond in ${moon.sign.name}) ungeschminkt zu zeigen und deine ungezähmte Authentizität mutig zu leben.`;
 
   // 4. Domain: CAREER & VOCATION (Beruf & Berufung)
   const mcSign = housesResult.angles.midheaven.sign;
@@ -208,7 +227,25 @@ export function detectSpecialConfigurations(
   // 5. Domain: PERSONAL FULFILLMENT (Persönliche Erfüllung)
   const ascSign = housesResult.angles.ascendant.sign;
   const node = planets.find(p => p.id === 'NorthNode') || planets[10];
-  const chiron = planets.find(p => p.id === 'Chiron') || planets[11];
+
+  // Dynamic Shadow to Integrate derived from Lilith, Chiron, and Dominant Element
+  const domEl = balance.dominantElement;
+  const dynamicShadowToIntegrate = domEl === 'Feuer'
+    ? `Die Furcht vor Ohnmacht oder Nicht-Gesehenwerden: Integriere Sanftmut und die Gewissheit, dass dein inneres Licht (Lilith in ${lilith.sign.name}) auch in Momenten der Stille und Verletzlichkeit unantastbar strahlt.`
+    : domEl === 'Erde'
+    ? `Das ängstliche Klammern an Kontrolle und Perfektionismus: Lass die Angst vor dem Unvorhersehbaren los und vertraue auf die angeborene Resilienz deiner Seele (Lilith in ${lilith.sign.name}, Chiron in ${chiron.sign.name}).`
+    : domEl === 'Luft'
+    ? `Die Flucht vor emotionaler Rohheit in kühle Theorie oder endlose Gedankenschleifen: Erlaube dir, Gefühle unmittelbar im Körper zu verankern und echte Seelennähe zuzulassen (Lilith in ${lilith.sign.name}).`
+    : `Die Furcht vor seelischer Überwältigung oder Verlassenwerden: Wandle emotionale Schutzmechanismen in souveräne Seelenautonomie und bedingungslose Selbstannahme (Lilith in ${lilith.sign.name}, Chiron in ${chiron.sign.name}).`;
+
+  // Dynamic Daily Action Step derived from Dominant Element and Moon Sign
+  const dynamicDailyActionStep = domEl === 'Feuer'
+    ? `Nimm dir täglich 10 Minuten für eine dynamische Atem- oder Bewegungsmeditation: Zentriere dein feuriges Schöpferfeuer (Mond in ${moon.sign.name}) und handle aus der strahlenden Mitte deines Herzens.`
+    : domEl === 'Erde'
+    ? `Praktiziere täglich einen achtsamen Erdungs-Moment – einen Spaziergang in der Natur, Barfußgehen oder Stillekontemplation –, um das Urvertrauen deines ${moon.sign.name}-Monds zu vertiefen.`
+    : domEl === 'Luft'
+    ? `Gönne dir täglich 10 Minuten digitales Fasten und freies Reflektions-Journaling, um den mentalen Raum zu klären und die Weisheit deines ${moon.sign.name}-Monds klar zu empfangen.`
+    : `Erschaffe dir täglich ein geschütztes Ritual mit Wasser, beruhigender Musik oder stiller Einkehr, um seelische Resonanzen zu klären und dein inneres Heiligtum (☽ ${moon.sign.name}) zu nähren.`;
 
   return {
     specialConfigurations: {
@@ -220,7 +257,7 @@ export function detectSpecialConfigurations(
       coreTheme: `In Partnerschaften lebst du die Verbindung aus herzlicher Hingabe (${venus.sign.name}) und dem karmischen Wunsch nach wahrhafter Tiefe. Du suchst ein Gegenüber auf Augenhöhe, das deine emotionale Wahrheit (${moon.sign.name}) respektiert.`,
       strengths: relationshipStrengths,
       challenges: relationshipChallenges,
-      soulPartnerTrigger: `Dein Seelenpartner aktiviert in dir den Mut, die eigene Verletzlichkeit zu zeigen und alte Schutzpanzer abzulegen.`
+      soulPartnerTrigger: dynamicSoulPartnerTrigger
     },
     career: {
       headline: `Berufung & Erfolg: Die Meisterschaft des MC in ${mcSign.name}`,
@@ -233,8 +270,8 @@ export function detectSpecialConfigurations(
       headline: `Seelenplan & Erfüllung: Das Leuchten der ${sun.sign.name}-Sonne durch den ${ascSign.name}-Aszendenten`,
       soulDrive: `Dein tiefster Seelendrang ist es, die Schöpferkraft von ${sun.sign.name} als mutiges Vorbild (${ascSign.name}) in die Welt zu tragen.`,
       innerPeaceKey: `Innerer Friede stellt sich ein, wenn du dem Ruf deines Nordknotens in ${node.sign.name} folgst und den alten Schmerz von Chiron in ${chiron.sign.name} in Mitgefühl für andere verwandelst.`,
-      shadowToIntegrate: `Die Angst vor Unvollkommenheit und die Tendenz, sich hinter einer unnahbaren Maske zu verstecken.`,
-      dailyActionStep: `Nimm dir täglich 10 Minuten Stille, um dich mit deinem Seelen-Zentrum (☉) zu verbinden und aus der Fülle deines Herzens zu handeln.`
+      shadowToIntegrate: dynamicShadowToIntegrate,
+      dailyActionStep: dynamicDailyActionStep
     }
   };
 }

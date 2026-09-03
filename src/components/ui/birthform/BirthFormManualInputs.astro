@@ -1,0 +1,176 @@
+---
+interface Props {
+  defaultDate: string;
+  defaultTime: string;
+  defaultCity: string;
+  defaultLat: number;
+  defaultLng: number;
+  defaultTz: string;
+  defaultSystem: string;
+  defaultName: string;
+}
+
+const {
+  defaultDate,
+  defaultTime,
+  defaultCity,
+  defaultLat,
+  defaultLng,
+  defaultTz,
+  defaultSystem,
+  defaultName
+} = Astro.props;
+---
+
+<!-- PANEL A: Enter New Profile Form -->
+<div id="panelModeEnter" class="space-y-5">
+  <form id="astroForm" class="space-y-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- 1. Birth Date -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label for="birthDate" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
+            Geburtsdatum *
+          </label>
+          <span class="text-[10px] text-slate-400 font-normal">Sonne & Lebensweg</span>
+        </div>
+        <input
+          type="date"
+          id="birthDate"
+          name="birthDate"
+          value={defaultDate}
+          required
+          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm transition-all"
+        />
+        <p class="text-[10px] text-slate-400 leading-tight">Bestimmt Sonnenposition & Lebenswegzahl.</p>
+      </div>
+
+      <!-- 2. Birth Time -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label for="birthTime" class="block text-xs uppercase font-bold tracking-wider text-cyan-300">
+            Geburtszeit *
+          </label>
+          <span id="birthTimeBadge" class="text-[10px] text-cyan-400 font-bold">
+            (Exakte Minute)
+          </span>
+        </div>
+        <input
+          type="time"
+          id="birthTime"
+          name="birthTime"
+          value={defaultTime}
+          required
+          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-cyan-500/30 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-[0_0_10px_rgba(6,182,212,0.1)]"
+        />
+
+        <!-- Checkbox: Unknown Birth Time -->
+        <div class="pt-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none group">
+            <input
+              type="checkbox"
+              id="unknownTimeCheckbox"
+              name="unknownTime"
+              class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-400 focus:ring-offset-slate-950 cursor-pointer transition-all"
+            />
+            <span class="text-xs text-slate-300 group-hover:text-amber-300 transition-colors font-medium">
+              Kenne Geburtsstunde nicht
+            </span>
+          </label>
+        </div>
+
+        <div id="unknownTimeNotice" class="hidden p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200/90 leading-tight flex items-start gap-2 mt-1.5 shadow-sm">
+          <span class="text-amber-400 text-sm">☀️</span>
+          <span><strong>Sonnen-Horoskop (12:00 Uhr):</strong> Planetenpositionen, Tierkreiszeichen, Aspekte & Lebenswegzahl sind vollkommen präzise.</span>
+        </div>
+        <p id="birthTimeStandardHint" class="text-[10px] text-slate-400 leading-tight">Fixiert den Aszendenten & die 12 Häuser.</p>
+      </div>
+
+      <!-- 3. Birth City -->
+      <div class="space-y-1.5 relative">
+        <div class="flex items-center justify-between">
+          <label for="citySearch" class="block text-xs uppercase font-bold tracking-wider text-purple-300">
+            Geburtsort *
+          </label>
+          <span class="text-[10px] text-slate-400 font-normal">Geokoordinaten</span>
+        </div>
+        <input
+          type="text"
+          id="citySearch"
+          name="cityName"
+          value={defaultCity}
+          placeholder="Stadt suchen (z. B. Wien, Berlin, Graz...)"
+          autocomplete="off"
+          required
+          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 text-sm transition-all"
+        />
+        <p class="text-[10px] text-slate-400 leading-tight">Bestimmt Himmelsausrichtung & Zeitzone.</p>
+
+        <!-- Hidden Lat / Lng / Timezone fields -->
+        <input type="hidden" id="latitude" name="latitude" value={defaultLat} />
+        <input type="hidden" id="longitude" name="longitude" value={defaultLng} />
+        <input type="hidden" id="timezone" name="timezone" value={defaultTz} />
+
+        <!-- Autocomplete dropdown container -->
+        <div
+          id="cityDropdown"
+          class="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-amber-500/30 rounded-xl shadow-2xl z-50 max-h-56 overflow-y-auto hidden"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Settings: Name & Houses -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/10">
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label for="userName" class="block text-xs uppercase font-bold tracking-wider text-amber-300">
+            Vollständiger Name
+          </label>
+          <span class="text-[10px] text-amber-400 font-medium">
+            (Für Namens- & Herzzahl)
+          </span>
+        </div>
+        <input
+          type="text"
+          id="userName"
+          name="name"
+          value={defaultName}
+          placeholder="Vorname & Nachname (z. B. Denise Mustermann)"
+          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-amber-500/25 focus:outline-none focus:border-amber-400 text-sm transition-all"
+        />
+        <p class="text-[10px] text-slate-400 leading-tight">Enthüllt deine persönliche Schwingungs-Signatur.</p>
+      </div>
+
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label for="houseSystem" class="block text-xs uppercase font-bold tracking-wider text-slate-300">
+            Häusersystem
+          </label>
+          <span class="text-[10px] text-slate-400 font-normal">Raumteilung</span>
+        </div>
+        <select
+          id="houseSystem"
+          name="houseSystem"
+          class="w-full bg-slate-950/80 text-white px-3.5 py-2.5 rounded-xl border border-white/15 focus:outline-none focus:border-amber-400 text-sm"
+        >
+          <option value="placidus" selected={defaultSystem === 'placidus'}>Placidus (Klassischer Standard der Astrologie)</option>
+          <option value="equal" selected={defaultSystem === 'equal'}>Equal Houses (Gleichmäßige 30°-Felder ab AC)</option>
+        </select>
+        <p class="text-[10px] text-slate-400 leading-tight">Placidus berücksichtigt die Erdneigung optimal.</p>
+      </div>
+    </div>
+
+    <!-- Submit button -->
+    <div class="flex justify-end pt-2">
+      <button
+        type="submit"
+        id="submitCalcBtn"
+        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-[0_0_30px_rgba(234,179,8,0.45)] hover:shadow-[0_0_40px_rgba(234,179,8,0.7)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+      >
+        <span>✨</span>
+        <span>Mein Seelenbuch berechnen & Frage stellen ➔</span>
+      </button>
+    </div>
+  </form>
+</div>

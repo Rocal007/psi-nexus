@@ -52,4 +52,25 @@ describe('Astrology Calculation Engine (Invariance & Fixpoint)', () => {
     expect(chart1.housesResult.angles.ascendant.longitude).toEqual(chart2.housesResult.angles.ascendant.longitude);
     expect(chart1.aspects.length).toEqual(chart2.aspects.length);
   });
+
+  it('should generate dynamic soulPartnerTrigger, challenges, shadowToIntegrate, and dailyActionStep', () => {
+    const chart = generateNatalChart(sampleInput);
+    const { lifePillars, planets } = chart;
+    const moon = planets.find(p => p.id === 'Moon') || planets[1];
+    const chiron = planets.find(p => p.id === 'Chiron') || planets[11];
+    const lilith = planets.find(p => p.id === 'Lilith') || planets[12];
+
+    expect(lifePillars.relationships.soulPartnerTrigger).toContain(chiron.sign.name);
+    expect(lifePillars.relationships.soulPartnerTrigger).toContain(lilith.sign.name);
+    expect(lifePillars.relationships.soulPartnerTrigger).toContain(moon.sign.name);
+
+    expect(lifePillars.relationships.challenges.length).toBeGreaterThanOrEqual(2);
+    expect(lifePillars.relationships.challenges[0]).toContain(moon.sign.name);
+
+    expect(lifePillars.personalFulfillment.shadowToIntegrate).toBeTruthy();
+    expect(lifePillars.personalFulfillment.shadowToIntegrate).toContain(lilith.sign.name);
+
+    expect(lifePillars.personalFulfillment.dailyActionStep).toBeTruthy();
+    expect(lifePillars.personalFulfillment.dailyActionStep).toContain(moon.sign.name);
+  });
 });

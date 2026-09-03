@@ -1,0 +1,549 @@
+---
+// Neuroacoustic Sound Matrix & Brainwave Frequency Player (ADHS, Anti-Stress, Deep Work, Sleep & HMA)
+import { UNIVERSAL_PRESETS } from '../../scripts/audio/neuroAcousticEngine';
+---
+
+<div
+  id="neuroAcousticModal"
+  class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center justify-center p-3 sm:p-6"
+>
+  <div id="neuroModalBackdrop" class="absolute inset-0"></div>
+
+  <div
+    id="neuroModalContent"
+    class="relative z-10 w-full max-w-3xl bg-slate-950 border border-amber-500/40 rounded-3xl p-5 sm:p-8 space-y-6 shadow-2xl cosmic-glass-gold transform scale-95 transition-all duration-300 max-h-[92vh] overflow-y-auto"
+  >
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-2xl border border-amber-500/40 font-tech shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+          🎧
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-lg sm:text-xl font-black text-white font-cinzel tracking-wide">NEXUS Neuro-Akustik Matrix</h3>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold font-tech uppercase">Live DSP</span>
+          </div>
+          <p class="text-xs text-amber-300/80 font-tech">Gehirnwellen-Entrainment • Binaurale Beats • Brown & Pink Noise • HMA Frequenzen</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        id="closeNeuroModalBtn"
+        class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center text-lg transition-all cursor-pointer"
+        aria-label="Schließen"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Hypnotic Soul Matrix: Visual Bio-Feedback Breathing Pacer (0.1 Hz) & Live Wave Canvas -->
+    <div class="relative bg-black/80 rounded-2xl p-5 border border-amber-500/35 overflow-hidden flex flex-col items-center justify-center space-y-4 shadow-2xl cosmic-corner-accent">
+      
+      <!-- Top Row: 0.1 Hz Bio-Feedback Breathing Ring & Oscilloscope -->
+      <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        <!-- 1. The Breathing Circle (0.1 Hz Heart Coherence) -->
+        <div class="flex flex-col items-center justify-center space-y-2 shrink-0">
+          <div class="relative w-28 h-28 flex items-center justify-center">
+            <!-- Pulsing Halo Rings -->
+            <div id="breathingRingOuter" class="absolute inset-0 rounded-full border-2 border-amber-400/30 transition-all duration-[4000ms] ease-in-out scale-75 opacity-40"></div>
+            <div id="breathingRingMiddle" class="absolute inset-2 rounded-full border border-amber-300/50 transition-all duration-[4000ms] ease-in-out scale-90 opacity-60"></div>
+            <div id="breathingRingCore" class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500/25 to-yellow-500/40 border border-amber-400/80 flex items-center justify-center shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all duration-[4000ms] ease-in-out">
+              <span id="breathingCenterIcon" class="text-xl">🫁</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <span id="breathingActionText" class="text-xs font-bold text-amber-300 font-tech block tracking-wide">Einatmen (4s)</span>
+            <span class="text-[10px] text-slate-400 font-mono">0,1 Hz Herz-Kohärenz</span>
+          </div>
+        </div>
+
+        <!-- 2. Live Audio Waveform Canvas -->
+        <div class="w-full flex-1 flex flex-col justify-center space-y-2">
+          <canvas
+            id="neuroVisualizerCanvas"
+            class="w-full h-20 rounded-xl bg-slate-950/80 border border-white/10 block shadow-inner"
+            width="500"
+            height="90"
+          ></canvas>
+
+          <div class="flex flex-wrap items-center justify-between text-xs text-slate-300 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-600 transition-colors" id="soundStatusIndicator"></span>
+              <span class="font-bold text-white font-tech" id="activePresetTitle">ADHS Fokus & Reiz-Filter</span>
+            </div>
+            <div class="text-[11px] font-mono text-amber-300" id="activeFreqMetrics">
+              141.27 Hz + 14.0 Hz SMR • Brown Noise
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. Das Persönliche Seelen-Mantra (Subconscious Anchor) -->
+      <div class="w-full p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 text-center space-y-1 relative overflow-hidden">
+        <div class="text-[10px] uppercase font-bold tracking-widest text-amber-400 font-tech flex items-center justify-center gap-1.5">
+          <span>✨</span>
+          <span>Dein Aktives Seelen-Mantra (Subconscious Anchor)</span>
+          <span>✨</span>
+        </div>
+        <div id="neuroActiveMantra" class="text-xs sm:text-sm font-bold text-white italic font-cinzel leading-relaxed text-amber-100">
+          „Ich bin die ruhende Kraft im Sturm, unerschütterlich in meiner schöpferischen Mitte.“
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quick Presets Selector Grid (6 Universal Modes) -->
+    <div class="space-y-2">
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-300 font-tech flex items-center justify-between">
+        <span>⚡ Sofort-Programm wählen (Unabhängig von Daten):</span>
+        <span class="text-[10px] text-amber-300 font-normal">Kopfhörer für Stereo-Binaural empfohlen</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="presetsButtonContainer">
+        {UNIVERSAL_PRESETS.map((preset, idx) => (
+          <button
+            type="button"
+            class={`preset-select-btn p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between group ${idx === 0 ? 'bg-amber-500/20 border-amber-500/50 text-white shadow-md active' : 'bg-white/5 border-white/10 text-slate-300 hover:border-amber-400/40 hover:text-white'}`}
+            data-preset-id={preset.id}
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xl group-hover:scale-110 transition-transform">{preset.icon}</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-slate-400 group-hover:text-amber-300">
+                {preset.binauralBeat > 0 ? `${preset.binauralBeat} Hz` : 'Harmonie'}
+              </span>
+            </div>
+            <div class="pt-2">
+              <div class="text-xs font-bold leading-tight font-tech">{preset.name}</div>
+              <div class="text-[10px] text-slate-400 truncate mt-0.5">{preset.subtitle}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Scientific Benefit & Neurodidactic Explanation Box -->
+    <div class="p-4 rounded-2xl bg-slate-900/80 border border-white/10 space-y-2 text-xs">
+      <div class="flex items-center gap-1.5 font-bold text-amber-300 font-tech">
+        <span>🔬</span>
+        <span id="presetBenefitHeadline">Neuroakustische Wirkungsweise:</span>
+      </div>
+      <p class="text-slate-200 leading-relaxed font-lato" id="presetDescriptionText">
+        Tiefes Brown Noise blendet störende Umweltreize und Gedankenrasen aus, während 14 Hz SMR-Wellen das neuronale Feedback stabilisieren.
+      </p>
+      <div class="text-[11px] text-emerald-300 font-medium font-tech pt-0.5" id="presetScientificText">
+        ✓ Empfohlen bei Reizüberflutung, ADHS, Konzentrationsschwierigkeiten und Tinnitus.
+      </div>
+    </div>
+
+    <!-- Main Controls: Play/Pause, Noise Selector, Volume & Timer -->
+    <div class="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-4">
+      
+      <!-- Top Row: Big Play/Pause + Volume -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Big Play Button -->
+        <button
+          type="button"
+          id="btnToggleSound"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:scale-[1.02] transition-all cursor-pointer font-tech shrink-0"
+        >
+          <span id="playIcon">▶</span>
+          <span id="playText">Frequenz starten</span>
+        </button>
+
+        <!-- Master Volume Control -->
+        <div class="flex items-center gap-3 w-full sm:w-64">
+          <span class="text-slate-400 text-xs">🔊</span>
+          <input
+            type="range"
+            id="sliderMasterVolume"
+            min="0"
+            max="100"
+            value="80"
+            class="w-full accent-amber-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
+            aria-label="Lautstärke"
+          />
+          <span class="text-xs text-slate-400 font-mono w-8 text-right" id="volumeText">80%</span>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Noise Color Selector & Sleep Timer -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-white/10 text-xs">
+        
+        <!-- Noise Color Selector -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-slate-300 font-tech uppercase block">Rauschfarbe (Noise Texture):</label>
+          <div class="flex items-center gap-1.5" id="noiseColorBtnGroup">
+            <button type="button" class="noise-btn px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-bold" data-noise="brown">Brown</button>
+            <button type="button" class="noise-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-noise="pink">Pink</button>
+            <button type="button" class="noise-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-noise="green">Green</button>
+            <button type="button" class="noise-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-noise="white">White</button>
+            <button type="button" class="noise-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-noise="off">Aus</button>
+          </div>
+        </div>
+
+        <!-- Timer Selector -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-slate-300 font-tech uppercase block">Fokus- / Schlaf-Timer:</label>
+          <div class="flex items-center gap-1.5" id="timerBtnGroup">
+            <button type="button" class="timer-btn active px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-bold" data-timer="0">∞</button>
+            <button type="button" class="timer-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-timer="15">15m</button>
+            <button type="button" class="timer-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-timer="30">30m</button>
+            <button type="button" class="timer-btn px-2.5 py-1 rounded-lg bg-white/5 text-slate-300 border border-white/10 hover:border-amber-400/30 text-[11px]" data-timer="60">60m</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+      <span>✦ 100% Client-Side Web Audio DSP • Keine Datenübertragung</span>
+      <span class="text-amber-300 font-tech">psi-nexus.de</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { NeuroAcousticEngine, UNIVERSAL_PRESETS, type SoundPreset, type NoiseType } from '../../scripts/audio/neuroAcousticEngine';
+
+  function initNeuroPlayerUI() {
+    const modal = document.getElementById('neuroAcousticModal');
+    const content = document.getElementById('neuroModalContent');
+    const closeBtn = document.getElementById('closeNeuroModalBtn');
+    const backdrop = document.getElementById('neuroModalBackdrop');
+    const btnToggle = document.getElementById('btnToggleSound');
+    const playIcon = document.getElementById('playIcon');
+    const playText = document.getElementById('playText');
+    const statusIndicator = document.getElementById('soundStatusIndicator');
+    const activeTitle = document.getElementById('activePresetTitle');
+    const activeMetrics = document.getElementById('activeFreqMetrics');
+    const descText = document.getElementById('presetDescriptionText');
+    const sciText = document.getElementById('presetScientificText');
+    const sliderVol = document.getElementById('sliderMasterVolume') as HTMLInputElement;
+    const volumeText = document.getElementById('volumeText');
+    const canvas = document.getElementById('neuroVisualizerCanvas') as HTMLCanvasElement;
+    const presetButtons = document.querySelectorAll('.preset-select-btn');
+    const noiseButtons = document.querySelectorAll('.noise-btn');
+    const timerButtons = document.querySelectorAll('.timer-btn');
+
+    const engine = new NeuroAcousticEngine();
+    let currentPreset = UNIVERSAL_PRESETS[0];
+    let animationFrameId: number | null = null;
+
+    function openModal() {
+      if (!modal || !content) return;
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+      startVisualizer();
+    }
+
+    function closeModal() {
+      if (!modal || !content) return;
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      document.body.style.overflow = '';
+    }
+
+    const activeMantraEl = document.getElementById('neuroActiveMantra');
+    const breathOuter = document.getElementById('breathingRingOuter');
+    const breathMiddle = document.getElementById('breathingRingMiddle');
+    const breathCore = document.getElementById('breathingRingCore');
+    const breathText = document.getElementById('breathingActionText');
+    const breathIcon = document.getElementById('breathingCenterIcon');
+
+    let breathIntervalId: any = null;
+    let breathPhase: 'in' | 'hold' | 'out' = 'in';
+
+    const PRESET_MANTRAS: Record<string, string> = {
+      preset_adhd: '„Mein Fokus ist unerschütterlich. Ich filtere das Rauschen und vollende meine Schöpfung.“',
+      preset_stress: '„Ich lasse alle Anspannung los. Mein Nervensystem findet tiefen, heilsamen Frieden.“',
+      preset_focus: '„Klarheit durchdringt meinen Verstand. Mein Handeln ist präzise und kraftvoll.“',
+      preset_learn: '„Ich nehme Wissen mühelos und spielerisch auf. Meine Auffassungsgabe fließt unbegrenzt.“',
+      preset_sleep: '„Ich vertraue der Nacht. Mein Körper regeneriert, mein Geist ruht in tiefer Stille.“',
+      preset_cosmic: '„Ich bin eins mit der kosmischen Ordnung. Mein Seelenweg entfaltet sich vollkommen.“'
+    };
+
+    function startBreathingPacer() {
+      if (breathIntervalId) clearInterval(breathIntervalId);
+      breathPhase = 'in';
+      runBreathCycle();
+      breathIntervalId = setInterval(runBreathCycle, 4000);
+    }
+
+    function stopBreathingPacer() {
+      if (breathIntervalId) {
+        clearInterval(breathIntervalId);
+        breathIntervalId = null;
+      }
+      if (breathOuter) {
+        breathOuter.style.transform = 'scale(0.75)';
+        breathOuter.style.opacity = '0.4';
+      }
+      if (breathMiddle) {
+        breathMiddle.style.transform = 'scale(0.9)';
+      }
+      if (breathCore) {
+        breathCore.style.transform = 'scale(1.0)';
+      }
+      if (breathText) breathText.textContent = 'Bereit (0,1 Hz)';
+      if (breathIcon) breathIcon.textContent = '🫁';
+    }
+
+    function runBreathCycle() {
+      if (breathPhase === 'in') {
+        if (breathText) breathText.textContent = 'Einatmen (4s)...';
+        if (breathIcon) breathIcon.textContent = '🌬️';
+        if (breathOuter) {
+          breathOuter.style.transform = 'scale(1.25)';
+          breathOuter.style.opacity = '0.9';
+        }
+        if (breathMiddle) {
+          breathMiddle.style.transform = 'scale(1.15)';
+        }
+        if (breathCore) {
+          breathCore.style.transform = 'scale(1.15)';
+        }
+        breathPhase = 'hold';
+      } else if (breathPhase === 'hold') {
+        if (breathText) breathText.textContent = 'Halten (4s)...';
+        if (breathIcon) breathIcon.textContent = '✨';
+        breathPhase = 'out';
+      } else {
+        if (breathText) breathText.textContent = 'Ausatmen (4s)...';
+        if (breathIcon) breathIcon.textContent = '🌊';
+        if (breathOuter) {
+          breathOuter.style.transform = 'scale(0.75)';
+          breathOuter.style.opacity = '0.4';
+        }
+        if (breathMiddle) {
+          breathMiddle.style.transform = 'scale(0.85)';
+        }
+        if (breathCore) {
+          breathCore.style.transform = 'scale(0.95)';
+        }
+        breathPhase = 'in';
+      }
+    }
+
+    function syncMantraWithChart() {
+      const chartMantra = document.getElementById('personalityMantraText')?.textContent?.trim();
+      if (chartMantra && activeMantraEl) {
+        activeMantraEl.textContent = `„${chartMantra.replace(/^["„“]|["”]$/g, '').trim()}“`;
+      }
+    }
+
+    function updatePresetInfo(p: SoundPreset) {
+      if (activeTitle) activeTitle.textContent = p.name;
+      if (activeMetrics) {
+        const beatText = p.binauralBeat > 0 ? `+ ${p.binauralBeat} Hz` : '';
+        activeMetrics.textContent = `${p.baseFrequency} Hz ${beatText} • ${p.noiseType.toUpperCase()} Noise`;
+      }
+      if (descText) descText.textContent = p.description;
+      if (sciText) sciText.textContent = `✓ ${p.scientificBenefit}`;
+
+      // Update Active Mantra
+      if (activeMantraEl) {
+        const customMantra = PRESET_MANTRAS[p.id] || PRESET_MANTRAS.preset_adhd;
+        activeMantraEl.textContent = customMantra;
+      }
+
+      // Update noise buttons
+      noiseButtons.forEach((btn) => {
+        const n = btn.getAttribute('data-noise');
+        if (n === p.noiseType) {
+          btn.classList.add('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+          btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+        } else {
+          btn.classList.remove('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+          btn.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+        }
+      });
+    }
+
+    function updatePlayState(playing: boolean) {
+      if (playing) {
+        if (playIcon) playIcon.textContent = '⏸';
+        if (playText) playText.textContent = 'Frequenz pausieren';
+        if (statusIndicator) {
+          statusIndicator.classList.remove('bg-slate-600');
+          statusIndicator.classList.add('bg-emerald-400', 'animate-pulse');
+        }
+        btnToggle?.classList.add('shadow-[0_0_25px_rgba(16,185,129,0.5)]');
+        startBreathingPacer();
+      } else {
+        if (playIcon) playIcon.textContent = '▶';
+        if (playText) playText.textContent = 'Frequenz starten';
+        if (statusIndicator) {
+          statusIndicator.classList.remove('bg-emerald-400', 'animate-pulse');
+          statusIndicator.classList.add('bg-slate-600');
+        }
+        btnToggle?.classList.remove('shadow-[0_0_25px_rgba(16,185,129,0.5)]');
+        stopBreathingPacer();
+      }
+    }
+
+    btnToggle?.addEventListener('click', async () => {
+      if (engine.getIsPlaying()) {
+        engine.stop();
+        updatePlayState(false);
+      } else {
+        await engine.start(currentPreset);
+        updatePlayState(true);
+      }
+    });
+
+    // Preset selection
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-preset-id');
+        const found = UNIVERSAL_PRESETS.find((p) => p.id === id);
+        if (!found) return;
+
+        currentPreset = found;
+        presetButtons.forEach((b) => {
+          b.classList.remove('bg-amber-500/20', 'border-amber-500/50', 'text-white', 'shadow-md', 'active');
+          b.classList.add('bg-white/5', 'border-white/10', 'text-slate-300');
+        });
+        btn.classList.add('bg-amber-500/20', 'border-amber-500/50', 'text-white', 'shadow-md', 'active');
+        btn.classList.remove('bg-white/5', 'border-white/10', 'text-slate-300');
+
+        updatePresetInfo(found);
+        if (engine.getIsPlaying()) {
+          engine.setPreset(found);
+        }
+      });
+    });
+
+    // Noise selection
+    noiseButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const n = (btn.getAttribute('data-noise') || 'off') as NoiseType;
+        noiseButtons.forEach((b) => {
+          b.classList.remove('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+          b.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+        });
+        btn.classList.add('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+        btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+
+        engine.setNoiseType(n);
+      });
+    });
+
+    // Timer selection
+    timerButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const minutes = parseInt(btn.getAttribute('data-timer') || '0', 10);
+        timerButtons.forEach((b) => {
+          b.classList.remove('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+          b.classList.add('bg-white/5', 'text-slate-300', 'border-white/10');
+        });
+        btn.classList.add('active', 'bg-amber-500/20', 'text-amber-300', 'border-amber-500/40', 'font-bold');
+        btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10');
+
+        engine.setTimer(minutes, () => {
+          updatePlayState(false);
+        });
+      });
+    });
+
+    // Volume Slider
+    sliderVol?.addEventListener('input', () => {
+      const val = parseInt(sliderVol.value, 10) / 100;
+      engine.setMasterVolume(val);
+      if (volumeText) volumeText.textContent = `${sliderVol.value}%`;
+    });
+
+    // Canvas Visualizer
+    function startVisualizer() {
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const dataArray = new Uint8Array(128);
+
+      function draw() {
+        animationFrameId = requestAnimationFrame(draw);
+
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        if (engine.getIsPlaying()) {
+          engine.getAnalyserData(dataArray);
+
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#f59e0b';
+          ctx.beginPath();
+
+          const sliceWidth = w / dataArray.length;
+          let x = 0;
+
+          for (let i = 0; i < dataArray.length; i++) {
+            const v = dataArray[i] / 128.0;
+            const y = (v * h) / 2;
+
+            if (i === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+            x += sliceWidth;
+          }
+
+          ctx.lineTo(w, h / 2);
+          ctx.stroke();
+
+          // Ambient glow
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#fbbf24';
+        } else {
+          // Flat ambient line
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(0, h / 2);
+          ctx.lineTo(w, h / 2);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      if (!animationFrameId) {
+        draw();
+      }
+    }
+
+    closeBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Global listeners
+    window.addEventListener('astro_open_neuro_player', openModal);
+
+    document.querySelectorAll('.trigger-neuro-player').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNeuroPlayerUI);
+  } else {
+    initNeuroPlayerUI();
+  }
+</script>

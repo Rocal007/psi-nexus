@@ -4,6 +4,8 @@ import Header from '../components/ui/Header.astro';
 import ConstellationBackground from '../components/ui/ConstellationBackground.astro';
 import FloatingThemeWidget from '../components/ui/FloatingThemeWidget.astro';
 import UserManagementModal from '../components/ui/UserManagementModal.astro';
+import SoulShareCardModal from '../components/ui/SoulShareCardModal.astro';
+import NeuroAcousticPlayer from '../components/ui/NeuroAcousticPlayer.astro';
 
 interface Props {
   title?: string;
@@ -242,6 +244,12 @@ const schemaData = {
     <!-- Global User Management Modal with SQLite Backend -->
     <UserManagementModal />
 
+    <!-- Global Viral Soul Share Card Modal (Spotify-Wrapped Style) -->
+    <SoulShareCardModal />
+
+    <!-- Global Neuro-Acoustic Frequency & Brainwave Player (ADHS, Anti-Stress, Deep Work) -->
+    <NeuroAcousticPlayer />
+
     <!-- Floating Theme Switcher Widget -->
     <FloatingThemeWidget />
 
@@ -273,8 +281,9 @@ const schemaData = {
         Präzise Himmelsmechanik nach Swiss Ephemeris DE431 Standard & Esoterische Seelenanalytik • Nach den Prinzipien der Sieben Strahlen & des VFB-Neurodidaktik-Systems (Pauken → 0) • Radikale Objektivität (RO) und Achtung des freien Schöpferwillens.
       </p>
 
-      <div class="text-[10px] text-slate-400 font-mono">
-        © {new Date().getFullYear()} Ψ-NEXUS Heritage • Alle Berechnungen erfolgen streng vertraulich und verschlüsselt im Browser.
+      <div class="text-[10px] text-slate-400 font-mono space-y-1">
+        <div>© {new Date().getFullYear()} Ψ-NEXUS Heritage • Alle Berechnungen erfolgen streng vertraulich und verschlüsselt im Browser.</div>
+        <div class="text-slate-400">*Hinweis: Als Amazon-Partner verdiene ich an qualifizierten Verkäufen.</div>
       </div>
     </footer>
   </body>

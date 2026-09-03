@@ -94,8 +94,17 @@ export function validateBirthProfileInputDTO(raw: unknown): Result<BirthProfileI
       value: candidate.birthDate
     });
   } else {
-    const parsed = new Date(candidate.birthDate);
-    if (isNaN(parsed.getTime())) {
+    const [yearStr, monthStr, dayStr] = candidate.birthDate.split('-');
+    const y = parseInt(yearStr, 10);
+    const m = parseInt(monthStr, 10);
+    const d = parseInt(dayStr, 10);
+    const parsed = new Date(Date.UTC(y, m - 1, d));
+    if (
+      isNaN(parsed.getTime()) ||
+      parsed.getUTCFullYear() !== y ||
+      parsed.getUTCMonth() !== m - 1 ||
+      parsed.getUTCDate() !== d
+    ) {
       errors.push({ field: 'birthDate', message: 'birthDate is not a real calendar date', value: candidate.birthDate });
     }
   }

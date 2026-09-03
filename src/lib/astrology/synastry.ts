@@ -129,7 +129,7 @@ export interface FamilyMatrixResult {
 }
 
 // Helpers for Midpoints
-function calculateMidpointLongitude(lon1: number, lon2: number): number {
+export function calculateMidpointLongitude(lon1: number, lon2: number): number {
   let diff = Math.abs(lon1 - lon2);
   let mid: number;
   if (diff <= 180) {
@@ -140,7 +140,176 @@ function calculateMidpointLongitude(lon1: number, lon2: number): number {
   return ((mid % 360) + 360) % 360;
 }
 
-// 1. Synastry Calculation
+// 1. Dynamic Relationship Motto based on Element combinations
+export function calculateDynamicRelationshipMotto(compSun: ZodiacSign, compMoon: ZodiacSign): string {
+  const sunEl = compSun.element;
+  const moonEl = compMoon.element;
+  const key = `${sunEl}-${moonEl}`;
+
+  const mottoMatrix: Record<string, string> = {
+    'Feuer-Feuer': `„Zwei Flammen, ein kosmisches Leuchtfeuer – unsere Liebe brennt mit unbändigem Pioniergeist (${compSun.name}), mutiger Herzenskraft und purer Schöpferfreude (${compMoon.name}).“`,
+    'Feuer-Erde': `„Vision trifft auf fruchtbaren Boden – wir verwandeln feurige Begeisterung (${compSun.name}) in meisterhafte Realität und bauen ein unerschütterliches Seelenfundament (${compMoon.name}).“`,
+    'Feuer-Luft': `„Der Atem, der das Schöpferfeuer entfacht – wir beflügeln einander mit grenzenlosen Ideen (${compSun.name}), geistiger Freiheit und geteilter Lebenslust (${compMoon.name}).“`,
+    'Feuer-Wasser': `„Alchemistische Herzensglut – im Zusammentreffen von mutiger Tatkraft (${compSun.name}) und tiefer Seelenberührung (${compMoon.name}) heilen, transformieren und erneuern wir einander.“`,
+    'Erde-Feuer': `„Aus tiefem Urgestein bricht strahlendes Schöpferlicht – wir schenken kühnen Träumen (${compSun.name}) verlässliche Struktur, Schutz und dauerhaften Glanz (${compMoon.name}).“`,
+    'Erde-Erde': `„Zwei Wurzeln, ein ewiger Seelenbaum – im Rhythmus der Natur (${compSun.name}) schenken wir einander bedingungslose Geborgenheit, treue Verlässlichkeit und bleibende Werte (${compMoon.name}).“`,
+    'Erde-Luft': `„Geerdete Weisheit im freien Dialog – wir verbinden pragmatische Meisterschaft (${compSun.name}) mit geistiger Klarheit und visionärer Weite (${compMoon.name}).“`,
+    'Erde-Wasser': `„Fruchtbare Oase des Lebens – wo beständige Verlässlichkeit (${compSun.name}) auf nährende Herzenswärme (${compMoon.name}) trifft, erblüht unsere Liebe in tiefer seelischer Harmonie.“`,
+    'Luft-Feuer': `„Ein göttlicher Funke, der den Horizont erleuchtet – durch geistige Inspiration (${compSun.name}) und mutigen Vorwärtsdrang (${compMoon.name}) eröffnen wir einander neue Dimensionen.“`,
+    'Luft-Erde': `„Geistige Klarheit findet sichere Wurzeln – wir schenken visionären Gedanken (${compSun.name}) greifbare Gestalt, geordnete Harmonie und dauerhaften Halt (${compMoon.name}).“`,
+    'Luft-Luft': `„Zwei Seelen im selben kosmischen Wind – in geistiger Freiheit, heiterer Leichtigkeit (${compSun.name}) und philosophischer Tiefe (${compMoon.name}) verstehen wir uns ohne Worte.“`,
+    'Luft-Wasser': `„Poesie zwischen Geist und Seelentiefe – feinsinniges Denken (${compSun.name}) verschmilzt mit intuitiver Herzensweisheit (${compMoon.name}) zu einem unendlichen Strom des Mitgefühls.“`,
+    'Wasser-Feuer': `„Ozeanische Tiefe entfacht innere Glut – wir ergründen die Mysterien der Seele (${compSun.name}) mit dem wärmenden Licht unbändiger Hingabe und Treue (${compMoon.name}).“`,
+    'Wasser-Erde': `„Ein klarer Seelenquell, geborgen im Schoß der Erde – wir nähren einander mit instinktivem Schutz (${compSun.name}), emotionaler Wahrheit und verlässlicher Zärtlichkeit (${compMoon.name}).“`,
+    'Wasser-Luft': `„Sanfte Brise über tiefem Gewässer – wir übersetzen tiefste Gefühle (${compSun.name}) in verständnisvollen Dialog und schenken einander seelische Klarheit (${compMoon.name}).“`,
+    'Wasser-Wasser': `„Vollkommene Seelenverschmelzung – im Ozean bedingungsloser Liebe (${compSun.name} & ${compMoon.name}) bedarf es keiner Masken, denn unsere Herzen schlagen im selben ewigen Takt.“`
+  };
+
+  return mottoMatrix[key] || `„In Liebe verbunden, im Geiste frei – wir erschaffen miteinander einen geschützten Raum für gegenseitiges Erblühen.“`;
+}
+
+// 2. Dynamic Pair Gemstone based on Sun & Venus Element/Sign
+export function calculateDynamicPairGemstone(compSun: ZodiacSign, compVenus: ZodiacSign): {
+  name: string;
+  chakra: string;
+  effect: string;
+} {
+  const sunEl = compSun.element;
+  const venEl = compVenus.element;
+  const pairKey = `${sunEl}-${venEl}`;
+
+  const gemstoneMatrix: Record<string, { name: string; chakra: string; effect: string }> = {
+    'Feuer-Feuer': {
+      name: 'Karneol & Roter Granat',
+      chakra: 'Manipura & Muladhara (Solarplexus- & Wurzelchakra)',
+      effect: 'Entfacht vitale Leidenschaft, schützt die schöpferische Strahlkraft des Paares und schenkt mutige Tatkraft für gemeinsame Herzensprojekte.'
+    },
+    'Feuer-Erde': {
+      name: 'Tigerauge & Roter Jaspis',
+      chakra: 'Manipura & Wurzelchakra',
+      effect: 'Verbindet leidenschaftliche Begeisterung mit geerdeter Beständigkeit und schützt vor energetischer Verausgabung im Beziehungsalltag.'
+    },
+    'Feuer-Luft': {
+      name: 'Sonnenstein & Citrin',
+      chakra: 'Solarplexus- & Sakralchakra',
+      effect: 'Schenkt ansteckende Lebensfreude, beflügelt geistige Visionen und bringt strahlenden Optimismus in gemeinsame Unternehmungen.'
+    },
+    'Feuer-Wasser': {
+      name: 'Rhodochrosit & Feuerachat',
+      chakra: 'Anahata (Herzchakra) & Sakralchakra',
+      effect: 'Harmonisiert emotionale Intensität, wandelt ungestüme Leidenschaft in alchemistische Herzenswärme und schenkt seelischen Frieden.'
+    },
+    'Erde-Erde': {
+      name: 'Smaragd & Malachit',
+      chakra: 'Anahata (Herzchakra) & Wurzelchakra',
+      effect: 'Schenkt unerschütterliche Loyalität, nährt die gemeinsame Erdung und zieht materielle wie emotionale Fülle in eure Verbindung.'
+    },
+    'Erde-Feuer': {
+      name: 'Pyrit & Granat',
+      chakra: 'Solarplexus- & Wurzelchakra',
+      effect: 'Katalysiert die greifbare Manifestation eurer Träume und schützt das Paar vor äußeren Zweifeln und Entmutigung.'
+    },
+    'Erde-Luft': {
+      name: 'Grüner Aventurin & Chrysokoll',
+      chakra: 'Herz- & Halschakra',
+      effect: 'Fördert ruhige, sachliche Herzenskommunikation, balanciert Gedankenkreisen und festigt ein harmonisches Zusammenleben.'
+    },
+    'Erde-Wasser': {
+      name: 'Jade & Grüner Turmalin',
+      chakra: 'Herz- & Sakralchakra',
+      effect: 'Nährt instinktives Vertrauen, schenkt seelische Fruchtbarkeit und schützt den gemeinsamen Erholungs- und Heilungsraum.'
+    },
+    'Luft-Luft': {
+      name: 'Aquamarin & Lapislazuli',
+      chakra: 'Vishuddha & Ajna (Hals- & Stirnchakra)',
+      effect: 'Klärt den geistigen Austausch, schützt vor Missverständnissen und öffnet die Ebene für telepathische Seelenverbundenheit.'
+    },
+    'Luft-Feuer': {
+      name: 'Citrin & Bergkristall',
+      chakra: 'Solarplexus- & Kronenchakra',
+      effect: 'Beflügelt schöpferische Inspiration, schenkt Klarheit in Zukunftsplänen und vertreibt jegliche Schwere aus der Partnerschaft.'
+    },
+    'Luft-Erde': {
+      name: 'Moosachat & Blauer Chalcedon',
+      chakra: 'Herz- & Halschakra',
+      effect: 'Verbindet geistige Beweglichkeit mit praktischer Vernunft und fördert geduldigen, wohlwollenden Austausch.'
+    },
+    'Luft-Wasser': {
+      name: 'Amethyst & Blauer Topas',
+      chakra: 'Kronen- & Halschakra',
+      effect: 'Verbindet intuitive Seeleneindrücke mit klarer, liebevoller Ausdruckskraft und beruhigt das Nervensystem beider Partner.'
+    },
+    'Wasser-Wasser': {
+      name: 'Rosenquarz & Rhodonit',
+      chakra: 'Anahata (Herzchakra) & Sakralchakra',
+      effect: 'Öffnet den gemeinsamen Herzraum für bedingungslose Liebe, heilt vergangene Seelenwunden und schenkt tiefste Geborgenheit.'
+    },
+    'Wasser-Feuer': {
+      name: 'Rosenquarz & Rubin',
+      chakra: 'Herz- & Wurzelchakra',
+      effect: 'Vereint zarte seelische Hingabe mit feuriger magnetischer Anziehung und errichtet ein starkes energetisches Schutzfeld.'
+    },
+    'Wasser-Erde': {
+      name: 'Mondstein & Smaragd',
+      chakra: 'Sakral- & Herzchakra',
+      effect: 'Erdet tiefe Emotionen, fördert gegenseitige Fürsorge und schenkt beständige, sanft nährende Zärtlichkeit.'
+    },
+    'Wasser-Luft': {
+      name: 'Larimar & Selenit',
+      chakra: 'Hals- & Kronenchakra',
+      effect: 'Löst emotionale Spannungen sanft auf, fördert friedvollen Seelendialog und verbindet das Paar mit höheren Schwingungsebenen.'
+    }
+  };
+
+  return gemstoneMatrix[pairKey] || {
+    name: 'Rosenquarz & Bergkristall',
+    chakra: 'Anahata (Herzchakra)',
+    effect: 'Öffnet den gemeinsamen Herzraum für bedingungslose Liebe, klärt Missverständnisse und stärkt loyale Treue.'
+  };
+}
+
+// 3. Dynamic Composite Interpretations
+function getCompositeVenusInterpretation(sign: ZodiacSign): string {
+  const map: Record<string, string> = {
+    Feuer: `In ${sign.name} (${sign.element}): Eure Liebe brennt mit lebendiger Begeisterung, feuriger Romantik und geteilter Abenteuerlust. Ihr nährt eure Verbindung, wenn ihr einander Raum für mutige Entfaltung und freie Schöpferkraft schenkt.`,
+    Erde: `In ${sign.name} (${sign.element}): Eure Liebe basiert auf gelebter Zuverlässigkeit, sinnlicher Geborgenheit und dauerhaften Werten. In ${sign.name} zeigt sich Zuneigung in realen Taten, Fürsorge und unerschütterlichem Zusammenhalt.`,
+    Luft: `In ${sign.name} (${sign.element}): Eure Liebe erblüht im inspirierenden Dialog, heiterer Leichtigkeit und gegenseitiger geistiger Wertschätzung. Eine tiefe ästhetische und philosophische Harmonie verbindet eure Herzen.`,
+    Wasser: `In ${sign.name} (${sign.element}): Eure Liebe wurzelt in tiefem intuitivem Mitgefühl, seelischer Verschmelzung und wortlosem Verstehen. Ihr berührt einander auf der feinstofflichen Herzensebene und schenkt euch gegenseitige Heilung.`
+  };
+  return map[sign.element] || `Die Ästhetik, Zärtlichkeit und seelische Anziehungskraft eurer Verbindung im Zeichen ${sign.name}.`;
+}
+
+function getCompositeMarsInterpretation(sign: ZodiacSign): string {
+  const map: Record<string, string> = {
+    Feuer: `In ${sign.name} (${sign.element}): Eure gemeinsame Handlungsenergie ist von mutigem Pioniergeist, feuriger Tatkraft und Entschlossenheit getragen. Konflikte klärt ihr direkt, aufrichtig und ohne langes Zögern.`,
+    Erde: `In ${sign.name} (${sign.element}): Eure Umsetzungskraft zeichnet sich durch zähe Ausdauer, handwerkliche Meisterschaft und pragmatische Zielstrebigkeit aus. Gemeinsame Pläne setzt ihr mit unerschütterlichem Durchhaltewillen um.`,
+    Luft: `In ${sign.name} (${sign.element}): Eure Dynamik entfaltet sich in ideenreichen Projekten, strategischem Weitblick und konstruktivem Dialog. Meinungsverschiedenheiten meistert ihr durch sachliche Reflexion.`,
+    Wasser: `In ${sign.name} (${sign.element}): Eure Handlungen werden von instinktiver Seelenkraft, Fürsorge und intuitivem Schutzinstinkt gelenkt. Ihr kämpft loyal füreinander und handelt im Einklang mit eurer emotionalen Wahrheit.`
+  };
+  return map[sign.element] || `Die gemeinsame Umsetzungsenergie, Willenskraft und Dynamik bei Projekten im Zeichen ${sign.name}.`;
+}
+
+function getCompositeJupiterInterpretation(sign: ZodiacSign): string {
+  const map: Record<string, string> = {
+    Feuer: `In ${sign.name} (${sign.element}): Euer größtes Glückspotenzial entfaltet sich durch weite Reisen, visionäre Projekte und ansteckenden Optimismus. Ihr inspiriert einander, über alte Begrenzungen mutig hinauszuwachsen.`,
+    Erde: `In ${sign.name} (${sign.element}): Glück und Fülle materialisieren sich in eurer Verbindung durch Naturverbundenheit, Wohlstand und das Ernten meisterhafter Lebensfrüchte. Stabilität schenkt euch spirituelle Weite.`,
+    Luft: `In ${sign.name} (${sign.element}): Seelisches Wachstum und Horizonterweiterung erlebt ihr durch philosophischen Austausch, gemeinsames Lernen und ein weltoffenes, freies Bewusstsein.`,
+    Wasser: `In ${sign.name} (${sign.element}): Höchste kosmische Gnade und Seelenwachstum fließen durch bedingungsloses Mitgefühl, mystische Tiefe und die gemeinsame Gabe tiefgreifender seelischer Heilung.`
+  };
+  return map[sign.element] || `Das gemeinsame Glückspotenzial, seelische Expansion und Erkenntnisreichtum im Zeichen ${sign.name}.`;
+}
+
+function getCompositeSaturnInterpretation(sign: ZodiacSign): string {
+  const map: Record<string, string> = {
+    Feuer: `In ${sign.name} (${sign.element}): Euer karmischer Reifeauftrag besteht darin, feurigen Enthusiasmus mit geduldiger Disziplin zu veredeln und unerschütterliche Loyalität zu gemeinsamen Idealen zu wahren.`,
+    Erde: `In ${sign.name} (${sign.element}): Ein unerschütterliches Fundament aus unendlicher Treue, verlässlichen Alltagsstrukturen und materieller Sicherheit gibt eurer Partnerschaft zeitlose Beständigkeit.`,
+    Luft: `In ${sign.name} (${sign.element}): Tragfähige Verbindlichkeit wächst durch absolute Ehrlichkeit, klare Vereinbarungen und geistige Reife im respektvollen, transparenten Dialog.`,
+    Wasser: `In ${sign.name} (${sign.element}): Eure Stabilität gründet auf gegenseitigem emotionalen Schutz, karmischer Seelenloyalität und dem Errichten sicherer Grenzen gegen störende Einflüsse von außen.`
+  };
+  return map[sign.element] || `Die tragende Stabilität, Treue, Verbindlichkeit und karmische Reife im Zeichen ${sign.name}.`;
+}
+
+// Synastry Calculation Function
 export function calculateSynastry(
   chartA: CompleteNatalChart,
   chartB: CompleteNatalChart
@@ -247,6 +416,30 @@ export function calculateSynastry(
   const compAcPos = degreeToSignAndPos(compAcLon);
   const compMcPos = degreeToSignAndPos(compMcLon);
 
+  const compVenusLon = calculateMidpointLongitude(
+    (chartA.planets.find(p => p.id === 'Venus') || chartA.planets[3] || chartA.planets[0]).longitude,
+    (chartB.planets.find(p => p.id === 'Venus') || chartB.planets[3] || chartB.planets[0]).longitude
+  );
+  const compVenusPos = degreeToSignAndPos(compVenusLon);
+
+  const compMarsLon = calculateMidpointLongitude(
+    (chartA.planets.find(p => p.id === 'Mars') || chartA.planets[4] || chartA.planets[0]).longitude,
+    (chartB.planets.find(p => p.id === 'Mars') || chartB.planets[4] || chartB.planets[0]).longitude
+  );
+  const compMarsPos = degreeToSignAndPos(compMarsLon);
+
+  const compJupiterLon = calculateMidpointLongitude(
+    (chartA.planets.find(p => p.id === 'Jupiter') || chartA.planets[5] || chartA.planets[0]).longitude,
+    (chartB.planets.find(p => p.id === 'Jupiter') || chartB.planets[5] || chartB.planets[0]).longitude
+  );
+  const compJupiterPos = degreeToSignAndPos(compJupiterLon);
+
+  const compSaturnLon = calculateMidpointLongitude(
+    (chartA.planets.find(p => p.id === 'Saturn') || chartA.planets[6] || chartA.planets[0]).longitude,
+    (chartB.planets.find(p => p.id === 'Saturn') || chartB.planets[6] || chartB.planets[0]).longitude
+  );
+  const compSaturnPos = degreeToSignAndPos(compSaturnLon);
+
   const composite: CompositeChartResult = {
     sun: {
       id: 'sun',
@@ -292,85 +485,45 @@ export function calculateSynastry(
       id: 'venus',
       name: 'Komposit-Venus',
       symbol: '♀',
-      longitude: calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Venus') || chartA.planets[3] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Venus') || chartB.planets[3] || chartB.planets[0]).longitude
-      ),
-      degreeString: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Venus') || chartA.planets[3] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Venus') || chartB.planets[3] || chartB.planets[0]).longitude
-      )).degreeString,
-      sign: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Venus') || chartA.planets[3] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Venus') || chartB.planets[3] || chartB.planets[0]).longitude
-      )).sign,
+      longitude: compVenusLon,
+      degreeString: compVenusPos.degreeString,
+      sign: compVenusPos.sign,
       color: '#ec4899',
-      interpretation: 'Die Ästhetik und Zärtlichkeit eurer Verbindung.'
+      interpretation: getCompositeVenusInterpretation(compVenusPos.sign)
     },
     mars: {
       id: 'mars',
       name: 'Komposit-Mars',
       symbol: '♂',
-      longitude: calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Mars') || chartA.planets[4] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Mars') || chartB.planets[4] || chartB.planets[0]).longitude
-      ),
-      degreeString: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Mars') || chartA.planets[4] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Mars') || chartB.planets[4] || chartB.planets[0]).longitude
-      )).degreeString,
-      sign: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Mars') || chartA.planets[4] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Mars') || chartB.planets[4] || chartB.planets[0]).longitude
-      )).sign,
+      longitude: compMarsLon,
+      degreeString: compMarsPos.degreeString,
+      sign: compMarsPos.sign,
       color: '#ef4444',
-      interpretation: 'Die gemeinsame Umsetzungsenergie und Dynamik bei Projekten.'
+      interpretation: getCompositeMarsInterpretation(compMarsPos.sign)
     },
     jupiter: {
       id: 'jupiter',
       name: 'Komposit-Jupiter',
       symbol: '♃',
-      longitude: calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Jupiter') || chartA.planets[5] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Jupiter') || chartB.planets[5] || chartB.planets[0]).longitude
-      ),
-      degreeString: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Jupiter') || chartA.planets[5] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Jupiter') || chartB.planets[5] || chartB.planets[0]).longitude
-      )).degreeString,
-      sign: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Jupiter') || chartA.planets[5] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Jupiter') || chartB.planets[5] || chartB.planets[0]).longitude
-      )).sign,
+      longitude: compJupiterLon,
+      degreeString: compJupiterPos.degreeString,
+      sign: compJupiterPos.sign,
       color: '#fbbf24',
-      interpretation: 'Das gemeinsame Glückspotenzial und seelisches Wachstum.'
+      interpretation: getCompositeJupiterInterpretation(compJupiterPos.sign)
     },
     saturn: {
       id: 'saturn',
       name: 'Komposit-Saturn',
       symbol: '♄',
-      longitude: calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Saturn') || chartA.planets[6] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Saturn') || chartB.planets[6] || chartB.planets[0]).longitude
-      ),
-      degreeString: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Saturn') || chartA.planets[6] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Saturn') || chartB.planets[6] || chartB.planets[0]).longitude
-      )).degreeString,
-      sign: degreeToSignAndPos(calculateMidpointLongitude(
-        (chartA.planets.find(p => p.id === 'Saturn') || chartA.planets[6] || chartA.planets[0]).longitude,
-        (chartB.planets.find(p => p.id === 'Saturn') || chartB.planets[6] || chartB.planets[0]).longitude
-      )).sign,
+      longitude: compSaturnLon,
+      degreeString: compSaturnPos.degreeString,
+      sign: compSaturnPos.sign,
       color: '#e2e8f0',
-      interpretation: 'Die tragende Stabilität, Treue und Verbindlichkeit.'
+      interpretation: getCompositeSaturnInterpretation(compSaturnPos.sign)
     },
     sharedSoulPurpose: `Als Paar vereint ihr das Licht von ${chartA.synthesis.sun.planet.sign.name} und ${chartB.synthesis.sun.planet.sign.name} zu einer kraftvollen Komposit-Sonne in ${compSunPos.sign.name}. Ihr seid gemeinsam stärker als die Summe eurer Einzelteile.`,
-    relationshipMotto: `„In Liebe verbunden, im Geiste frei – wir erschaffen miteinander einen geschützten Raum für gegenseitiges Erblühen.“`,
-    pairGemstone: {
-      name: 'Rosenquarz & Malachit / Rhodonit',
-      chakra: 'Anahata (Herzchakra)',
-      effect: 'Öffnet den gemeinsamen Herzraum für bedingungslose Liebe, klärt Missverständnisse und stärkt loyale Treue.'
-    }
+    relationshipMotto: calculateDynamicRelationshipMotto(compSunPos.sign, compMoonPos.sign),
+    pairGemstone: calculateDynamicPairGemstone(compSunPos.sign, compVenusPos.sign)
   };
 
   // Numerology Pair Calculation

@@ -1,0 +1,113 @@
+---
+import type { CompleteNatalChart } from '../../lib/astrology/engine';
+import type { PersonalitySummary } from '../../lib/astrology/personalitySynthesis';
+
+interface Props {
+  hasExplicitQuery: boolean;
+  userName: string;
+  chart: CompleteNatalChart;
+  personalitySummary: PersonalitySummary;
+  formattedBirthDate: string;
+  birthTime: string;
+  cityName: string;
+  houseSystem: string;
+}
+
+const {
+  hasExplicitQuery,
+  userName,
+  chart,
+  personalitySummary,
+  formattedBirthDate,
+  birthTime,
+  cityName,
+  houseSystem
+} = Astro.props;
+---
+
+<!-- Hero / Title Section in Boxed Frame -->
+<div class="boxed-frame text-center space-y-4 max-w-5xl mx-auto relative">
+  <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full birkenbihl-badge text-amber-300 text-xs font-bold uppercase tracking-widest shadow-md">
+    <span class="font-serif">Ψ</span> Die Göttliche Geometrie Deines Seelenplans (Ψ-NEXUS) <span class="font-serif">Ψ</span>
+  </div>
+
+  <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight" id="heroName">
+    {hasExplicitQuery && userName ? (
+      <span><span class="cosmic-gold-gradient">{userName}s</span> Kosmisches Seelenbuch</span>
+    ) : (
+      <span>Entschlüssle dein <span class="cosmic-gold-gradient">Kosmisches Seelenbuch</span></span>
+    )}
+  </h1>
+
+  <!-- Welcome Onboarding Prompt (Visible when no profile is active) -->
+  <div id="heroWelcomePrompt" class={`space-y-2.5 max-w-2xl mx-auto pt-1 ${hasExplicitQuery ? 'hidden' : ''}`}>
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold font-tech">
+      <span>✨</span>
+      <span>Erstelle dein Seelen-Profil</span>
+    </div>
+    <p class="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed font-lato">
+      Trage unten deine Geburtsdaten ein oder wähle ein bestehendes Profil, um dein persönliches Kosmisches Seelenbuch, dein Radix-Horoskop und deine Lebenszahlen in Echtzeit zu generieren.
+    </p>
+  </div>
+
+  <!-- Individuelle Zusammenfassung der Person im Header (Visible when profile is active) -->
+  <div id="heroActiveProfileDetails" class={`space-y-2.5 max-w-3xl mx-auto ${hasExplicitQuery ? '' : 'hidden'}`}>
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold font-tech">
+      <span>🌟</span>
+      <span id="heroArchetypeTitle">{personalitySummary.archetypeName}</span>
+    </div>
+    <p class="text-slate-200 text-sm md:text-base leading-relaxed font-lato" id="heroPersonalitySummary">
+      {personalitySummary.shortEssence}
+    </p>
+    <blockquote class="font-cormorant italic text-base md:text-lg text-amber-200/90 font-medium tracking-wide" id="heroPersonalityMantra">
+      {personalitySummary.personalityMantra}
+    </blockquote>
+  </div>
+
+  <!-- Key Identity Highlights Pill Bar (Unified Boxed Style) -->
+  <div id="heroIdentityPillsBar" class={`flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 pt-2 ${hasExplicitQuery ? '' : 'hidden'}`}>
+    <button type="button" id="pillSun" data-pill-gate="radix" class="hero-identity-pill flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-white/10 hover:border-amber-400/50 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all cursor-pointer group" title="Klicke hier: Direkt zum Sonnen-Stand in Tor I springen">
+      <span class="text-amber-400 text-sm">☉ Sonne:</span>
+      <span class="text-white font-bold">{chart.synthesis.sun.planet.sign.name}</span>
+      <span class="text-amber-300/80 font-mono text-[11px]">({chart.synthesis.sun.planet.degreeString})</span>
+      <span class="text-amber-400">{chart.synthesis.sun.planet.sign.symbol}</span>
+    </button>
+
+    <button type="button" id="pillMoon" data-pill-gate="moon_wisdom" class="hero-identity-pill flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-white/10 hover:border-amber-400/50 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all cursor-pointer group" title="Klicke hier: Direkt zum Mond- & Lebensführer (Tor VIII) springen">
+      <span class="text-slate-300 text-sm">☽ Mond:</span>
+      <span class="text-white font-bold">{chart.synthesis.moon.planet.sign.name}</span>
+      <span class="text-slate-400 font-mono text-[11px]">({chart.synthesis.moon.planet.degreeString})</span>
+      <span class="text-slate-300">{chart.synthesis.moon.planet.sign.symbol}</span>
+    </button>
+
+    <button type="button" id="pillAsc" data-pill-gate="radix" data-pill-subtarget="cardAC" class="hero-identity-pill flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-white/10 hover:border-amber-400/50 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all cursor-pointer group" title="Klicke hier: Direkt zum Aszendenten (1. Haus) springen">
+      <span class="text-amber-300/90 text-sm">↑ AC:</span>
+      <span class="text-white font-bold">{chart.housesResult.angles.ascendant.sign.name}</span>
+      <span class="text-amber-300/80 font-mono text-[11px]">({chart.housesResult.angles.ascendant.degreeString})</span>
+      <span class="text-amber-300/90">{chart.housesResult.angles.ascendant.sign.symbol}</span>
+    </button>
+
+    <button type="button" id="pillMc" data-pill-gate="radix" data-pill-subtarget="cardMC" class="hero-identity-pill flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-white/10 hover:border-amber-400/50 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all cursor-pointer group" title="Klicke hier: Direkt zum Medium Coeli (Beruf & 10. Haus) springen">
+      <span class="text-amber-300/90 text-sm">❖ MC:</span>
+      <span class="text-white font-bold">{chart.housesResult.angles.midheaven.sign.name}</span>
+      <span class="text-amber-300/80 font-mono text-[11px]">({chart.housesResult.angles.midheaven.degreeString})</span>
+      <span class="text-amber-300/90">{chart.housesResult.angles.midheaven.sign.symbol}</span>
+    </button>
+
+    <button type="button" id="pillLifePath" data-pill-gate="numerology" class="hero-identity-pill flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-white/10 hover:border-amber-400/50 hover:bg-slate-800 text-slate-200 text-xs font-bold transition-all cursor-pointer group" title="Klicke hier: Direkt zu den Pythagoräischen Lebenszahlen (Tor IV) springen">
+      <span class="text-amber-400 text-sm">🔢 Lebenszahl:</span>
+      <span class="text-white font-bold">{chart.numerology.lifePath.number}</span>
+      <span class="text-amber-300/80 text-[11px]">({chart.numerology.lifePath.archetype})</span>
+    </button>
+  </div>
+
+  <div id="heroDetails" class={`text-xs text-slate-400 flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 ${hasExplicitQuery ? '' : 'hidden'}`}>
+    <span>📍 {cityName}</span>
+    <span>•</span>
+    <span>🗓️ {formattedBirthDate}, {birthTime} Uhr</span>
+    <span>•</span>
+    <span>🌐 UTC: {chart.utcDate.toUTCString().slice(17, 22)} Uhr</span>
+    <span>•</span>
+    <span class="text-amber-400/90 font-medium">Häuser: {houseSystem === 'placidus' ? 'Placidus' : 'Equal'}</span>
+  </div>
+</div>

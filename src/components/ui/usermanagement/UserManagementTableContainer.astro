@@ -1,0 +1,19 @@
+---
+// UserManagementTableContainer: Dynamic user list & empty state
+---
+
+<!-- User Table / List (Scrollable Area) -->
+<div class="flex-1 overflow-y-auto rounded-2xl border border-white/10 bg-black/40 min-h-[220px]">
+  <div id="usersListContainer" class="divide-y divide-white/5">
+    <!-- Dynamically rendered user rows -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="usersEmptyState" class="hidden p-8 text-center space-y-2">
+    <div class="text-3xl">🌌</div>
+    <div class="text-sm font-bold text-slate-300">Keine Profile gefunden</div>
+    <p class="text-xs text-slate-500 max-w-sm mx-auto">
+      Es wurden noch keine Seelen-Profile gespeichert oder deine Suchfilter liefern keine Treffer.
+    </p>
+  </div>
+</div>

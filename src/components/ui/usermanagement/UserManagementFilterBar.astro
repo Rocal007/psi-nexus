@@ -1,0 +1,48 @@
+---
+// UserManagementFilterBar: Search and filtering controls
+---
+
+<!-- Search & Filter Controls -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+  <div class="relative flex-1">
+    <input
+      type="text"
+      id="userSearchInput"
+      placeholder="🔍 Nach Name, Stadt, Notiz oder Tags suchen..."
+      class="w-full px-3.5 py-2 pl-9 rounded-xl bg-white/[0.04] border border-white/10 text-white placeholder:text-slate-500 text-xs focus:border-amber-400/50 focus:outline-none transition-all"
+    />
+    <span class="absolute left-3 top-2.5 text-slate-400 text-xs pointer-events-none">🔍</span>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <select
+      id="userFilterSunSign"
+      class="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 text-xs focus:border-amber-400/50 focus:outline-none"
+    >
+      <option value="">Alle Sternzeichen</option>
+      <option value="Widder">♈ Widder</option>
+      <option value="Stier">♉ Stier</option>
+      <option value="Zwillinge">♊ Zwillinge</option>
+      <option value="Krebs">♋ Krebs</option>
+      <option value="Löwe">♌ Löwe</option>
+      <option value="Jungfrau">♍ Jungfrau</option>
+      <option value="Waage">♎ Waage</option>
+      <option value="Skorpion">♏ Skorpion</option>
+      <option value="Schütze">♐ Schütze</option>
+      <option value="Steinbock">♑ Steinbock</option>
+      <option value="Wassermann">♒ Wassermann</option>
+      <option value="Fische">♓ Fische</option>
+    </select>
+
+    <select
+      id="userFilterRole"
+      class="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-slate-300 text-xs focus:border-amber-400/50 focus:outline-none"
+    >
+      <option value="">Alle Rollen</option>
+      <option value="client">Klienten</option>
+      <option value="family">Familie</option>
+      <option value="member">Partner</option>
+      <option value="admin">Admin</option>
+    </select>
+  </div>
+</div>
