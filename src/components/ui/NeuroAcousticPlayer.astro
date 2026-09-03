@@ -215,9 +215,12 @@ import { UNIVERSAL_PRESETS } from '../../scripts/audio/neuroAcousticEngine';
     </div>
 
     <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-      <span>✦ 100% Client-Side Web Audio DSP • Keine Datenübertragung</span>
+      <span>✦ 100% Client-Side Dual-Engine (Native Audio + Web Audio DSP)</span>
       <span class="text-amber-300 font-tech">psi-nexus.de</span>
     </div>
+
+    <!-- Hidden Native Audio Element for 100% Guaranteed Playback across iOS/Android/Safari/Desktop -->
+    <audio id="iamNativeAudioPlayer" loop preload="auto" src="/audio/iam_adhd_fokus.wav" class="hidden"></audio>
 
   </div>
 </div>
@@ -244,8 +247,9 @@ import { UNIVERSAL_PRESETS } from '../../scripts/audio/neuroAcousticEngine';
     const presetButtons = document.querySelectorAll('.preset-select-btn');
     const noiseButtons = document.querySelectorAll('.noise-btn');
     const timerButtons = document.querySelectorAll('.timer-btn');
+    const nativeAudioEl = document.getElementById('iamNativeAudioPlayer') as HTMLAudioElement;
 
-    const engine = new NeuroAcousticEngine();
+    const engine = new NeuroAcousticEngine(nativeAudioEl);
     let currentPreset = UNIVERSAL_PRESETS[0];
     let animationFrameId: number | null = null;
 
