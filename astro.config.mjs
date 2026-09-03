@@ -5,8 +5,7 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://psi-nexus.org',
-  output: 'server',
-  adapter: vercel(),
+  output: 'static',
   vite: {
     plugins: [tailwindcss()]
   }
