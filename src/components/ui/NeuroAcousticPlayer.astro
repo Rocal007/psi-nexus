@@ -142,20 +142,34 @@ import { UNIVERSAL_PRESETS } from '../../scripts/audio/neuroAcousticEngine';
     <!-- Main Controls: Play/Pause, Noise Selector, Volume & Timer -->
     <div class="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-4">
       
-      <!-- Top Row: Big Play/Pause + Volume -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <!-- Big Play Button -->
-        <button
-          type="button"
-          id="btnToggleSound"
-          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:scale-[1.02] transition-all cursor-pointer font-tech shrink-0"
-        >
-          <span id="playIcon">▶</span>
-          <span id="playText">Frequenz starten</span>
-        </button>
+      <!-- Top Row: Big Play/Pause + Download + Volume -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          <!-- Big Play Button -->
+          <button
+            type="button"
+            id="btnToggleSound"
+            class="flex-1 sm:flex-initial px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:scale-[1.02] transition-all cursor-pointer font-tech shrink-0"
+          >
+            <span id="playIcon">▶</span>
+            <span id="playText">Frequenz starten</span>
+          </button>
+
+          <!-- Direct IAM Audio Download Button -->
+          <a
+            id="btnDownloadIamAudio"
+            href="/audio/iam_adhd_fokus.wav"
+            download="iam_adhd_fokus.wav"
+            class="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 hover:border-amber-400/40 transition-all cursor-pointer font-tech shrink-0"
+            title="Aktuelle IAM-Frequenz als Audiodatei herunterladen"
+          >
+            <span>📥</span>
+            <span>Audio (WAV)</span>
+          </a>
+        </div>
 
         <!-- Master Volume Control -->
-        <div class="flex items-center gap-3 w-full sm:w-64">
+        <div class="flex items-center gap-3 w-full sm:w-56">
           <span class="text-slate-400 text-xs">🔊</span>
           <input
             type="range"
@@ -355,6 +369,22 @@ import { UNIVERSAL_PRESETS } from '../../scripts/audio/neuroAcousticEngine';
       if (activeMantraEl) {
         const customMantra = PRESET_MANTRAS[p.id] || PRESET_MANTRAS.preset_adhd;
         activeMantraEl.textContent = customMantra;
+      }
+
+      // Update IAM Audio Download Link
+      const dlBtn = document.getElementById('btnDownloadIamAudio') as HTMLAnchorElement;
+      if (dlBtn) {
+        const audioMap: Record<string, string> = {
+          preset_adhd: 'iam_adhd_fokus.wav',
+          preset_stress: 'iam_anti_stress.wav',
+          preset_focus: 'iam_deep_work.wav',
+          preset_learn: 'iam_birkenbihl_flow.wav',
+          preset_sleep: 'iam_tiefschlaf.wav',
+          preset_cosmic: 'iam_seelenmatrix.wav'
+        };
+        const targetFile = audioMap[p.id] || 'iam_adhd_fokus.wav';
+        dlBtn.href = `/audio/${targetFile}`;
+        dlBtn.download = targetFile;
       }
 
       // Update noise buttons
